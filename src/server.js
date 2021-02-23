@@ -7,6 +7,7 @@ const app = express();
 env.config();
 const port = process.env.PORT || DEFAULT_PORT;
 
+app.use(express.json());
 app.use('/ping', healthRouter);
 
 app.listen(port, () => {
