@@ -1,4 +1,5 @@
-const fileUtils = require('../fileUtils/fileUtils');
+/* eslint-disable no-useless-escape */
+const fileUtils = require('../utils/fileUtils');
 
 const generateFiles = async (data) => {
   const directoryName = data.projectName;
@@ -33,7 +34,22 @@ const generateFiles = async (data) => {
           makeAPIcall,
          };`;
 
-  const packageJSONdata = 'test';
+  // package.json data
+  const packageJSONdata = `{
+    "name": "${directoryName}",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo 'Error: no test specified' && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "node-fetch": "^2.6.1"
+    }
+}`;
+
   // files creating and writing
   await fileUtils.writeToAfile(`./${directoryName}/index.js`, `${indexData}`);
   await fileUtils.writeToAfile(`./${directoryName}/helpers.js`, `${helpersData}`);
