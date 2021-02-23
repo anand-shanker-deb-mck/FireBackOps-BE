@@ -7,7 +7,20 @@ const generateFiles = async (data) => {
   // generate directory
   await fileUtils.makeDirectory(`${directoryName}`);
 
-  const indexData = 'test';
+  // logic to write index.js
+  const components = data.componentInput.map((item) => {
+    if (!item.code) {
+      return `const ${item.refName} = await make${item.type}call('${item.endpoint}');`;
+    }
+    return `const ${item.refName} = ${item.code.slice(7)};
+        return ${item.refName};`;
+  }).reduce((acc, curr) => `${`${acc} ${curr}`}\n`, '');
+
+  const indexData = `const { makeAPIcall } = require('./helpers');
+     async function ${functionName}() {
+        ${components}
+     }`;
+
   const helpersData = 'test';
   const packageJSONdata = 'test';
   // files creating and writing
