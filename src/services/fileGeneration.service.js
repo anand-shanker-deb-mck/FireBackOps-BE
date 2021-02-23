@@ -16,12 +16,23 @@ const generateFiles = async (data) => {
         return ${item.refName};`;
   }).reduce((acc, curr) => `${`${acc} ${curr}`}\n`, '');
 
+  // index data
   const indexData = `const { makeAPIcall } = require('./helpers');
      async function ${functionName}() {
         ${components}
      }`;
 
-  const helpersData = 'test';
+  // helpers.js data
+  const methodType = data.componentInput[0].method;
+  const helpersData = `const fetch = require('node-fetch');
+    const makeAPIcall = async (endpoint, method = '${methodType}') => {
+          const response = await fetch(endpoint).then((res) => res.json());
+           return response;
+         };
+         module.exports = {
+          makeAPIcall,
+         };`;
+
   const packageJSONdata = 'test';
   // files creating and writing
   await fileUtils.writeToAfile(`./${directoryName}/index.js`, `${indexData}`);
