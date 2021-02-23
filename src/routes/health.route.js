@@ -5,7 +5,7 @@ const { healthHandler } = require('../handlers/health.handler');
 const { createFiles } = require('../handlers/fileGeneration.handler');
 
 router.get('', healthHandler);
-router.post('/', createFiles);
+router.post('/project', createFiles);
 
 // Add an endpoint which when passed with necessary info (project id, component input, etc)
 // generates the directory named with projectName containing
