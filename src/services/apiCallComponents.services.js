@@ -31,8 +31,6 @@ const makeAPIcall = async (endpoint, method = 'GET', headers = null, body = null
   return response;
 };
 
-makeAPIcall('https://api.github.com/repos/pushyatiwari/Hello-World_3/comments/{comment_id}', 'DELETE', null, null, 'Bearer', 'c9e9ba693c07dc2ce0a3b8c256c359bc732fb631');
-
 module.exports = {
   makeAPIcall,
 };
