@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { healthHandler } = require('../handlers/health.handler');
+const { healthHandler } = require('../handlers');
 
 router.get('', healthHandler);
 
