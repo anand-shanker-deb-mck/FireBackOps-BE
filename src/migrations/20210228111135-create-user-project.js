@@ -2,14 +2,12 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('user_projects', {
-
       UserId: {
         type: Sequelize.STRING,
         references: {
           model: 'users',
           key: 'user_id',
         },
-
       },
       ProjectId: {
         type: Sequelize.INTEGER,
@@ -17,7 +15,6 @@ module.exports = {
           model: 'projects',
           key: 'id',
         },
-
       },
       createdAt: {
         allowNull: false,

@@ -20,7 +20,6 @@ module.exports = {
           model: 'projects',
           key: 'id',
         },
-
       },
       createdAt: {
         allowNull: false,
