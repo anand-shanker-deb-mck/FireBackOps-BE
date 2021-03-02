@@ -22,4 +22,14 @@ describe('oauthLogin', () => {
     expect(getUsernameSpy).toHaveBeenCalledWith(mockAccessToken);
     expect(writeFileSpy).toHaveBeenCalledWith('accessToken.txt', `${mockUsername} ${mockAccessToken}`);
   });
+  it('should throw error with invalid api call', async () => {
+    const errorMessage = 'Invalid API Call';
+    const mockCode = '73582375278';
+    jest.spyOn(githubApiUtil, 'getToken').mockImplementation(() => { throw new Error(errorMessage); });
+    try {
+      await oauthLogin(mockCode);
+    } catch (error) {
+      expect(error.message).toBe(errorMessage);
+    }
+  });
 });
