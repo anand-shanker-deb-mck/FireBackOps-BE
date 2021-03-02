@@ -14,13 +14,15 @@ module.exports = {
       p_attributes: {
         type: Sequelize.JSONB,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
       },
     });
   },

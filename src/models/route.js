@@ -12,13 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Project, Config }) {
       // define association here
       Route.belongsTo(Project, { foreignKey: 'p_id' });
-      Route.hasMany(Config, { foreignKey: 'r_id' });
+      Route.belongsToMany(Config, { through: 'Route_Configuration' }, { foreignKey: 'RouteId' });
     }
   }
   Route.init({
     name: DataTypes.STRING,
     r_config: DataTypes.JSONB,
     p_id: DataTypes.INTEGER,
+    createdAt: { type: DataTypes.DATE, field: 'created_at' },
+    updatedAt: { type: DataTypes.DATE, field: 'updated_at' },
   }, {
     sequelize,
     modelName: 'Route',

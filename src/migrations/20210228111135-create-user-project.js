@@ -2,27 +2,29 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('user_projects', {
-      UserId: {
+      user_id: {
         type: Sequelize.STRING,
         references: {
           model: 'users',
           key: 'user_id',
         },
       },
-      ProjectId: {
+      project_id: {
         type: Sequelize.INTEGER,
         references: {
           model: 'projects',
           key: 'id',
         },
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
       },
     });
   },

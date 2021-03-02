@@ -1,3 +1,6 @@
+// eslint-disable-next-line no-unused-vars
+const { NOW } = require('sequelize');
+
 /* eslint-disable no-unused-vars */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -5,7 +8,6 @@ module.exports = {
       id: {
         allowNull: false,
         autoIncrement: true,
-
         type: Sequelize.INTEGER,
       },
       user_id: {
@@ -15,13 +17,17 @@ module.exports = {
       display_name: {
         type: Sequelize.STRING,
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
+
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
+
       },
     });
   },

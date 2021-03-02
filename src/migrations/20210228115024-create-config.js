@@ -11,29 +11,18 @@ module.exports = {
       type: {
         type: Sequelize.STRING,
       },
-      unique_friendly_name: {
-        type: Sequelize.STRING,
-      },
       payload: {
         type: Sequelize.JSONB,
       },
-      order: {
-        type: Sequelize.INTEGER,
-      },
-      r_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'routes',
-          key: 'id',
-        },
-      },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now'),
       },
     });
   },

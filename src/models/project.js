@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   Project.init({
     name: DataTypes.STRING,
     p_attributes: DataTypes.JSONB,
+    createdAt: { type: DataTypes.DATE, field: 'created_at' },
+    updatedAt: { type: DataTypes.DATE, field: 'updated_at' },
   }, {
     sequelize,
     modelName: 'Project',

@@ -1,23 +1,23 @@
-/* eslint-disable no-unused-vars */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('routes', {
+    await queryInterface.createTable('route_configuration_dependencies', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
-      },
-      r_config: {
-        type: Sequelize.JSONB,
-      },
-      p_id: {
+      rc_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'projects',
+          model: 'route_configurations',
+          key: 'id',
+        },
+      },
+      dependencies: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'configs',
           key: 'id',
         },
       },
@@ -33,7 +33,7 @@ module.exports = {
       },
     });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('routes');
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('route_configuration_dependencies');
   },
 };

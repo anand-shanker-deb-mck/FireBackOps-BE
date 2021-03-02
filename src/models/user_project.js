@@ -1,5 +1,5 @@
 const {
-  Model,
+  Model, DataTypes,
 } = require('sequelize');
 
 module.exports = (sequelize) => {
@@ -15,6 +15,10 @@ module.exports = (sequelize) => {
     // }
   }
   User_Project.init({
+    createdAt: { type: DataTypes.DATE, field: 'created_at' },
+    updatedAt: { type: DataTypes.DATE, field: 'updated_at' },
+    ProjectId: { type: DataTypes.STRING, field: 'project_id' },
+    UserId: { type: DataTypes.INTEGER, field: 'user_id' },
 
   }, {
     sequelize,
