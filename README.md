@@ -84,6 +84,7 @@ The pull requests should have the following two components
 * Explain any context: is it part of a greater set of changes? are any concurrent PRs (in other repositories) dependent on this PR?
 * State what testing has been performed
 
-
+### Login with Github
+Add your Github Organization `CLIENT_ID`,   `CLIENT_SECRET` and `JWT_SECRET` in your `.env` file
 ## License
 
