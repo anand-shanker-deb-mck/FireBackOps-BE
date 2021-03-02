@@ -28,8 +28,8 @@
     "winston": "^3.3.3",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.5.0"
-    
+    "sequelize": "^6.5.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "eslint": "^7.20.0",
