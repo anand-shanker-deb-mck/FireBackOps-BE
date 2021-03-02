@@ -85,6 +85,6 @@ The pull requests should have the following two components
 * State what testing has been performed
 
 ### Login with Github
-Add your Github Organization `CLIENT_ID`,   `CLIENT_SECRET` and `JWT_SECRET` in your `.env` file
+Add your Github Organization `CLIENT_ID`, `CLIENT_SECRET` and `JWT_SECRET` in your `.env` file. We have `.sample-env` file to demonstrate required fields needed in an `.env` file
 ## License
 
