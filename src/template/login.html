@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>    
+<body>
+  <a id="link" href=""> Login with github</a>
+</body>
+
+<script>
+    var client_id = "<%= client_id %>";
+    var link = document.getElementById('link'); 
+    link.href = `https://github.com/login/oauth/authorize?client_id=3351ff8147c4ad228d9d&scope=user,repo`;
+    </script>
+
+</html>
