@@ -1,0 +1,4 @@
+PORT=2400
+JWT_SECRET="this is my secret key"
+CLIENT_ID="3456ffty7c4ad228d9d"
+CLIENT_SECRET="67890264b6852d7d31fd45asbjsabjsbbb"
