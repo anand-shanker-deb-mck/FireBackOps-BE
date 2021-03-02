@@ -16,6 +16,7 @@ const oauthLogin = async (code) => {
     fileUtil.writeFile('accessToken.txt', `${username} ${accessToken}`);
     const jwtToken = jwt.sign({ username },
       process.env.JWT_SECRET);
+    fileUtil.writeFile('JWTToken.txt', `${username} ${jwtToken}`);
     return jwtToken;
   } catch (error) {
     throw error;
