@@ -1,0 +1,25 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Project FireBackOps-BE",
+    "description": "An application designed to help developers in bringing backend servers to life"
+  },
+  "host": ":",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "description": "Health route check",
+        "responses": {
+          "200": {
+            "description": "Pong is recieved, server up"
+          }
+        }
+      }
+    }
+  }
+}
