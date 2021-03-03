@@ -5,11 +5,6 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class Config extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate({ Route_Configuration, Route }) {
       Config.belongsToMany(Route, { through: 'Route_Configuration' }, { foreignKey: 'ConfigId' });
       Config.belongsToMany(Route_Configuration, { through: 'Route_Configuration_Dependency' }, { foreignKey: 'ConfigId' });
