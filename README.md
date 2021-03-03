@@ -84,6 +84,16 @@ The pull requests should have the following two components
 * Explain any context: is it part of a greater set of changes? are any concurrent PRs (in other repositories) dependent on this PR?
 * State what testing has been performed
 
+### Documentation of APIs
+The live API documentation is being visualized using Swagger-Ui at http://:/api-docs/, which reads the swagger.json for the OpenAPI specification
+
+To update the swagger.json on creating a new route:
+* Update 'paths' object with route endpoint
+* Within newly created paths object, update path item object with method (eg. get, post)
+* Add to path item object the paramers, tags, description, and responses
+* The responses is to be updated with an object corresponding to each response code, description of the response, content type returned, and a schema with definition of the output data types if required
+
+Further information regarding the OpenAPI specification can be found at https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md
 
 ## License
 

@@ -2,3 +2,5 @@ node_modules
 **/.vscode/
 .env
 .eslintcache
+**/.DS_Store
+**/logs
