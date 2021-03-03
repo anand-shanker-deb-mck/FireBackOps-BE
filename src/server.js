@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(morgan('combined', { stream: winston.stream }));
 
 app.use('/ping', healthRouter);
-
 app.use('/config', storeConfigRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
