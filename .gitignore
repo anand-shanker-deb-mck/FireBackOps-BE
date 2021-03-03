@@ -2,3 +2,6 @@ node_modules
 **/.vscode/
 .env
 .eslintcache
+coverage
+*.txt
+*.log
