@@ -6,6 +6,7 @@ const storeConfigValidator = (req, res, next) => {
 
   if (error) {
     res.status(400).json({ error: 'Invalid component' });
+    return;
   }
   next();
 };
@@ -18,9 +19,9 @@ const payloadValidator = (req, res) => {
 
     if (error) {
       res.status(400).json({ error: error.message });
-    } else {
-      res.status(200).json({ message: 'Valid payload' });
+      return;
     }
+    res.status(200).json({ message: 'Valid payload' });
     // next();
   }
 };

@@ -11,9 +11,9 @@ const storeConfigDBSchema = Joi.object().keys({
 
 const apiSchema = Joi.object().keys({
   method: Joi.string().valid('GET', 'POST', 'PUT', 'DELETE').required(),
-  url: Joi.string().custom((urlValue, helper) => {
+  url: Joi.string().custom((urlValue, error) => {
     if (!isUrl(urlValue)) {
-      return helper.message('URL must be valid');
+      return error.message('URL must be valid');
     }
     return true;
   }),
