@@ -1,5 +1,5 @@
 const env = require('dotenv');
-
+// add db_details to env file
 env.config();
 
 module.exports = {
