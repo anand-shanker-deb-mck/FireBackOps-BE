@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const { DEFAULT_PORT } = require('./constants/config');
 const { healthRouter } = require('./routes');
-const winston = require('./config/winston');
+const winston = require('../config/winston');
 const swaggerDocument = require('./swagger.json');
 
 const app = express();
