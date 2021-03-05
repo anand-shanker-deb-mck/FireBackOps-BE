@@ -14,18 +14,15 @@ const storeConfigValidator = (req, res, next) => {
 const payloadValidator = (req, res) => {
   const { body } = req;
   const { payload } = body;
+  let error;
   if (body.type === 'API') {
-    const { error } = apiSchema.validate(payload);
-    if (error) {
-      res.status(400).json({ error: error.message });
-      return;
-    }
+    error = apiSchema.validate(payload).error;
   } else if (body.type === 'MAPPER') {
-    const { error } = mapperSchema.validate(payload);
-    if (error) {
-      res.status(400).json({ error: error.message });
-      return;
-    }
+    error = mapperSchema.validate(payload).error;
+  }
+  if (error) {
+    res.status(400).json({ error: error.message });
+    return;
   }
   res.status(200).json({ message: 'Valid payload' });
   // next();
