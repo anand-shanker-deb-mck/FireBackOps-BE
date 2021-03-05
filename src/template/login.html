@@ -5,9 +5,10 @@
 </body>
 
 <script>
-    var client_id = "<%= client_id %>";
+    const url = window.location.href;
+    const client_id = url.split('?')[1].split('=')[1];
     var link = document.getElementById('link'); 
-    link.href = `https://github.com/login/oauth/authorize?client_id=3351ff8147c4ad228d9d&scope=user,repo`;
+    link.href = `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=user,repo`;
     </script>
 
 </html>
