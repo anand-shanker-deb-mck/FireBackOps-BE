@@ -3,7 +3,6 @@ const axios = require('axios').default;
 const getToken = async (body, opts) => {
   const token = await axios.post('https://github.com/login/oauth/access_token', body, opts)
     .then((res) => res.data.access_token)
-    .then((_token) => _token)
     .catch((error) => { throw error; });
   return token;
 };
