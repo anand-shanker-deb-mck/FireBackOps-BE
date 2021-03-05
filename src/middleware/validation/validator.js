@@ -1,4 +1,4 @@
-const { storeConfigDBSchema, apiSchema } = require('./schema');
+const { storeConfigDBSchema, apiSchema, mapperSchema } = require('./schema');
 
 const storeConfigValidator = (req, res, next) => {
   const { body } = req;
@@ -16,14 +16,19 @@ const payloadValidator = (req, res) => {
   const { payload } = body;
   if (body.type === 'API') {
     const { error } = apiSchema.validate(payload);
-
     if (error) {
       res.status(400).json({ error: error.message });
       return;
     }
-    res.status(200).json({ message: 'Valid payload' });
-    // next();
+  } else if (body.type === 'MAPPER') {
+    const { error } = mapperSchema.validate(payload);
+    if (error) {
+      res.status(400).json({ error: error.message });
+      return;
+    }
   }
+  res.status(200).json({ message: 'Valid payload' });
+  // next();
 };
 
 module.exports = { storeConfigValidator, payloadValidator };

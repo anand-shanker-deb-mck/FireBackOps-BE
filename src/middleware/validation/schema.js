@@ -1,16 +1,21 @@
 const isUrl = require('is-url');
 const Joi = require('joi');
 
-const APICOMPONENT = 'API';
-const MAPPERCOMPONENT = 'MAPPER';
+const { API_COMPONENT } = require('../../constants/constants');
+const { MAPPER_COMPONENT } = require('../../constants/constants');
+const { METHODS } = require('../../constants/constants');
 
 const storeConfigDBSchema = Joi.object().keys({
-  type: Joi.string().valid(APICOMPONENT, MAPPERCOMPONENT).required(),
+  id: Joi.number(),
+  type: Joi.string().valid(API_COMPONENT, MAPPER_COMPONENT).required(),
+  routeId: Joi.number().required(),
+  sequence: Joi.number().required(),
+  refName: Joi.string().required(),
   payload: Joi.object().required(),
 });
 
 const apiSchema = Joi.object().keys({
-  method: Joi.string().valid('GET', 'POST', 'PUT', 'DELETE').required(),
+  method: Joi.string().valid(...METHODS).required(),
   url: Joi.string().custom((urlValue, error) => {
     if (!isUrl(urlValue)) {
       return error.message('URL must be valid');
@@ -25,4 +30,9 @@ const apiSchema = Joi.object().keys({
     .concat(Joi.object().when('method', { is: 'DELETE', then: Joi.forbidden() })),
 });
 
-module.exports = { storeConfigDBSchema, apiSchema };
+const mapperSchema = Joi.object().keys({
+  code: Joi.string().required(),
+  dependency: Joi.array(),
+});
+
+module.exports = { storeConfigDBSchema, apiSchema, mapperSchema };
