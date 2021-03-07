@@ -3,7 +3,7 @@ const env = require('dotenv');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const { DEFAULT_PORT } = require('./constants/config');
-const { healthRouter } = require('./routes');
+const { healthRouter, createFoldersRouter, githubPushRouter } = require('./routes');
 const winston = require('../config/winston');
 const swaggerDocument = require('./swagger.json');
 
@@ -14,6 +14,8 @@ const port = process.env.PORT || DEFAULT_PORT;
 app.use(express.json());
 app.use(morgan('combined', { stream: winston.stream }));
 app.use('/ping', healthRouter);
+app.use('/createFolders', createFoldersRouter);
+app.use('/githubPush', githubPushRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => {
