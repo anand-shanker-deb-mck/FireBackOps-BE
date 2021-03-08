@@ -10,20 +10,15 @@ describe('Create Folders handler', () => {
     mockSend = jest.fn();
     mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
-
     };
     mockRequest = {
       body: { projectId: 1 },
-
     };
-
     mockValue = [{ name: 'r1' }, { name: 'r3' }];
   });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
-
   it('should set status code to 200', async () => {
     const spyGetProjectName = jest.spyOn(createFoldersService, 'getProjectName').mockResolvedValue('P1');
     const spyGetRouteNamesService = jest.spyOn(createFoldersService, 'getRouteNamesService').mockResolvedValue(mockValue);
@@ -39,19 +34,15 @@ describe('Create Folders handler', () => {
   let mockSend;
   let mockResponse;
   let mockRequest;
-
   beforeEach(() => {
     mockSend = jest.fn();
     mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
-
     };
     mockRequest = {
       body: { projectId: 1 },
-
     };
   });
-
   afterEach(() => {
     jest.clearAllMocks();
   });

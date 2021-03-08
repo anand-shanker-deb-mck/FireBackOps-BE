@@ -10,7 +10,6 @@ describe('Git hub push handler', () => {
     mockSend = jest.fn();
     mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
-
     };
     mockRequest = {
       body: {
@@ -20,12 +19,9 @@ describe('Git hub push handler', () => {
         branchName: 'a',
         commitMessage: 'a',
       },
-
     };
-
     mockValue = ['routes', 'handlers'];
   });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -47,7 +43,6 @@ describe('Git hub push handler', () => {
     mockSend = jest.fn();
     mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
-
     };
     mockRequest = {
       body: {
@@ -57,10 +52,8 @@ describe('Git hub push handler', () => {
         branchName: 'a',
         commitMessage: 'a',
       },
-
     };
   });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
