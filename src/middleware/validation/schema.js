@@ -1,8 +1,7 @@
 const isUrl = require('is-url');
 const Joi = require('joi');
 
-const { API_COMPONENT } = require('../../constants/constants');
-const { MAPPER_COMPONENT } = require('../../constants/constants');
+const { API_COMPONENT, MAPPER_COMPONENT } = require('../../constants/constants');
 const { METHODS } = require('../../constants/constants');
 
 const storeConfigDBSchema = Joi.object().keys({
