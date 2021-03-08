@@ -6,7 +6,7 @@ const createFoldersValidator = (req, res, next) => {
   // eslint-disable-next-line no-unused-vars
   const { value, error } = createFoldersSchema.validate(body);
   if (error) {
-    return res.status(400).json({ message: 'Bad Request' });
+    return res.status(400).send('Bad Request');
   }
   next();
 };

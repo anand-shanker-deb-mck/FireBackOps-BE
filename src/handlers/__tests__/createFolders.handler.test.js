@@ -34,3 +34,36 @@ describe('Create Folders handler', () => {
     expect(spyGetRouteNamesService).toHaveBeenCalledWith(1);
   });
 });
+
+describe('Create Folders handler', () => {
+  let mockSend;
+  let mockResponse;
+  let mockRequest;
+
+  beforeEach(() => {
+    mockSend = jest.fn();
+    mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+
+    };
+    mockRequest = {
+      body: { projectId: 1 },
+
+    };
+
+    // mockValue = [{ name: 'r1' }, { name: 'r2' }];
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should set status code to 500', async () => {
+    const spyGetProjectName = jest.spyOn(createFoldersService, 'getProjectName').mockRejectedValue('Unable to fetch details');
+    jest.spyOn(createFoldersService, 'getRouteNamesService').mockResolvedValue('sj');
+    await createFoldersHandler.createFoldersHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockResponse.status().send).toHaveBeenCalledWith('Unable to fetch details');
+    expect(spyGetProjectName).toHaveBeenCalledWith(1);
+  });
+});
