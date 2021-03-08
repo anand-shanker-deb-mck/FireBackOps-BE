@@ -50,8 +50,6 @@ describe('Create Folders handler', () => {
       body: { projectId: 1 },
 
     };
-
-    // mockValue = [{ name: 'r1' }, { name: 'r2' }];
   });
 
   afterEach(() => {
