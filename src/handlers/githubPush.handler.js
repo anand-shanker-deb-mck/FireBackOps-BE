@@ -13,7 +13,7 @@ const githubPushHandler = async (req, res) => {
   try {
     const folders = await githubPushService.getFoldersService();
     // (call to github push function using body and folders)
-    res.status(201).send(folders);
+    res.status(200).send(folders);
   } catch (err) {
     res.status(500).send('Unable to read files');
   }

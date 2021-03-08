@@ -17,7 +17,7 @@ describe('Create Folders handler', () => {
 
     };
 
-    mockValue = [{ name: 'r1' }, { name: 'r2' }];
+    mockValue = [{ name: 'r1' }, { name: 'r3' }];
   });
 
   afterEach(() => {
@@ -29,7 +29,7 @@ describe('Create Folders handler', () => {
     const spyGetRouteNamesService = jest.spyOn(createFoldersService, 'getRouteNamesService').mockResolvedValue(mockValue);
     await createFoldersHandler.createFoldersHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.status().send).toHaveBeenCalledWith(['r1', 'r2']);
+    expect(mockResponse.status().send).toHaveBeenCalledWith(['r1', 'r3']);
     expect(spyGetProjectName).toHaveBeenCalledWith(1);
     expect(spyGetRouteNamesService).toHaveBeenCalledWith(1);
   });

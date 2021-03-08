@@ -30,10 +30,10 @@ describe('Git hub push handler', () => {
     jest.clearAllMocks();
   });
 
-  it('should set status code to 201', async () => {
+  it('should set status code to 200', async () => {
     const spyGetFoldersService = jest.spyOn(githubPushService, 'getFoldersService').mockResolvedValue(mockValue);
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
-    expect(mockResponse.status).toHaveBeenCalledWith(201);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
@@ -65,7 +65,7 @@ describe('Git hub push handler', () => {
     jest.clearAllMocks();
   });
 
-  it('should set status code to 201', async () => {
+  it('should set status code to 500', async () => {
     const spyGetFoldersService = jest.spyOn(githubPushService, 'getFoldersService').mockRejectedValue('error');
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
