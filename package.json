@@ -26,6 +26,7 @@
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
     "fs-extra": "^9.1.0",
+    "github-api": "^3.4.0",
     "is-url": "^1.2.4",
     "joi": "^17.4.0",
     "lodash": "^4.17.21",
