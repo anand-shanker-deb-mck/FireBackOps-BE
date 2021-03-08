@@ -1,4 +1,3 @@
-const { expect } = require('@jest/globals');
 const fse = require('fs-extra');
 const server = require('./generateFilesAndFolders');
 
