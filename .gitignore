@@ -2,6 +2,9 @@ node_modules
 **/.vscode/
 .env
 .eslintcache
+coverage
+accessToken.txt
+JWTToken.txt
+*.log
 **/.DS_Store
 **/logs
-coverage
