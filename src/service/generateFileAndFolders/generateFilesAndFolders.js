@@ -12,7 +12,8 @@ const createPackageJson = (projectName) => {
     "author": "",
     "license": "ISC",
     "dependencies": {
-      "node-fetch": "^2.6.1"
+      "node-fetch": "^2.6.1",
+      "axios": "^0.21.1",
     }
   }`;
   return packageJson;

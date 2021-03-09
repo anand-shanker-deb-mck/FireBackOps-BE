@@ -16,7 +16,8 @@ describe('Create PackageJSON', () => {
     "author": "",
     "license": "ISC",
     "dependencies": {
-      "node-fetch": "^2.6.1"
+      "node-fetch": "^2.6.1",
+      "axios": "^0.21.1",
     }
   }`;
   it('should return the default packageJson', () => {
