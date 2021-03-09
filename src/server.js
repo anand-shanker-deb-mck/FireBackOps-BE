@@ -4,11 +4,10 @@ const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
 const { DEFAULT_PORT } = require('./constants/config');
 const {
-  healthRouter, projectRouter, loginRouter, storeConfigRouter,
+  healthRouter, projectRouter, loginRouter, storeConfigRouter, routeRouter,
 } = require('./routes');
 
 const winston = require('../config/winston');
-
 const swaggerDocument = require('./swagger.json');
 
 env.config();
@@ -27,6 +26,8 @@ app.use('/login', loginRouter);
 app.use('/config', storeConfigRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+app.use('/route', routeRouter);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
