@@ -5,7 +5,9 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class Route_Configuration_Dependency extends Model {
-    static associate() {
+    static associate({ Route_Configuration, Config }) {
+      Route_Configuration_Dependency.belongsTo(Route_Configuration, { foreignKey: 'RouteConfigurationRouteId' });
+      Route_Configuration_Dependency.belongsTo(Config, { foreignKey: 'ConfigId' });
     }
   }
   Route_Configuration_Dependency.init({

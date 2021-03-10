@@ -5,9 +5,8 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class Config extends Model {
-    static associate({ Route_Configuration, Route }) {
+    static associate({ Route }) {
       Config.belongsToMany(Route, { through: 'Route_Configuration' }, { foreignKey: 'ConfigId' });
-      Config.belongsToMany(Route_Configuration, { through: 'Route_Configuration_Dependency' }, { foreignKey: 'ConfigId' });
     }
   }
   Config.init({

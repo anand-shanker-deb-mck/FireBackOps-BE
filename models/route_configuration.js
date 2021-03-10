@@ -5,11 +5,15 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class Route_Configuration extends Model {
-    static associate({ Config }) {
-      Route_Configuration.belongsToMany(Config, { through: 'Route_Configuration_Dependency' }, { foreignKey: 'RouteConfigurationRouteId' });
+    static associate({ Config, Route }) {
+      Route_Configuration.belongsTo(Config, { foreignKey: 'ConfigId' });
+      Route_Configuration.belongsTo(Route, { foreignKey: 'RouteId' });
     }
   }
   Route_Configuration.init({
+    id: {
+      type: DataTypes.INTEGER, field: 'id', primaryKey: true, autoIncrement: true,
+    },
     createdAt: { type: DataTypes.DATE, field: 'created_at' },
     updatedAt: { type: DataTypes.DATE, field: 'updated_at' },
     RouteId: { type: DataTypes.INTEGER, field: 'route_id' },
