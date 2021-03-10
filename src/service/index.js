@@ -1,9 +1,18 @@
-const updateHandlerService = require('./updateHandler');
-const updateDependencyService = require('./updatePackageJson');
+const { exec } = require('child_process');
+const fse = require('fs-extra');
+const updateHandlerService = require('./generateCode/updateHandler');
+const updateDependencyService = require('./generateCode/updatePackageJson');
+const updateRouteService = require('./generateCode/updateRoutes');
+const generateFileAndFolderService = require('./generateFileAndFolders/index');
 
-const updateHandlerAndDependency = (routes = ['flight', 'hotel'], projectName = 'generatedFolder') => {
-  updateDependencyService.updatePackageJson(projectName);
-  routes.forEach((routeName) => updateHandlerService.updateHandler(projectName, routeName, 'input.json'));
+const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectName = 'generatedFolder') => {
+  generateFileAndFolderService.createProjectTemplate(projectName, routes);
+  const componentList = await fse.readJson('input.json');
+  updateDependencyService.updatePackageJson(projectName, componentList);
+  updateHandlerService.updateHandler(projectName, routes, componentList);
+  updateRouteService.updateRoutes(projectName, routes, componentList);
+  updateRouteService.updateRouteIndex(projectName, routes);
+  exec(`npx eslint --fix ${projectName}/src`);
 };
 
 updateHandlerAndDependency();

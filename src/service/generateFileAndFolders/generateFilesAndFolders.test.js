@@ -5,24 +5,22 @@ describe('Create PackageJSON', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  const mockPackageJson = `{
-    "name": "abc",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo 'Error: no test specified' && exit 1"
+  const mockPackageJson = {
+    name: 'abc',
+    version: '1.0.0',
+    description: '',
+    main: 'index.js',
+    scripts: {
+      test: "echo 'Error: no test specified' && exit 1",
     },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-      "node-fetch": "^2.6.1",
-      "axios": "^0.21.1",
-    }
-  }`;
+    author: '',
+    license: 'ISC',
+    dependencies: {
+    },
+  };
   it('should return the default packageJson', () => {
     const packageJson = server.createPackageJson('abc');
-    expect(packageJson).toEqual(mockPackageJson);
+    expect(packageJson).toEqual(JSON.stringify(mockPackageJson, null, 4));
   });
 });
 

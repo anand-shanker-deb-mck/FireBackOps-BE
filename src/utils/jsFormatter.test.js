@@ -1,5 +1,5 @@
 const prettier = require('prettier');
-const { prettifyJsText } = require('./javaScriptFormatter');
+const { prettifyJsText } = require('./jsFormatter');
 
 describe('Prettify Javascript', () => {
   it('should return the formatted javascript', () => {

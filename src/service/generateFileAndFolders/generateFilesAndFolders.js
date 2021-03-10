@@ -1,22 +1,20 @@
 const fse = require('fs-extra');
 
 const createPackageJson = (projectName) => {
-  const packageJson = `{
-    "name": "${projectName}",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo 'Error: no test specified' && exit 1"
+  const packageJson = {
+    name: projectName,
+    version: '1.0.0',
+    description: '',
+    main: 'index.js',
+    scripts: {
+      test: "echo 'Error: no test specified' && exit 1",
     },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-      "node-fetch": "^2.6.1",
-      "axios": "^0.21.1",
-    }
-  }`;
-  return packageJson;
+    author: '',
+    license: 'ISC',
+    dependencies: {
+    },
+  };
+  return JSON.stringify(packageJson, null, 4);
 };
 
 const generateProjectFolderStructure = (projectName) => {

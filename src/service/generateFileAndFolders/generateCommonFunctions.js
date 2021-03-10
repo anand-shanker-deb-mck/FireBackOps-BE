@@ -1,5 +1,5 @@
 const fse = require('fs-extra');
-const { prettifyJsText } = require('../../utils/javaScriptFormatter');
+const { prettifyJsText } = require('../../utils/jsFormatter');
 const apiTemplate = require('../../templates/apiTemplate');
 const mapperTemplate = require('../../templates/mapperTemplate');
 
