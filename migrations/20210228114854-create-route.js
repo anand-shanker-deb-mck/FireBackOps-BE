@@ -9,16 +9,20 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       r_config: {
         type: Sequelize.JSONB,
       },
       p_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'projects',
           key: 'id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       created_at: {
         allowNull: false,

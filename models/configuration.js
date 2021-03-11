@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Route }) {
       Configuration.belongsTo(Route, {
         foreignKey: 'routeId',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       });
     }
   }

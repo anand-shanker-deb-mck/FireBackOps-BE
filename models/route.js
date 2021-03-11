@@ -7,6 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Project, Configuration }) {
       Route.belongsTo(Project, {
         foreignKey: 'p_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       });
       Route.hasMany(Configuration, {
         foreignKey: 'routeId',
@@ -16,10 +18,22 @@ module.exports = (sequelize, DataTypes) => {
   }
   Route.init({
     name: DataTypes.STRING,
-    r_config: DataTypes.JSONB,
-    p_id: DataTypes.INTEGER,
-    createdAt: { type: DataTypes.DATE, field: 'created_at' },
-    updatedAt: { type: DataTypes.DATE, field: 'updated_at' },
+    rConfig: {
+      type: DataTypes.JSONB,
+      field: 'r_config',
+    },
+    pId: {
+      type: DataTypes.INTEGER,
+      field: 'p_id',
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      field: 'created_at',
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      field: 'updated_at',
+    },
   }, {
     sequelize,
     modelName: 'Route',

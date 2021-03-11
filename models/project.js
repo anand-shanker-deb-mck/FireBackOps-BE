@@ -9,9 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         through: 'User_Project',
         foreignKey: 'ProjectId',
         as: 'users',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       });
       Project.hasMany(Route, {
-        foreignKey: 'p_id', as: 'routes',
+        foreignKey: 'p_id',
+        as: 'routes',
       });
     }
   }
