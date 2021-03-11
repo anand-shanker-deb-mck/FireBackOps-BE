@@ -14,7 +14,7 @@ const {
   Config, Route_Configuration, Route_Configuration_Dependency, Route,
 } = require('../../../models');
 
-describe('insertConfigData function', () => {
+xdescribe('insertConfigData function', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnCreate = jest.spyOn(Config, 'create');
   const MOCK_ARGUMENT = {
@@ -28,7 +28,7 @@ describe('insertConfigData function', () => {
     expect(spyOnCreate).toHaveBeenCalledWith(MOCK_ARGUMENT);
   });
 });
-describe('insertRouteConfigData function', () => {
+xdescribe('insertRouteConfigData function', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnCreate = jest.spyOn(Route_Configuration, 'create');
   const MOCK_ARGUMENT = {
@@ -43,7 +43,7 @@ describe('insertRouteConfigData function', () => {
     expect(spyOnCreate).toHaveBeenCalledWith(MOCK_ARGUMENT);
   });
 });
-describe('insertRouteConfigDependencies function', () => {
+xdescribe('insertRouteConfigDependencies function', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnCreate = jest.spyOn(Route_Configuration_Dependency, 'create');
   it('should return a single resolved db promise when no dependencies', async () => {
@@ -67,7 +67,7 @@ describe('insertRouteConfigDependencies function', () => {
       .toHaveBeenNthCalledWith(2, { ConfigId: 2, RouteConfigurationRouteId: MOCK_RC_ID });
   });
 });
-describe('updateConfigData function', () => {
+xdescribe('updateConfigData function', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnUpdate = jest.spyOn(Config, 'update');
   const MOCK_ARGUMENT_1 = {
@@ -88,7 +88,7 @@ describe('updateConfigData function', () => {
   });
 });
 
-describe('updateRouteConfigData function', () => {
+xdescribe('updateRouteConfigData function', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnUpdate = jest.spyOn(Route_Configuration, 'update');
   const MOCK_ROUTE_ID = 1;
@@ -132,7 +132,7 @@ describe('checkRouteExist function ', () => {
   });
 });
 
-describe('checkExistingRouteSequence function ', () => {
+xdescribe('checkExistingRouteSequence function ', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnFindOne = jest.spyOn(Route_Configuration, 'findOne');
   it('should return false if sequence for particular route is not present', async () => {
@@ -146,7 +146,7 @@ describe('checkExistingRouteSequence function ', () => {
     expect(receivedValue).toBe(true);
   });
 });
-describe('checkDependenciesExist function ', () => {
+xdescribe('checkDependenciesExist function ', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnFindAll = jest.spyOn(Config, 'findAll');
   it('should return "exist" if component does not have any dependencies', async () => {
@@ -168,7 +168,7 @@ describe('checkDependenciesExist function ', () => {
     expect(receivedValue).toEqual([2, 3]); // should tell which dependency does not exist which is 2
   });
 });
-describe('updateRouteConfigDependencies', () => {
+xdescribe('updateRouteConfigDependencies', () => {
   afterEach(() => { jest.clearAllMocks(); });
   const spyOnUpdate = jest.spyOn(Route_Configuration_Dependency, 'update');
   it('should return an array of resolved db promises when dependencies present', async () => {

@@ -5,10 +5,11 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         type: Sequelize.INTEGER,
-      },
-      user_id: {
-        type: Sequelize.STRING,
         primaryKey: true,
+      },
+      user_name: {
+        type: Sequelize.STRING,
+        unique: true,
       },
       display_name: {
         type: Sequelize.STRING,
