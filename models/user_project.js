@@ -8,9 +8,13 @@ module.exports = (sequelize) => {
     static associate({ Project, User }) {
       User_Project.belongsTo(Project, {
         foreignKey: 'ProjectId',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       });
       User_Project.belongsTo(User, {
         foreignKey: 'UserId',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
       });
     }
   }

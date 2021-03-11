@@ -9,6 +9,7 @@ module.exports = {
       },
       component_type: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       payload: {
         type: Sequelize.JSONB,
@@ -18,13 +19,17 @@ module.exports = {
       },
       route_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'routes',
           key: 'id',
         },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       sequence: {
         type: Sequelize.INTEGER,
+        allowNull: false,
       },
       ref_name: {
         type: Sequelize.STRING,

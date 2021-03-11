@@ -5,8 +5,17 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Project extends Model {
     static associate({ User, Route }) {
-      Project.belongsToMany(User, { through: 'User_Project' }, { foreignKey: 'ProjectId' });
-      Project.hasMany(Route, { foreignKey: 'p_id' });
+      Project.belongsToMany(User, {
+        through: 'User_Project',
+        foreignKey: 'ProjectId',
+        as: 'users',
+        onDelete: 'cascade',
+        onUpdate: 'cascade',
+      });
+      Project.hasMany(Route, {
+        foreignKey: 'p_id',
+        as: 'routes',
+      });
     }
   }
   Project.init({
