@@ -1,0 +1,9 @@
+const API_COMPONENT = 'API';
+const MAPPER_COMPONENT = 'MAPPER';
+const METHODS = ['GET', 'POST', 'PUT', 'DELETE'];
+
+module.exports = {
+  API_COMPONENT,
+  MAPPER_COMPONENT,
+  METHODS,
+};

@@ -1,11 +1,20 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('route_configurations', {
+    await queryInterface.createTable('configurations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
+      },
+      component_type: {
+        type: Sequelize.STRING,
+      },
+      payload: {
+        type: Sequelize.JSONB,
+      },
+      dependencies: {
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
       },
       route_id: {
         type: Sequelize.INTEGER,
@@ -14,17 +23,10 @@ module.exports = {
           key: 'id',
         },
       },
-      config_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'configs',
-          key: 'id',
-        },
-      },
       sequence: {
         type: Sequelize.INTEGER,
       },
-      refName: {
+      ref_name: {
         type: Sequelize.STRING,
       },
       created_at: {
@@ -38,8 +40,14 @@ module.exports = {
         defaultValue: Sequelize.fn('now'),
       },
     });
+    await queryInterface.addConstraint('configurations', {
+      type: 'unique',
+      fields: ['route_id', 'sequence'],
+      name: 'unique_route_seq',
+    });
   },
   down: async (queryInterface) => {
-    await queryInterface.dropTable('route_configurations');
+    await queryInterface.removeConstraint('configurations', 'unique_route_seq');
+    await queryInterface.dropTable('configurations');
   },
 };

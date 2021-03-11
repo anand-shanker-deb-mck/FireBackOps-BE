@@ -4,9 +4,14 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class Route extends Model {
-    static associate({ Project, Config }) {
-      Route.belongsTo(Project, { foreignKey: 'p_id' });
-      Route.belongsToMany(Config, { through: 'Route_Configuration' }, { foreignKey: 'RouteId' });
+    static associate({ Project, Configuration }) {
+      Route.belongsTo(Project, {
+        foreignKey: 'p_id',
+      });
+      Route.hasMany(Configuration, {
+        foreignKey: 'routeId',
+        as: 'configurations',
+      });
     }
   }
   Route.init({
