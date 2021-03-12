@@ -1,11 +1,11 @@
 const express = require('express');
 
 const router = express.Router();
-const { updateConfigHandler } = require('../handlers');
-const { payloadValidator, updateConfigValidator } = require('../middleware/validation/validator');
+const { storeConfigHandler, updateConfigHandler } = require('../handlers');
+const { storeConfigValidator, payloadValidator, updateConfigValidator } = require('../middleware/validation/validator');
 
+router.post('', storeConfigValidator, payloadValidator, storeConfigHandler);
 router.patch('', updateConfigValidator, payloadValidator, updateConfigHandler);
-
 module.exports = {
   router,
 };

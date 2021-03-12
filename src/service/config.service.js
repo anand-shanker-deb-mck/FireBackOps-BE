@@ -2,6 +2,30 @@ const configServiceHelpers = require('./config.service.helper');
 const InvalidBodyError = require('../errors/invalidBody.error');
 const { Configuration } = require('../../models');
 
+const storeConfig = async (body) => {
+  const {
+    type, payload, refName, routeId, dependencies, sequence,
+  } = body;
+  const doesRouteIdExist = await configServiceHelpers.checkRouteIdExist(routeId);
+  if (!doesRouteIdExist) {
+    throw new InvalidBodyError('The specified routeId does not exist');
+  }
+  const doesRouteSeqExist = await configServiceHelpers.checkRouteSequenceExists(routeId, sequence);
+  if (doesRouteSeqExist) {
+    throw new InvalidBodyError('Two configurations cannot have same sequence in a route');
+  }
+  const dependenciesNotExisting = await configServiceHelpers.findDependenciesNotExist(dependencies);
+  if (dependenciesNotExisting) {
+    throw new InvalidBodyError(`Dependencies [${dependenciesNotExisting}] do not exist`);
+  }
+  const configData = await Configuration.create({
+    componentType: type, payload, refName, routeId, dependencies, sequence,
+  });
+  const storedConfigData = { ...configData.dataValues, type };
+  delete storedConfigData.componentType;
+  return storedConfigData;
+};
+
 const updateConfig = async (body) => {
   const {
     id, type, payload, refName, routeId, dependencies, sequence,
@@ -50,4 +74,5 @@ const updateConfig = async (body) => {
 };
 module.exports = {
   updateConfig,
+  storeConfig,
 };

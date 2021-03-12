@@ -1,5 +1,5 @@
 const { healthHandler } = require('./health.handler');
-const { updateConfigHandler } = require('./config.handler');
+const { storeConfigHandler, updateConfigHandler } = require('./config.handler');
 const { addNewRouteHandler, getAllRoutesHandler, updateRouteHandler } = require('./route.handler');
 
 module.exports = {
@@ -8,4 +8,5 @@ module.exports = {
   getAllRoutesHandler,
   updateRouteHandler,
   updateConfigHandler,
+  storeConfigHandler,
 };

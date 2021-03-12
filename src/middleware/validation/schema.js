@@ -10,7 +10,7 @@ const storeConfigDBSchema = Joi.object().keys({
   sequence: Joi.number().required(),
   refName: Joi.string().required(),
   payload: Joi.object().required(),
-  dependencies: Joi.array().items(Joi.string()),
+  dependencies: Joi.array().items(Joi.number()),
 });
 const updateConfigDBSchema = Joi.object().keys({
   id: Joi.number().required(),
