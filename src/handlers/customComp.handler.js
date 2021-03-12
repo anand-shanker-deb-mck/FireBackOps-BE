@@ -1,4 +1,4 @@
-const customCompServices = require('../service/customComponent.service');
+const customCompServices = require('../service/customComp.service');
 const InvalidBodyError = require('../errors/invalidBody.error');
 
 const storeCustomCompHandler = async (req, res) => {

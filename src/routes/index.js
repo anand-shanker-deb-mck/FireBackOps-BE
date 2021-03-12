@@ -5,7 +5,7 @@ const { router: loginRouter } = require('./login.route');
 const { router: routeRouter } = require('./route.route');
 const { router: projectRouter } = require('./newProject.route');
 const { router: storeConfigRouter } = require('./storeConfig.route');
-const { router: customComponentRouter } = require('./customComponent.route');
+const { router: customComponentRouter } = require('./customComp.route');
 
 const router = express.Router();
 const swaggerDocument = require('../swagger.json');
