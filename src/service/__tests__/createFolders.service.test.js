@@ -16,7 +16,7 @@ xdescribe('Get route details service', () => {
               },
               sequence: 1,
               refName: 'source',
-              dependencies: [2, 1],
+              dependencies: null,
             }],
         }],
     };
