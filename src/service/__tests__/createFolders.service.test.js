@@ -1,7 +1,7 @@
 const createFoldersService = require('../createFolders.service');
 const { Project } = require('../../../models');
 
-xdescribe.only('Get route details service', () => {
+xdescribe('Get route details service', () => {
   test('should return all route details from the projecct id', async () => {
     const mockValue = {
       projectName: 'P1',
