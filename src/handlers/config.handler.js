@@ -1,10 +1,10 @@
-const configServices = require('../service/storeConfig.service');
+const configServices = require('../service/config.service');
 const InvalidBodyError = require('../errors/invalidBody.error');
 
-const storeConfigHandler = async (req, res) => {
+const updateConfigHandler = async (req, res) => {
   const { body } = req;
   try {
-    const dataReceived = await configServices.storeConfig(body);
+    const dataReceived = await configServices.updateConfig(body);
     return res.status(200).json({ data: dataReceived });
   } catch (error) {
     if (error instanceof InvalidBodyError) {
@@ -13,7 +13,6 @@ const storeConfigHandler = async (req, res) => {
     return res.status(500).json({ message: 'Internal server issues' });
   }
 };
-
 module.exports = {
-  storeConfigHandler,
+  updateConfigHandler,
 };

@@ -1,4 +1,6 @@
-const { storeConfigDBSchema, apiSchema, mapperSchema } = require('./schema');
+const {
+  storeConfigDBSchema, apiSchema, mapperSchema, updateConfigDBSchema,
+} = require('./schema');
 
 const storeConfigValidator = (req, res, next) => {
   const { body } = req;
@@ -10,8 +12,18 @@ const storeConfigValidator = (req, res, next) => {
   }
   next();
 };
+const updateConfigValidator = (req, res, next) => {
+  const { body } = req;
+  const { error } = updateConfigDBSchema.validate(body);
 
-const payloadValidator = (req, res) => {
+  if (error) {
+    res.status(400).json({ error: 'Invalid component' });
+    return;
+  }
+  next();
+};
+
+const payloadValidator = (req, res, next) => {
   const { body } = req;
   const { payload } = body;
   let error;
@@ -24,8 +36,7 @@ const payloadValidator = (req, res) => {
     res.status(400).json({ error: error.message });
     return;
   }
-  res.status(200).json({ message: 'Valid payload' });
-  // next();
+  next();
 };
 
-module.exports = { storeConfigValidator, payloadValidator };
+module.exports = { storeConfigValidator, payloadValidator, updateConfigValidator };

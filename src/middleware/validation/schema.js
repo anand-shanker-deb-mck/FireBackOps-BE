@@ -5,12 +5,21 @@ const { API_COMPONENT, MAPPER_COMPONENT } = require('../../constants/constants')
 const { METHODS } = require('../../constants/constants');
 
 const storeConfigDBSchema = Joi.object().keys({
-  id: Joi.number(),
   type: Joi.string().valid(API_COMPONENT, MAPPER_COMPONENT).required(),
   routeId: Joi.number().required(),
   sequence: Joi.number().required(),
   refName: Joi.string().required(),
   payload: Joi.object().required(),
+  dependencies: Joi.array().items(Joi.string()),
+});
+const updateConfigDBSchema = Joi.object().keys({
+  id: Joi.number().required(),
+  type: Joi.string().valid(API_COMPONENT, MAPPER_COMPONENT),
+  routeId: Joi.number(),
+  sequence: Joi.number(),
+  refName: Joi.string(),
+  payload: Joi.object(),
+  dependencies: Joi.array().items(Joi.number()),
 });
 
 const apiSchema = Joi.object().keys({
@@ -20,7 +29,7 @@ const apiSchema = Joi.object().keys({
       return error.message('URL must be valid');
     }
     return true;
-  }),
+  }).required(),
   headers: Joi.object(),
   // body is valid only for POST and PUT methods
   body: Joi.object().when('method', { is: 'POST', then: Joi.required() })
@@ -31,7 +40,9 @@ const apiSchema = Joi.object().keys({
 
 const mapperSchema = Joi.object().keys({
   code: Joi.string().required(),
-  dependency: Joi.array(),
+  nodeModules: Joi.array().items(Joi.string()),
 });
 
-module.exports = { storeConfigDBSchema, apiSchema, mapperSchema };
+module.exports = {
+  storeConfigDBSchema, apiSchema, mapperSchema, updateConfigDBSchema,
+};
