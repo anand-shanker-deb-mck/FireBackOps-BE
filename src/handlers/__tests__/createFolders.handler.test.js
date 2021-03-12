@@ -14,19 +14,33 @@ describe('Create Folders handler', () => {
     mockRequest = {
       body: { projectId: 1 },
     };
-    mockValue = [{ name: 'r1' }, { name: 'r3' }];
+    mockValue = {
+      projectName: 'P1',
+      routes: [
+        {
+          routeName: 'R1',
+          configurations: [
+            {
+              componentType: 'Api',
+              payload: {
+                method: 'get',
+              },
+              sequence: 1,
+              refName: 'source',
+              dependencies: null,
+            }],
+        }],
+    };
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
   it('should set status code to 200', async () => {
-    const spyGetProjectName = jest.spyOn(createFoldersService, 'getProjectName').mockResolvedValue('P1');
-    const spyGetRouteNamesService = jest.spyOn(createFoldersService, 'getRouteNamesService').mockResolvedValue(mockValue);
+    const spyGetRouteDetailsService = jest.spyOn(createFoldersService, 'getRouteDetailsService').mockResolvedValue(mockValue);
     await createFoldersHandler.createFoldersHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.status().send).toHaveBeenCalledWith(['r1', 'r3']);
-    expect(spyGetProjectName).toHaveBeenCalledWith(1);
-    expect(spyGetRouteNamesService).toHaveBeenCalledWith(1);
+    expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
+    expect(spyGetRouteDetailsService).toHaveBeenCalledWith(1);
   });
 });
 
@@ -48,11 +62,9 @@ describe('Create Folders handler', () => {
   });
 
   it('should set status code to 500', async () => {
-    const spyGetProjectName = jest.spyOn(createFoldersService, 'getProjectName').mockRejectedValue('Unable to fetch details');
-    jest.spyOn(createFoldersService, 'getRouteNamesService').mockResolvedValue('sj');
+    jest.spyOn(createFoldersService, 'getRouteDetailsService').mockRejectedValue('sj');
     await createFoldersHandler.createFoldersHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
     expect(mockResponse.status().send).toHaveBeenCalledWith('Unable to fetch details');
-    expect(spyGetProjectName).toHaveBeenCalledWith(1);
   });
 });

@@ -4,12 +4,13 @@ const githubPushService = require('../service/githubPush.service');
 const githubPushHandler = async (req, res) => {
   const { body } = req;
   const {
-    authToken,
-    userName,
+    accessToken,
+    username,
     repositoryName,
     branchName,
     commitMessage,
   } = body;
+
   try {
     const folders = await githubPushService.getFoldersService();
     // (call to github push function using body and folders)

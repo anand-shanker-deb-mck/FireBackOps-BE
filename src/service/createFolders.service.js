@@ -2,33 +2,55 @@ const {
   Project, Route, Configuration,
 } = require('../../models');
 
-const getProjectName = async (projectId) => {
-  const projectName = await Project.findOne({
-    where: {
-      id: projectId,
-    },
-    attributes: ['name'],
+const filterDetails = async (projectDetails) => {
+  const { routes } = projectDetails;
+  let newRoute = routes.map(async (route) => {
+    let newConfig = route.configurations.map(async (configuration) => {
+      if (configuration.dependencies) {
+        let newDep = configuration.dependencies.map(async (dependency) => {
+          const dependencyString = await Configuration.findOne({
+            where: {
+              id: dependency,
+            },
+            attributes: ['refName'],
+          });
+          return dependencyString.refName;
+        });
+        newDep = await Promise.all(newDep);
+        const newObj = { ...configuration };
+        newObj.dataValues.dependencies = newDep;
+        return newObj.dataValues;
+      }
+      return { ...configuration };
+    });
+    newConfig = await Promise.all(newConfig);
+    return { ...route, configuration: newConfig };
   });
-
-  return projectName;
+  newRoute = await Promise.all(newRoute);
+  const newProjectDetails = { ...projectDetails, routes: newRoute };
+  return newProjectDetails;
 };
 
 const getRouteDetailsService = async (projectId) => {
-  const routeIds = await Route.findAll({
-
+  const projectDetails = await Project.findOne({
     include: [{
-      model: Configuration,
-      as: 'configurations',
-      attributes: ['componentType', 'payload', 'sequence', 'refName'],
+      model: Route,
+      as: 'routes',
+      attributes: [['name', 'routeName']],
+      include: [{
+        model: Configuration,
+        as: 'configurations',
+        attributes: ['componentType', 'payload', 'sequence', 'refName', 'dependencies'],
+      }],
     }],
-
     where: {
-      p_id: projectId,
+      id: projectId,
     },
-    attributes: ['name'],
+    attributes: [['name', 'projectName']],
   });
+  const filteredDetails = await filterDetails(projectDetails);
 
-  return routeIds;
+  return filteredDetails.dataValues;
 };
 
-module.exports = { getRouteDetailsService, getProjectName };
+module.exports = { getRouteDetailsService, filterDetails };
