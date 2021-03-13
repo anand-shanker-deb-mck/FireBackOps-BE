@@ -1,27 +1,9 @@
-const createFoldersService = require('../createFolders.service');
 const createFoldersHelper = require('../createFolder.service.helper');
-const { Project } = require('../../../models');
+const { Configuration } = require('../../../models');
 
-describe('Get route details service', () => {
-  test('should return all route details from the projecct id', async () => {
-    const mockValue1 = {
-      projectName: 'P1',
-      routes: [
-        {
-          routeName: 'R1',
-          configurations: [
-            {
-              componentType: 'Api',
-              payload: {
-                method: 'get',
-              },
-              sequence: 1,
-              refName: 'source',
-              dependencies: [1, 2, 4],
-            }],
-        }],
-    };
-    const mockValue2 = {
+describe('Filter details service', () => {
+  test('should return dependency strings ', async () => {
+    const mockValue = {
       projectName: 'P1',
       routes: [
         {
@@ -38,11 +20,27 @@ describe('Get route details service', () => {
             }],
         }],
     };
+    const mockParam = {
+      projectName: 'P1',
+      routes: [
+        {
+          routeName: 'R1',
+          configurations: [
+            {
+              componentType: 'Api',
+              payload: {
+                method: 'get',
+              },
+              sequence: 1,
+              refName: 'source',
+              dependencies: [1, 2, 3],
+            }],
+        }],
+    };
 
-    const spyModel = jest.spyOn(Project, 'findOne').mockResolvedValue(mockValue1);
-    jest.spyOn(createFoldersHelper, 'filterDetails').mockResolvedValue(mockValue2);
-    const rNames = await createFoldersService.getRouteDetailsService(7);
+    const spyModel = jest.spyOn(Configuration, 'findOne').mockResolvedValueOnce({ refName: 'a' }).mockResolvedValueOnce({ refName: 'b' }).mockResolvedValueOnce({ refName: 'c' });
+    const returnValue = await createFoldersHelper.filterDetails(mockParam);
     expect(spyModel).toHaveBeenCalled();
-    expect(rNames).toEqual(mockValue2);
+    expect(returnValue).toEqual(mockValue);
   });
 });
