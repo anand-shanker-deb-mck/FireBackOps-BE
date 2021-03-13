@@ -1,3 +1,4 @@
+/* eslint-disable import/no-self-import */
 const {
   Project, Route, Configuration,
 } = require('../../models');
@@ -17,17 +18,18 @@ const filterDetails = async (projectDetails) => {
           return dependencyString.refName;
         });
         newDep = await Promise.all(newDep);
-        const newObj = { ...configuration };
-        newObj.dataValues.dependencies = newDep;
-        return newObj.dataValues;
+        const newObj = { ...configuration, dependencies: newDep };
+        return newObj;
       }
       return { ...configuration };
     });
+
     newConfig = await Promise.all(newConfig);
-    return { ...route, configuration: newConfig };
+    return { ...route, configurations: newConfig };
   });
   newRoute = await Promise.all(newRoute);
   const newProjectDetails = { ...projectDetails, routes: newRoute };
+
   return newProjectDetails;
 };
 
@@ -37,20 +39,26 @@ const getRouteDetailsService = async (projectId) => {
       model: Route,
       as: 'routes',
       attributes: [['name', 'routeName']],
+
       include: [{
         model: Configuration,
         as: 'configurations',
         attributes: ['componentType', 'payload', 'sequence', 'refName', 'dependencies'],
+
       }],
     }],
     where: {
       id: projectId,
     },
+
     attributes: [['name', 'projectName']],
   });
-  const filteredDetails = await filterDetails(projectDetails);
+  const newProjectDetails = JSON.parse(JSON.stringify(projectDetails));
+  // console.log(newProject.routes[0].configurations);
 
-  return filteredDetails.dataValues;
+  const filteredDetails = await filterDetails(newProjectDetails);
+
+  return filteredDetails;
 };
 
 module.exports = { getRouteDetailsService, filterDetails };
