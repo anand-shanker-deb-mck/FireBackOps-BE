@@ -5,11 +5,13 @@ const githubPushHandler = async (req, res) => {
   const { body } = req;
   const {
     accessToken,
-    username,
+    // A different PR will be raised for accessToken
     repositoryName,
     branchName,
     commitMessage,
   } = body;
+
+  // const { username } = req.user;
 
   try {
     const folders = await githubPushService.getFoldersService();

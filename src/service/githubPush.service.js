@@ -1,4 +1,4 @@
-const fileUtils = require('../utils/file.utils');
+const fileUtils = require('../utils/file.util');
 
 const getFoldersService = async () => {
   const folders = await fileUtils.readFile('./src/resources/folders.txt');

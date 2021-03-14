@@ -1,5 +1,5 @@
 const getFoldersService = require('../githubPush.service');
-const fileUtils = require('../../utils/file.utils');
+const fileUtils = require('../../utils/file.util');
 
 describe('Get folders service', () => {
   it('should return the folders name from the file', async () => {
