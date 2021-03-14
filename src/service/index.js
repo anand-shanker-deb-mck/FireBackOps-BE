@@ -1,5 +1,15 @@
 const { exec } = require('child_process');
 const fse = require('fs-extra');
+const {
+  getAllProjects, getProjectById, createProject,
+  deleteAllProjects,
+  deleteProjectById,
+  updateProject,
+} = require('./project.service');
+const {
+  getAllUsers, getUserById, createUser,
+} = require('./user.service');
+
 const updateHandlerService = require('./generateCode/updateHandler');
 const updateDependencyService = require('./generateCode/updatePackageJson');
 const updateRouteService = require('./generateCode/updateRoutes');
@@ -16,4 +26,15 @@ const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectN
 };
 
 updateHandlerAndDependency();
-module.exports = { updateHandlerAndDependency };
+module.exports = {
+  updateHandlerAndDependency,
+  getAllUsers,
+  getUserById,
+  getAllProjects,
+  getProjectById,
+  createUser,
+  createProject,
+  deleteAllProjects,
+  deleteProjectById,
+  updateProject,
+};
