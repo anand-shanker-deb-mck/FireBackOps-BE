@@ -1,7 +1,7 @@
 const joi = require('joi');
 
 const githubPushSchema = joi.object().keys({
-  username: joi.string().required(),
+  username: joi.string(),
   accessToken: joi.string().required(),
   commitMessage: joi.string().required(),
   repositoryName: joi.string().required(),
