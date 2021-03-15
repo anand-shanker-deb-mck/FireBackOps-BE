@@ -2,14 +2,14 @@ const githubPushHandler = require('../githubPush.handler');
 const githubPushService = require('../../service/githubPush.service');
 
 describe('Git hub push handler', () => {
-  let mockSend;
+  let mockJson;
   let mockResponse;
   let mockRequest;
   let mockValue;
   beforeEach(() => {
-    mockSend = jest.fn();
+    mockJson = jest.fn();
     mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
+      status: jest.fn(() => ({ json: mockJson })),
     };
     mockRequest = {
       body: {
@@ -30,19 +30,19 @@ describe('Git hub push handler', () => {
     const spyGetFoldersService = jest.spyOn(githubPushService, 'getFoldersService').mockResolvedValue(mockValue);
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.status().send).toHaveBeenCalledWith(mockValue);
+    expect(mockResponse.status().json).toHaveBeenCalledWith({ data: mockValue });
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
 });
 
 describe('Git hub push handler', () => {
-  let mockSend;
+  let mockJson;
   let mockResponse;
   let mockRequest;
   beforeEach(() => {
-    mockSend = jest.fn();
+    mockJson = jest.fn();
     mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
+      status: jest.fn(() => ({ json: mockJson })),
     };
     mockRequest = {
       body: {
@@ -62,7 +62,7 @@ describe('Git hub push handler', () => {
     const spyGetFoldersService = jest.spyOn(githubPushService, 'getFoldersService').mockRejectedValue('error');
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.status().send).toHaveBeenCalledWith('Unable to read files');
+    expect(mockResponse.status().json).toHaveBeenCalledWith({ message: 'Unable to read files' });
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
 });

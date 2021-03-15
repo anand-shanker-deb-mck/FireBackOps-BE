@@ -5,9 +5,9 @@ const createFoldersHandler = async (req, res) => {
     const { body } = req;
     const { projectId } = body;
     const routesIdList = await createFoldersService.getRouteDetailsService(projectId);
-    res.status(200).send(routesIdList);
+    res.status(200).json({ data: routesIdList });
   } catch (err) {
-    res.status(500).send('Unable to fetch details');
+    res.status(500).json({ message: 'Unable to fetch details' });
   }
 };
 
