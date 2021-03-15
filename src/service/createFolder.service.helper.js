@@ -1,34 +1,74 @@
 const {
+  uniq,
+  find,
+} = require('lodash');
+const {
   Configuration,
 } = require('../../models');
 
 const filterDetails = async (projectDetails) => {
   const { routes } = projectDetails;
-  let newRoute = routes.map(async (route) => {
-    let newConfig = route.configurations.map(async (configuration) => {
+
+  const rawDependencyIds = routes.reduce((dependencyIdList, route) => {
+    const configurationDependencies = route.configurations.reduce((
+      configDependencyCollection, configuration,
+    ) => {
       if (configuration.dependencies) {
-        let newDep = configuration.dependencies.map(async (dependency) => {
-          const dependencyString = await Configuration.findOne({
-            where: {
-              id: dependency,
-            },
-            attributes: ['refName'],
-          });
-          return dependencyString.refName;
-        });
-        newDep = await Promise.all(newDep);
-        const newObj = { ...configuration, dependencies: newDep };
-        return newObj;
+        return [
+          ...configDependencyCollection,
+          ...configuration.dependencies,
+        ];
       }
-      return { ...configuration };
-    });
+      return configDependencyCollection;
+    }, []);
+    return [
+      ...dependencyIdList,
+      ...configurationDependencies,
+    ];
+  }, []);
 
-    newConfig = await Promise.all(newConfig);
-    return { ...route, configurations: newConfig };
+  // Remove the duplicate ids
+  const dependencyIds = uniq(rawDependencyIds);
+
+  // Fetch all depency names in oneshot DB call
+  const dependencyNames = await Configuration.findAll({
+    where: {
+      id: dependencyIds,
+    },
+    attributes: ['id', 'refName'],
   });
-  newRoute = await Promise.all(newRoute);
-  const newProjectDetails = { ...projectDetails, routes: newRoute };
 
+  // Add dependency names to the  configuration payload
+  const newRoute = routes.map((route) => {
+    const newConfig = route.configurations.map((configuration) => {
+      if (configuration.dependencies) {
+        const newDependencies = configuration.dependencies.map((
+          dependency,
+        ) => {
+          const {
+            refName,
+          } = find(dependencyNames, {
+            id: dependency,
+          });
+          return refName;
+        });
+        return {
+          ...configuration,
+          dependencies: newDependencies,
+        };
+      }
+      return configuration;
+    });
+    return {
+      ...route,
+      configurations: newConfig,
+    };
+  });
+
+  const newProjectDetails = {
+    ...projectDetails,
+    routes: newRoute,
+  };
   return newProjectDetails;
 };
 

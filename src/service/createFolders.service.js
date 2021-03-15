@@ -25,6 +25,7 @@ const getRouteDetailsService = async (projectId) => {
 
     attributes: [['name', 'projectName']],
   });
+
   const newProjectDetails = JSON.parse(JSON.stringify(projectDetails));
   // console.log(newProject.routes[0].configurations);
 

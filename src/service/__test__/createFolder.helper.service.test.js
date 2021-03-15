@@ -38,7 +38,7 @@ describe('Filter details service', () => {
         }],
     };
 
-    const spyModel = jest.spyOn(Configuration, 'findOne').mockResolvedValueOnce({ refName: 'a' }).mockResolvedValueOnce({ refName: 'b' }).mockResolvedValueOnce({ refName: 'c' });
+    const spyModel = jest.spyOn(Configuration, 'findAll').mockResolvedValue([{ refName: 'a', id: 1 }, { refName: 'b', id: 2 }, { refName: 'c', id: 3 }]);
     const returnValue = await createFoldersHelper.filterDetails(mockParam);
     expect(spyModel).toHaveBeenCalled();
     expect(returnValue).toEqual(mockValue);
