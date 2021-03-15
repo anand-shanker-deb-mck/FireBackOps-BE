@@ -33,7 +33,6 @@ describe('Add a new route', () => {
       status: jest.fn(() => ({ json: mockJson })),
     };
     await routeHandler.addNewRouteHandler(mockReq, mockRes);
-    // console.log(newRoute);
     expect(mockRes.status).toHaveBeenCalledWith(201);
     expect(mockJson).toHaveBeenCalledWith({ message: mockRoute });
   });

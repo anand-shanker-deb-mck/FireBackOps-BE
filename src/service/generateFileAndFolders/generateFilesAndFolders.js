@@ -27,7 +27,7 @@ const generateProjectFolderStructure = (projectName) => {
     fse.mkdirSync(`${projectName}/src/services`);
     fse.mkdirSync(`${projectName}/src/utils`);
   } else {
-    throw new Error(`Project ${projectName} already exists!`);
+    console.log(`Project ${projectName} already exists!`);
   }
 };
 
