@@ -18,20 +18,22 @@ describe('storeCustomComp function', () => {
     implementation: 'MOCK IMPLEMENTATION',
     projectID: [1],
   };
-  it('should throw InvalidBodyError if custom component with given configId already exists', async () => {
-    spyOnCheckCustomCompExist.mockResolvedValue(true);
-    try {
-      await storeCustomComp(MOCK_BODY);
-    } catch (error) {
-      expect(error.message).toBe('Custom component with given configId already exists');
-    }
-  });
+
   it('should throw InvalidBodyError if component with given type already exists', async () => {
     spyOnCheckTypeAlreadyExist.mockResolvedValue(true);
     try {
       await storeCustomComp(MOCK_BODY);
     } catch (error) {
       expect(error.message).toBe('Component with given type already exists');
+    }
+  });
+  it('should throw InvalidBodyError if custom component with given configId already exists', async () => {
+    spyOnCheckTypeAlreadyExist.mockResolvedValue(false);
+    spyOnCheckCustomCompExist.mockResolvedValue(true);
+    try {
+      await storeCustomComp(MOCK_BODY);
+    } catch (error) {
+      expect(error.message).toBe('Custom component with given configId already exists');
     }
   });
   it('should enter information to db and return data on successful insertion', async () => {
