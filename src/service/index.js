@@ -7,8 +7,9 @@ const {
   updateProject,
 } = require('./project.service');
 const {
-  getAllUsers, getUserById, createUser,
+  getAllUsers, getUserById, createUser, getUserDetails,
 } = require('./user.service');
+const { createUserProject } = require('./user_project.service');
 
 const updateHandlerService = require('./generateCode/updateHandler');
 const updateDependencyService = require('./generateCode/updatePackageJson');
@@ -26,6 +27,7 @@ const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectN
 };
 
 updateHandlerAndDependency();
+
 module.exports = {
   updateHandlerAndDependency,
   getAllUsers,
@@ -37,4 +39,6 @@ module.exports = {
   deleteAllProjects,
   deleteProjectById,
   updateProject,
+  getUserDetails,
+  createUserProject,
 };

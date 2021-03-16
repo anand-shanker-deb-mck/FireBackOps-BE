@@ -6,10 +6,12 @@ const { router: userRouter } = require('./user.router');
 const { router: loginRouter } = require('./login.route');
 const { router: routeRouter } = require('./route.route');
 const { router: configRouter } = require('./config.route');
+const { router: userProjectRouter } = require('./user_project.route');
 
 const router = express.Router();
 const swaggerDocument = require('../swagger.json');
 
+router.use('/user-project', userProjectRouter);
 router.use('/ping', healthRouter);
 router.use('/config', configRouter);
 router.use('/login', loginRouter);
