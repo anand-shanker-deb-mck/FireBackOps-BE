@@ -1,6 +1,13 @@
 /* eslint-disable camelcase */
 const { User } = require('../../models');
 
+const getUserDetails = async () => {
+  const userDetails = await User.findAll({
+    attributes: ['user_name', 'display_name'],
+  });
+  return userDetails;
+};
+
 const getAllUsers = async () => {
   const users = await User.findAll();
   return users;
@@ -20,4 +27,6 @@ const createUser = async (userName, displayName) => {
   return newUser.dataValues;
 };
 
-module.exports = { getAllUsers, getUserById, createUser };
+module.exports = {
+  getAllUsers, getUserById, createUser, getUserDetails,
+};

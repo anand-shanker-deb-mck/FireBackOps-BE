@@ -1,6 +1,41 @@
 const UserHandler = require('../user.handler');
 const userServices = require('../../service');
 
+describe('getUserDetailsHandler', () => {
+  jest.useFakeTimers();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+  const responseValue = [
+    {
+      user_name: 'hi',
+      display_name: 'hi',
+    },
+    {
+      user_name: 'bye',
+      display_name: 'bye',
+    }];
+  const mockRequest = {};
+
+  const mockResponse = {
+    status: jest.fn(() => mockResponse),
+    send: jest.fn(),
+
+  };
+  it('should get user_name and display_name  from database', async () => {
+    jest.spyOn(userServices, 'getUserDetails').mockResolvedValue(responseValue);
+    await UserHandler.getUserDetailsHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.send).toHaveBeenCalledWith(responseValue);
+    expect(userServices.getUserDetails).toHaveBeenCalledWith();
+  });
+  it('should set status code to 500 if error in accessing db', async () => {
+    jest.spyOn(userServices, 'getUserDetails').mockRejectedValue(new Error('Error in accessing data'));
+    await UserHandler.getUserDetailsHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+  });
+});
+
 describe('getAllUsersHandler', () => {
   jest.useFakeTimers();
   afterEach(() => {

@@ -7,8 +7,9 @@ const {
   updateProject,
 } = require('./project.service');
 const {
-  getAllUsers, getUserById, createUser,
+  getAllUsers, getUserById, createUser, getUserDetails,
 } = require('./user.service');
+const { createUserProject } = require('./user_project.service');
 
 const updateHandlerService = require('./generateCode/updateHandler');
 const updateDependencyService = require('./generateCode/updatePackageJson');
@@ -37,4 +38,6 @@ module.exports = {
   deleteAllProjects,
   deleteProjectById,
   updateProject,
+  getUserDetails,
+  createUserProject,
 };

@@ -1,6 +1,15 @@
 /* eslint-disable camelcase */
 const userServices = require('../service');
 
+const getUserDetailsHandler = async (req, res) => {
+  try {
+    const allUsers = await userServices.getUserDetails();
+    res.status(200).send(allUsers);
+  } catch (error) {
+    res.status(500).send();
+  }
+};
+
 const getAllUsersHandler = async (req, res) => {
   try {
     const allUsers = await userServices.getAllUsers();
@@ -30,4 +39,6 @@ const createUserHandler = async (req, res) => {
     res.status(500).send();
   }
 };
-module.exports = { getAllUsersHandler, getUsersByIdHandler, createUserHandler };
+module.exports = {
+  getAllUsersHandler, getUsersByIdHandler, createUserHandler, getUserDetailsHandler,
+};
