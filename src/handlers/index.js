@@ -8,6 +8,7 @@ const {
 } = require('./project.handler');
 const { updateConfigHandler } = require('./config.handler');
 const { storeConfigHandler } = require('./config.handler');
+const { storeCustomCompHandler } = require('./customComp.handler');
 const { addNewRouteHandler, getAllRoutesHandler, updateRouteHandler } = require('./route.handler');
 
 module.exports = {
@@ -26,4 +27,5 @@ module.exports = {
   updateRouteHandler,
   updateConfigHandler,
   storeConfigHandler,
+  storeCustomCompHandler,
 };

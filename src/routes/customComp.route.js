@@ -1,5 +1,5 @@
 const express = require('express');
-const { storeCustomCompHandler } = require('../handlers/customComp.handler');
+const { storeCustomCompHandler } = require('../handlers');
 const { customCompValidator } = require('../middlewares/customComp.validator');
 
 const router = express.Router();
