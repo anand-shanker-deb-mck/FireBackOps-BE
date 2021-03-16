@@ -41,28 +41,3 @@ describe('Git hub push handler', () => {
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
 });
-
-// describe('Git hub push handler', () => {
-//   let mockJson;
-//   let mockResponse;
-//   let mockRequest;
-//   beforeEach(() => {
-//     mockJson = jest.fn();
-//     mockResponse = {
-//       status: jest.fn(() => ({ json: mockJson })),
-//     };
-//     mockRequest = {
-//       body: {
-//         authToken: 'a',
-//         userName: 'a',
-//         repositoryName: 'a',
-//         branchName: 'a',
-//         commitMessage: 'a',
-//       },
-//     };
-//   });
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   });
-
-// });
