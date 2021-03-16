@@ -25,7 +25,7 @@ const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectN
   exec(`npx eslint --fix ${projectName}/src`);
 };
 
-updateHandlerAndDependency();
+// updateHandlerAndDependency();
 module.exports = {
   updateHandlerAndDependency,
   getAllUsers,

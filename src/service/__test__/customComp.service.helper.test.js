@@ -87,9 +87,22 @@ describe('implementationHelper function', () => {
     });
     spyOnRouteFindOne.mockResolvedValue({ dataValues: { p_id: MOCK_PROJECTID } });
     spyOnProjectFindOne.mockResolvedValue({ dataValues: { name: MOCK_PROJECTNAME } });
+    spyOnUtils.mockRejectedValue('File does not exist');
     const receivedValue = await implementationHelper(3);
-    spyOnUtils.mockResolvedValue(null);
     expect(spyOnUtils).toHaveBeenCalledWith(`./${MOCK_PROJECTNAME}/src/services/${MOCK_REFNAME}.service.js`);
     expect(receivedValue).toBe(null);
+  });
+
+  it('should return implementaion code if exists', async () => {
+    const MOCK = 'abc';
+    spyOnConfigFindOne.mockResolvedValue({
+      dataValues: { routeId: MOCK_ROUTEID, refName: MOCK_REFNAME },
+    });
+    spyOnRouteFindOne.mockResolvedValue({ dataValues: { p_id: MOCK_PROJECTID } });
+    spyOnProjectFindOne.mockResolvedValue({ dataValues: { name: MOCK_PROJECTNAME } });
+    spyOnUtils.mockResolvedValue(MOCK);
+    const receivedValue = await implementationHelper(3);
+    expect(spyOnUtils).toHaveBeenCalledWith(`./${MOCK_PROJECTNAME}/src/services/${MOCK_REFNAME}.service.js`);
+    expect(receivedValue).toBe(MOCK);
   });
 });

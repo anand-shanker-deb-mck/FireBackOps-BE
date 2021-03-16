@@ -1,7 +1,8 @@
-const customCompServiceHelpers = require('./config.service.helper');
+const customCompServiceHelpers = require('./customComp.service.helper');
 const InvalidBodyError = require('../errors/invalidBody.error');
 // eslint-disable-next-line camelcase
 const { Custom_Component } = require('../../models');
+// const { checkTypeAlreadyExist } = require('./customComp.service.helper');
 
 const storeCustomComp = async (body) => {
   const { configId, type } = body;

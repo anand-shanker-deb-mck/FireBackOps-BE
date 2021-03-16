@@ -88,7 +88,7 @@ const implementationHelper = async (configId) => {
   try {
     const implementationCode = await fileUtils.readFile(`./${projectName}/src/services/${refName}.service.js`);
     return implementationCode;
-  } catch {
+  } catch (e) {
     return null;
   }
   // if implementation code file does not exist
