@@ -4,16 +4,16 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Custom_Components extends Model {
+  class Custom_Component extends Model {
     static associate({ Configuration }) {
-      Custom_Components.belongsTo(Configuration, {
+      Custom_Component.belongsTo(Configuration, {
         foreignKey: 'configId',
         onDelete: 'cascade',
         onUpdate: 'cascade',
       });
     }
   }
-  Custom_Components.init({
+  Custom_Component.init({
     type: {
       type: DataTypes.STRING,
       field: 'type',
@@ -38,8 +38,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'Custom_Components',
+    modelName: 'Custom_Component',
     tableName: 'custom_components',
   });
-  return Custom_Components;
+  return Custom_Component;
 };

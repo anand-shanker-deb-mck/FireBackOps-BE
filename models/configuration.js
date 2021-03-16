@@ -5,13 +5,13 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   class Configuration extends Model {
-    static associate({ Route, Custom_Components }) {
+    static associate({ Route, Custom_Component }) {
       Configuration.belongsTo(Route, {
         foreignKey: 'routeId',
         onDelete: 'cascade',
         onUpdate: 'cascade',
       });
-      Configuration.hasOne(Custom_Components, {
+      Configuration.hasOne(Custom_Component, {
         foreignKey: 'configId',
         as: 'custom_components',
       });
