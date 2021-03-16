@@ -7,6 +7,7 @@ const {
 
 const router = express.Router();
 
+router.get('/allusers', userHandler.getUserDetailsHandler);
 router.get('/', userHandler.getAllUsersHandler);
 router.get('/:id', getUserValidator, userHandler.getUsersByIdHandler);
 router.post('/', createUserValidator, userHandler.createUserHandler);

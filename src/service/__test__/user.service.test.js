@@ -1,6 +1,30 @@
-const { getAllUsers, getUserById, createUser } = require('../user.service');
+const {
+  getAllUsers, getUserById, createUser, getUserDetails,
+} = require('../user.service');
 
 const { User } = require('../../../models');
+
+describe('getUserDetails function', () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+  it('should return all username and displayname', async () => {
+    const spyOnFindAll = jest.spyOn(User, 'findAll');
+    const MOCK_EXPECTED_VALUE = [
+      {
+        user_name: 'hi',
+        display_name: 'hi',
+      },
+      {
+        user_name: 'bye',
+        display_name: 'bye',
+      },
+    ];
+    spyOnFindAll.mockResolvedValue(MOCK_EXPECTED_VALUE);
+    const recievedData = await getUserDetails();
+    expect(recievedData).toEqual(MOCK_EXPECTED_VALUE);
+  });
+});
 
 describe('getAllUsers function', () => {
   afterAll(() => {

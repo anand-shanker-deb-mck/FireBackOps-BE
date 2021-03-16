@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const fileUtil = require('../utils/file.util');
 const githubApiUtil = require('../utils/github.api.util');
+const userUtils = require('../utils/user.utils');
 
 const oauthLogin = async (code) => {
   const body = {
@@ -11,11 +12,11 @@ const oauthLogin = async (code) => {
 
   const opts = { headers: { accept: 'application/json' } };
   const accessToken = await githubApiUtil.getToken(body, opts);
-  const username = await githubApiUtil.getUserName(accessToken);
+  const userName = await githubApiUtil.getUserName(accessToken);
+  fileUtil.writeFile('accessToken.txt', `${userName} ${accessToken}`);
+  await userUtils.createUser(userName);
 
-  fileUtil.writeFile('accessToken.txt', `${username} ${accessToken}`);
-
-  const jwtToken = jwt.sign({ username },
+  const jwtToken = jwt.sign({ userName },
     process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY_TIME });
   return jwtToken;
 };
