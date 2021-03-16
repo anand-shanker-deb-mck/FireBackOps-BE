@@ -6,6 +6,7 @@ const { router: userRouter } = require('./user.router');
 const { router: loginRouter } = require('./login.route');
 const { router: routeRouter } = require('./route.route');
 const { router: configRouter } = require('./config.route');
+const { router: customComponentRouter } = require('./customComp.route');
 
 const router = express.Router();
 const swaggerDocument = require('../swagger.json');
@@ -17,6 +18,7 @@ router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 router.use('/project', projectRouter);
 router.use('/route', routeRouter);
 router.use('/user', userRouter);
+router.use('/custom-component', customComponentRouter);
 
 module.exports = {
   router,
