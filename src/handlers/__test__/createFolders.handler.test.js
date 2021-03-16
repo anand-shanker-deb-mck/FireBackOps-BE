@@ -42,25 +42,6 @@ describe('Create Folders handler', () => {
     expect(mockResponse.status().json).toHaveBeenCalledWith({ data: mockValue });
     expect(spyGetRouteDetailsService).toHaveBeenCalledWith(1);
   });
-});
-
-describe('Create Folders handler', () => {
-  let mockJson;
-  let mockResponse;
-  let mockRequest;
-  beforeEach(() => {
-    mockJson = jest.fn();
-    mockResponse = {
-      status: jest.fn(() => ({ json: mockJson })),
-    };
-    mockRequest = {
-      body: { projectId: 1 },
-    };
-  });
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should set status code to 500', async () => {
     jest.spyOn(createFoldersService, 'getRouteDetailsService').mockRejectedValue('sj');
     await createFoldersHandler.createFoldersHandler(mockRequest, mockResponse);

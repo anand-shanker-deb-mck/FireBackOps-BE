@@ -33,31 +33,6 @@ describe('Git hub push handler', () => {
     expect(mockResponse.status().json).toHaveBeenCalledWith({ data: mockValue });
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
-});
-
-describe('Git hub push handler', () => {
-  let mockJson;
-  let mockResponse;
-  let mockRequest;
-  beforeEach(() => {
-    mockJson = jest.fn();
-    mockResponse = {
-      status: jest.fn(() => ({ json: mockJson })),
-    };
-    mockRequest = {
-      body: {
-        authToken: 'a',
-        userName: 'a',
-        repositoryName: 'a',
-        branchName: 'a',
-        commitMessage: 'a',
-      },
-    };
-  });
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
-
   it('should set status code to 500', async () => {
     const spyGetFoldersService = jest.spyOn(githubPushService, 'getFoldersService').mockRejectedValue('error');
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
@@ -66,3 +41,28 @@ describe('Git hub push handler', () => {
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
 });
+
+// describe('Git hub push handler', () => {
+//   let mockJson;
+//   let mockResponse;
+//   let mockRequest;
+//   beforeEach(() => {
+//     mockJson = jest.fn();
+//     mockResponse = {
+//       status: jest.fn(() => ({ json: mockJson })),
+//     };
+//     mockRequest = {
+//       body: {
+//         authToken: 'a',
+//         userName: 'a',
+//         repositoryName: 'a',
+//         branchName: 'a',
+//         commitMessage: 'a',
+//       },
+//     };
+//   });
+//   afterEach(() => {
+//     jest.clearAllMocks();
+//   });
+
+// });
