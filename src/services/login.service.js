@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const fileUtil = require('../utils/file.util');
 const githubApiUtil = require('../utils/github.api.util');
+const { redisClient } = require('../redis');
 const userUtils = require('../utils/user.utils');
 
 const oauthLogin = async (code) => {
@@ -12,11 +12,12 @@ const oauthLogin = async (code) => {
 
   const opts = { headers: { accept: 'application/json' } };
   const accessToken = await githubApiUtil.getToken(body, opts);
-  const userName = await githubApiUtil.getUserName(accessToken);
-  fileUtil.writeFile('accessToken.txt', `${userName} ${accessToken}`);
-  await userUtils.createUser(userName);
+  const username = await githubApiUtil.getUserName(accessToken);
+  await userUtils.createUser(username);
 
-  const jwtToken = jwt.sign({ userName },
+  await redisClient.setex(username, process.env.ACCESS_TOKEN_EXPIRY_TIME, accessToken);
+
+  const jwtToken = jwt.sign({ username },
     process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY_TIME });
   return jwtToken;
 };

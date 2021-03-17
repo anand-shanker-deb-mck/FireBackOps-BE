@@ -10,7 +10,6 @@ describe(' authenticateJwt Middleware', () => {
     mockSend = jest.fn();
     mockResponse = {
       status: jest.fn(() => ({ send: mockSend })),
-      redirect: jest.fn(),
     };
     mockNext = jest.fn();
   });
@@ -20,26 +19,18 @@ describe(' authenticateJwt Middleware', () => {
       headers: { authorization: null },
     };
     authenticateJwt(mockRequest, mockResponse, mockNext);
-    expect(mockResponse.redirect).toHaveBeenCalledWith(`/login.html?client_id=${process.env.CLIENT_ID}`);
+    expect(mockSend).toHaveBeenCalledWith();
+    expect(mockResponse.status).toHaveBeenCalledWith(400);
   });
 
-  it('should go to login page when jwtToken is expired', () => {
+  it('should go to login page when jwtToken is expired or bad token', () => {
     const mockRequest = {
       headers: { authorization: 'Bearer sdfuahsdu283798wqr79' },
     };
     jest.spyOn(jwt, 'verify').mockImplementation((token, secret, callback) => { callback(new TokenExpiredError(), undefined); });
     authenticateJwt(mockRequest, mockResponse, mockNext);
-    expect(mockResponse.redirect).toHaveBeenCalledWith(`/login.html?client_id=${process.env.CLIENT_ID}`);
-  });
-
-  it('should return with status 401 when called with bad jwtToken ', () => {
-    const mockRequest = {
-      headers: { authorization: 'Bearer sdfuahsdu283798wqr79' },
-    };
-    jest.spyOn(jwt, 'verify').mockImplementation((token, secret, callback) => { callback(new Error('error'), undefined); });
-    authenticateJwt(mockRequest, mockResponse, mockNext);
     expect(mockResponse.status).toHaveBeenCalledWith(401);
-    expect(mockSend).toHaveBeenCalledWith({ message: 'Unauthenticated' });
+    expect(mockSend).toHaveBeenCalledWith();
   });
 
   it('should go to next', () => {
