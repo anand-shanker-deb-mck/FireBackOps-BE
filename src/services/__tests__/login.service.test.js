@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+
+jest.mock('redis', () => jest.requireActual('redis-mock'));
 const { oauthLogin } = require('../login.service');
-const fileUtil = require('../../utils/file.util');
 const githubApiUtil = require('../../utils/github.api.util');
 const userUtils = require('../../utils/user.utils');
 
@@ -48,15 +49,11 @@ describe('oauthLogin', () => {
 
     jest.spyOn(userUtils, 'createUser').mockResolvedValue(mockUser);
 
-    const writeFileSpy = jest.spyOn(fileUtil, 'writeFile');
-    writeFileSpy.mockResolvedValue();
-
     jest.spyOn(jwt, 'sign').mockResolvedValue(mockJWTToken);
 
     const response = await oauthLogin(mockCode);
     expect(response).toBe(mockJWTToken);
     expect(getUsernameSpy).toHaveBeenCalledWith(mockAccessToken);
-    expect(writeFileSpy).toHaveBeenCalledWith('accessToken.txt', `${mockUsername} ${mockAccessToken}`);
   });
 
   it('should throw error with invalid api call', async () => {

@@ -7,18 +7,14 @@ const authenticateJwt = (req, res, next) => {
 
     jwt.verify(jwtToken, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        if (err.name === 'TokenExpiredError') {
-          res.redirect(`/login.html?client_id=${process.env.CLIENT_ID}`);
-        } else {
-          res.status(401).send({ message: 'Unauthenticated' });
-        }
-        return;
+        res.status(401).send();
+      } else {
+        req.user = user;
       }
-      req.user = user;
     });
     next();
   } else {
-    res.redirect(`/login.html?client_id=${process.env.CLIENT_ID}`);
+    res.status(400).send();
   }
 };
 
