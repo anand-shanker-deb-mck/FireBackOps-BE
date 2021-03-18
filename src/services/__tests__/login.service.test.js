@@ -9,11 +9,11 @@ describe('oauthLogin', () => {
   afterEach(() => jest.clearAllMocks());
   it('should return jwtToken ', async () => {
     const mockAccessToken = 'dsbvyubdsbvsuvdsbk';
-    const mockUsername = 'appy385';
+    const mockUsername = 'abc';
     const mockJWTToken = '348yr834yt834yt83utirir';
     const mockCode = '73582375278';
-    const mockUser = [{
-      User: {
+    const mockUser = [
+      {
         dataValues: {
           id: 13,
           userName: 'abc',
@@ -39,7 +39,8 @@ describe('oauthLogin', () => {
         },
         isNewRecord: false,
       },
-    }];
+      false,
+    ];
 
     const getTokenSpy = jest.spyOn(githubApiUtil, 'getToken');
     getTokenSpy.mockResolvedValue(mockAccessToken);
@@ -49,11 +50,17 @@ describe('oauthLogin', () => {
 
     jest.spyOn(userUtils, 'createUser').mockResolvedValue(mockUser);
 
-    jest.spyOn(jwt, 'sign').mockResolvedValue(mockJWTToken);
+    const jwtSignSpy = jest.spyOn(jwt, 'sign');
+    jwtSignSpy.mockResolvedValue(mockJWTToken);
 
     const response = await oauthLogin(mockCode);
     expect(response).toBe(mockJWTToken);
     expect(getUsernameSpy).toHaveBeenCalledWith(mockAccessToken);
+    expect(jwtSignSpy).toHaveBeenCalledWith({
+      username: mockUsername,
+      id: mockUser[0].dataValues.id,
+    },
+    process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY_TIME });
   });
 
   it('should throw error with invalid api call', async () => {
