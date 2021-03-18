@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable camelcase */
 const projectServices = require('../service');
 
@@ -5,7 +6,6 @@ const getAllProjectsHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const allProjects = await projectServices.getAllProjects(id);
-
     res.status(200).send(allProjects);
   } catch (error) {
     res.status(500).send();
@@ -22,13 +22,14 @@ const getProjectByIdHandler = async (req, res) => {
   }
 };
 const createProjectHandler = async (req, res) => {
+  const { user } = req;
   const { name } = req.body;
   const { pAttributes } = req.body;
   try {
     const newProject = await projectServices.createProject(name, pAttributes);
+    const newUserProject = await projectServices.createUserProject(newProject.id, user.username);
     res.status(200).send(newProject);
   } catch (error) {
-    // res.status(500).json({ message: 'Error ,  Cannot create project' });
     res.status(500).send();
   }
 };
