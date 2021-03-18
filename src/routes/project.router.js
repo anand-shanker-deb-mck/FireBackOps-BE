@@ -1,4 +1,5 @@
 const express = require('express');
+const { authenticateJwt } = require('../middlewares/auth.middleware');
 const projectHandler = require('../handlers');
 const {
   getProjectByIdValidator,
@@ -9,9 +10,9 @@ const {
 } = require('../middlewares/project/project.validator');
 
 const router = express.Router();
-router.get('/user/:id', getProjectValidator, projectHandler.getAllProjectsHandler);
+router.get('/user/:id', getProjectValidator, authenticateJwt, projectHandler.getAllProjectsHandler);
 router.get('/:id', getProjectByIdValidator, projectHandler.getProjectByIdHandler);
-router.post('/', createProjectValidator, projectHandler.createProjectHandler);
+router.post('/', createProjectValidator, authenticateJwt, projectHandler.createProjectHandler);
 router.put('/:id', updateProjectValidator, projectHandler.updateProjectHandler);
 router.delete('/', projectHandler.deleteProjectHandler);
 router.delete('/:id', deleteProjectValidator, projectHandler.deleteProjectByIdHandler);

@@ -110,6 +110,100 @@
           "sequenceNumber": 3
         }
       ]
+    },
+    {
+      "routeName": "getshortestdistance",
+      "method": "GET",
+      "configuration": [
+        {
+          "type": "API",
+          "payload": {
+            "endpoint": "http://demo1852771.mockable.io/ibibo",
+            "method": "GET",
+            "nodeModules": {
+              "lodash": "^4.5.6",
+              "eslint": "1.1.1"
+            }
+          },
+          "refName": "getSource",
+          "sequenceNumber": 2,
+          "dependencies": []
+        },
+        {
+          "type": "API",
+          "payload": {
+            "endpoint": "http://demo1852771.mockable.io/trivago",
+            "method": "GET",
+            "nodeModules": { "lodash": "^4.5.6", "axios": "^1.2.3" }
+          },
+          "refName": "getDestination",
+          "sequenceNumber": 1,
+          "dependencies": []
+        },
+        {
+          "type": "MAPPER",
+          "payload": {
+            "code": "return getSource < getDestination ? getSource :  getDestination",
+            "nodeModules": {
+              "lodash": "^4.5.6",
+              "axios": "^1.2.3",
+              "express": "^4.17.1",
+              "fs-extra": "^9.1.0"
+            }
+          },
+          "refName": "shortestDistanceMapper",
+          "sequenceNumber": 3,
+          "dependencies": ["getSource", "getDestination"]
+        }
+      ]
+    },
+    {
+      "routeName": "bus_stops",
+      "method": "GET",
+      "configuration": [
+        {
+          "type": "API",
+          "payload": {
+            "endpoint": "http://demo1852771.mockable.io/ibibo",
+            "method": "GET",
+            "nodeModules": {
+              "lodash": "^4.5.6",
+              "eslint": "1.1.1"
+            }
+          },
+          "dependencies": [],
+          "refName": "getIbiboSource",
+          "sequenceNumber": 2
+        },
+        {
+          "type": "API",
+          "payload": {
+            "endpoint": "http://demo1852771.mockable.io/trivago",
+            "method": "GET",
+            "nodeModules": { "lodash": "^4.5.6", "axios": "^1.2.3" }
+          },
+          "dependencies": [],
+          "refName": "getRadisonSource",
+          "sequenceNumber": 1
+        },
+        {
+          "type": "CUSTOM_MAPPER_SHORTEST_PATH",
+          "payload": {
+            "implementation": "const customMapper = (getSource, getDestination) =>  getSource < getDestination ? getSource :  getDestination",
+            "signature": {
+              "getSource": "getIbiboSource",
+              "getDestination": "getRadisonSource"
+            },
+            "nodeModules": {
+              "lodash": "^4.5.6",
+              "eslint": "1.1.1"
+            }
+          },
+          "dependencies": ["getRadisonSource", "getIbiboSource"],
+          "refName": "customHotelCostMapper",
+          "sequenceNumber": 3
+        }
+      ]
     }
   ]
 }

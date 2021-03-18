@@ -3,9 +3,11 @@ const projectHandler = require('../project.handler');
 
 describe('createProjectHandler', () => {
   const mockRequest = {
+    user: { username: 'abc' },
     body: {
       name: 'project111',
       pAttributes: { time: 2 },
+
     },
   };
   const mockResponse = {
@@ -23,6 +25,7 @@ describe('createProjectHandler', () => {
   };
   it('should return status code 200 and create a project', async () => {
     jest.spyOn(projectServices, 'createProject').mockResolvedValueOnce(responseValue);
+    jest.spyOn(projectServices, 'createUserProject').mockResolvedValueOnce('abc');
     await projectHandler.createProjectHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.send).toHaveBeenCalledWith(responseValue);
