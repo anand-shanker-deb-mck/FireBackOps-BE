@@ -13,11 +13,11 @@ const oauthLogin = async (code) => {
   const opts = { headers: { accept: 'application/json' } };
   const accessToken = await githubApiUtil.getToken(body, opts);
   const username = await githubApiUtil.getUserName(accessToken);
-  await userUtils.createUser(username);
+  const userObject = await userUtils.createUser(username);
 
   await redisClient.setex(username, process.env.ACCESS_TOKEN_EXPIRY_TIME, accessToken);
 
-  const jwtToken = jwt.sign({ username },
+  const jwtToken = jwt.sign({ username, id: userObject[0].dataValues.id },
     process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY_TIME });
   return jwtToken;
 };

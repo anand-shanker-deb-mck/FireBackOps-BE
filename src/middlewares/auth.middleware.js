@@ -12,7 +12,7 @@ const authenticateJwt = (req, res, next) => {
         req.user = user;
       }
     });
-    next();
+    if (req.user) next();
   } else {
     res.status(400).send();
   }
