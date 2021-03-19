@@ -97,6 +97,7 @@ describe('getAllProjectsHandler', () => {
     params: {
       id: 1,
     },
+    user: { id: 1 },
   };
   const mockResponse = {
     status: jest.fn(() => mockResponse),
