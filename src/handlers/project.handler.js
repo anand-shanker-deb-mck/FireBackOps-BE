@@ -3,9 +3,9 @@
 const projectServices = require('../service');
 
 const getAllProjectsHandler = async (req, res) => {
-  const { id } = req.params;
+  const { user } = req;
   try {
-    const allProjects = await projectServices.getAllProjects(id);
+    const allProjects = await projectServices.getAllProjects(user.id);
     res.status(200).send(allProjects);
   } catch (error) {
     res.status(500).send();
@@ -27,7 +27,7 @@ const createProjectHandler = async (req, res) => {
   const { pAttributes } = req.body;
   try {
     const newProject = await projectServices.createProject(name, pAttributes);
-    const newUserProject = await projectServices.createUserProject(newProject.id, user.username);
+    const newUserProject = await projectServices.createUserProject(newProject.id, user.id);
     res.status(200).send(newProject);
   } catch (error) {
     res.status(500).send();

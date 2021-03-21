@@ -1,6 +1,6 @@
 const {
   storeConfigDBSchema, apiSchema, mapperSchema, updateConfigDBSchema,
-} = require('./schema');
+} = require('./config.validation.schema');
 
 const storeConfigValidator = (req, res, next) => {
   const { body } = req;

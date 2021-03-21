@@ -1,24 +1,15 @@
 /* eslint-disable camelcase */
 const { createUserProject } = require('../user_project.service');
-const { User, User_Project } = require('../../../models');
+const { User_Project } = require('../../../models');
 
 describe('createUserProject function', () => {
   afterAll(() => {
     jest.clearAllMocks();
   });
   it('should create a new user_project ', async () => {
-    const spyOnFindAll = jest.spyOn(User, 'findAll');
-    const MOCK_EXPECTED_VALUE1 = [
-      {
-        dataValues: { id: 1 },
-      },
-    ];
-
-    spyOnFindAll.mockResolvedValueOnce(MOCK_EXPECTED_VALUE1);
-
-    const spyOnFindAllUserProject = jest.spyOn(User_Project, 'findAll');
-    const MOCK_EXPECTED_VALUE2 = [];
-    spyOnFindAllUserProject.mockResolvedValueOnce(MOCK_EXPECTED_VALUE2);
+    const spyOnFindAllUserProject = jest.spyOn(User_Project, 'findOne');
+    const MOCK_EXPECTED_VALUE1 = false;
+    spyOnFindAllUserProject.mockResolvedValueOnce(MOCK_EXPECTED_VALUE1);
 
     const spyOnCreate = jest.spyOn(User_Project, 'create');
 

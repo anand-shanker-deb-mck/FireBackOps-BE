@@ -1,23 +1,17 @@
+/* eslint-disable no-return-await */
 /* eslint-disable camelcase */
-const { User, User_Project } = require('../../models');
+const { User_Project } = require('../../models');
 
-const createUserProject = async (ProjectId, userName) => {
-  let UserId = await User.findAll({
-    attributes: ['id'],
-    where: {
-      userName,
-    },
-  });
-  UserId = UserId[0].dataValues.id;
-  let user_project = await User_Project.findAll({
+const createUserProject = async (ProjectId, UserId) => {
+  const isUserPresent = await User_Project.findOne({
     where: {
       UserId,
       ProjectId,
     },
   });
-  if (user_project.length !== 0) { throw Error; }
-  user_project = await User_Project.create({ ProjectId, UserId });
-  return user_project;
+
+  if (isUserPresent) { throw Error; }
+  return await User_Project.create({ ProjectId, UserId });
 };
 
 module.exports = { createUserProject };

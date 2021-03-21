@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const { authenticateJwt } = require('../middlewares/auth.middleware');
 const projectHandler = require('../handlers');
@@ -10,7 +11,7 @@ const {
 } = require('../middlewares/project/project.validator');
 
 const router = express.Router();
-router.get('/user/:id', getProjectValidator, authenticateJwt, projectHandler.getAllProjectsHandler);
+router.get('/user', authenticateJwt, projectHandler.getAllProjectsHandler);
 router.get('/:id', getProjectByIdValidator, projectHandler.getProjectByIdHandler);
 router.post('/', createProjectValidator, authenticateJwt, projectHandler.createProjectHandler);
 router.put('/:id', updateProjectValidator, projectHandler.updateProjectHandler);
