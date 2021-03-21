@@ -10,6 +10,7 @@ const { router: routeRouter } = require('./route.route');
 const { router: configRouter } = require('./config.route');
 const { router: projectUsers } = require('./projectUsers.route');
 const { router: userProjectRouter } = require('./user_project.route');
+const { router: routeConfigRouter } = require('./routeConfig.route');
 
 const router = express.Router();
 const swaggerDocument = require('../swagger.json');
@@ -25,6 +26,7 @@ router.use('/createFolders', createFoldersRouter);
 router.use('/githubPush', githubPushRouter);
 router.use('/projectUsers', projectUsers);
 router.use('/user', userRouter);
+router.use('/routeConfig', routeConfigRouter);
 
 module.exports = {
   router,
