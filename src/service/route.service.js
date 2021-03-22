@@ -2,12 +2,12 @@ const { Route } = require('../../models');
 
 const addNewRouteService = async (body) => {
   const newRoute = await Route.create({
-    name: body.name, r_config: body.r_config, p_id: body.p_id,
+    name: body.name, r_config: body.r_config, p_id: body.p_id, method: body.method,
   });
   return newRoute;
 };
-const getAllRoutesService = async () => {
-  const allRoutes = await Route.findAll();
+const getAllRoutesByProjectIDService = async (pid) => {
+  const allRoutes = await Route.findAll({ where: { p_id: pid } });
   return allRoutes;
 };
 const updateRouteService = async (rid, body) => {
@@ -19,6 +19,6 @@ const updateRouteService = async (rid, body) => {
 };
 module.exports = {
   addNewRouteService,
-  getAllRoutesService,
+  getAllRoutesByProjectIDService,
   updateRouteService,
 };
