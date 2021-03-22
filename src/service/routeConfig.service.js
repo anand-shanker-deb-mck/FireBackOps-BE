@@ -11,7 +11,6 @@ const getRouteConfig = (async (routeId) => {
     include: [{
       model: Configuration,
       as: 'configurations',
-      attributes: ['id', 'componentType', 'payload', 'dependencies', 'sequence', 'refName'],
     }],
     where: {
       id: routeId,
