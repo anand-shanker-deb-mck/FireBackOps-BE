@@ -1,4 +1,5 @@
 const {
+  checkRefNameExist,
   checkRouteIdExist,
   checkRouteSequenceExists,
   findDependenciesNotExist,
@@ -86,5 +87,27 @@ describe('checkSequenceBeforeUpdate function ', () => {
     spyOnFindOne.mockResolvedValue('Present');
     const receivedValue = await checkSequenceBeforeUpdate(1, 1);
     expect(receivedValue).toBe(true);
+  });
+});
+
+describe('checkRefNameExist function', () => {
+  afterEach(() => { jest.clearAllMocks(); });
+  const spyOnFindOne = jest.spyOn(Configuration, 'findOne');
+  it('should return true if refName for provided routeId exists', async () => {
+    spyOnFindOne.mockResolvedValue({ dataValues: 'Present' });
+    const receivedValue = await checkRefNameExist(undefined, 1, 'MOCK_REF_NAME');
+    expect(receivedValue).toBe(true);
+  });
+  it('should return true if refName for provided configId"s route already exists', async () => {
+    spyOnFindOne.mockResolvedValueOnce({ dataValues: 'Present' });
+    spyOnFindOne.mockResolvedValue('Present');
+    const receivedValue = await checkRefNameExist(1, undefined, 'MOCK_REF_NAME');
+    expect(receivedValue).toBe(true);
+  });
+  it('should return false if refName does not exist', async () => {
+    spyOnFindOne.mockResolvedValueOnce({ dataValues: 'Present' });
+    spyOnFindOne.mockResolvedValue(null);
+    const receivedValue = await checkRefNameExist(1, undefined, 'MOCK_REF_NAME');
+    expect(receivedValue).toBe(false);
   });
 });

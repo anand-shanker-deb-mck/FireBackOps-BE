@@ -18,6 +18,11 @@ const storeConfig = async (body) => {
   if (dependenciesNotExisting) {
     throw new InvalidBodyError(`Dependencies [${dependenciesNotExisting}] do not exist`);
   }
+  const doesRefNameExist = await configServiceHelpers
+    .checkRefNameExist(undefined, routeId, refName);
+  if (doesRefNameExist) {
+    throw new InvalidBodyError('The reference name for route already exists');
+  }
   const configData = await Configuration.create({
     componentType: type, payload, refName, routeId, dependencies, sequence,
   });
@@ -50,6 +55,20 @@ const updateConfig = async (body) => {
       throw new InvalidBodyError('Two configurations cannot have same sequence in a route');
     }
   }
+  if (routeId && refName) {
+    const doesRefNameExist = await configServiceHelpers
+      .checkRefNameExist(undefined, routeId, refName);
+    if (doesRefNameExist) {
+      throw new InvalidBodyError('The reference name for route already exists');
+    }
+  }
+  if (refName) {
+    const doesRefNameExistConfig = await configServiceHelpers
+      .checkRefNameExist(id, undefined, refName);
+    if (doesRefNameExistConfig) {
+      throw new InvalidBodyError('The reference name for route already exists');
+    }
+  }
   if (sequence) {
     const doesSeqAlreadyExist = await configServiceHelpers.checkSequenceBeforeUpdate(id, sequence);
     if (doesSeqAlreadyExist) {
@@ -63,7 +82,6 @@ const updateConfig = async (body) => {
       throw new InvalidBodyError(`Dependencies [${dependenciesNotExisting}] do not exist`);
     }
   }
-
   const configData = await Configuration.update({
     dependencies, sequence, payload, routeId, refName, componentType: type,
   }, { where: { id }, returning: true });
