@@ -169,22 +169,17 @@ function GithubAPIMethod(auth) {
   };
 }
 
-const getFiles = (dirPath, arrayOfFiles) => {
+const getAllFilesFunction = (dirPath, arrayOfFiles) => {
   const files = fs.readdirSync(dirPath);
   let arrOfFiles = arrayOfFiles || [];
   files.forEach((file) => {
     if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
-      arrOfFiles = getFiles(`${dirPath}/${file}`, arrOfFiles);
+      arrOfFiles = getAllFilesFunction(`${dirPath}/${file}`, arrOfFiles);
     } else {
       arrOfFiles.push(path.join(dirPath, '/', file));
     }
   });
   return arrOfFiles;
-};
-
-const getAllFilesFunction = (folder) => {
-  const returnedFiles = getFiles(folder[0]);
-  return returnedFiles;
 };
 
 const getAllFileDataFunction = (allFiles) => {
@@ -207,7 +202,7 @@ const pushToGithub = (
   const getAllFiles = module.exports.getAllFilesFunction;
   const getAllFileData = module.exports.getAllFileDataFunction;
   const GithubAPI = module.exports.GithubAPIMethod;
-  const allFiles = getAllFiles(folder);
+  const allFiles = getAllFiles(folder[0]);
   const dataToPush = getAllFileData(allFiles);
   const api = new GithubAPI({ token: authToken });
   api.setRepo(username, repositoryName);
@@ -219,6 +214,6 @@ const pushToGithub = (
 };
 
 module.exports = {
-  pushToGithub, getAllFileDataFunction, getAllFilesFunction, getFiles, GithubAPIMethod,
+  pushToGithub, getAllFileDataFunction, getAllFilesFunction, GithubAPIMethod,
 };
 // pushToGithub(FOLDER_ARRAY, AUTH_TOKEN, USERNAME, REPOSITORY_NAME, BRANCH_NAME, COMMIT_MESSAGE);
