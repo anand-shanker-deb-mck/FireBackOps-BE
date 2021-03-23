@@ -30,7 +30,7 @@ describe('getAllFileDataFunction', () => {
     spyOnReadFileSync.mockReturnValueOnce('abc');
     spyOnReadFileSync.mockReturnValueOnce('def');
     const result = pushFunctions.getAllFileDataFunction(mockAllFiles);
-    expect(result).toEqual(expectedValue);
+    expect(result).toStrictEqual(expectedValue);
   });
 });
 
