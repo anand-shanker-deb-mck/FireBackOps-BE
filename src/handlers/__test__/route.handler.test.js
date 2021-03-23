@@ -1,23 +1,31 @@
 const routeService = require('../../service/route.service');
 const routeHandler = require('../route.handler');
 
-describe('Add a new route', () => {
+describe('addNewRouteHandler', () => {
   let mockRoute;
   let mockReq;
+  let mockSend;
+  let mockRes;
   beforeAll(() => {
+    mockSend = jest.fn();
+    mockRes = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
     mockRoute = {
       id: 36,
-      name: 'get',
+      name: 'route_1',
       r_config: {
         bcd: 'akjdfcsdn',
       },
       p_id: 1,
+      method: 'get',
       updatedAt: '2021-03-07T15:41:18.192Z',
       createdAt: '2021-03-07T15:41:18.192Z',
     };
     mockReq = {
       body: {
-        name: 'get',
+        name: 'route_1',
+        method: 'get',
         r_config: {
           bcd: 'akjdfcsdn',
         },
@@ -26,34 +34,26 @@ describe('Add a new route', () => {
     };
   });
   it('should add a new route along status code 201', async () => {
-    const mockJson = jest
-      .spyOn(routeService, 'addNewRouteService')
+    jest.spyOn(routeService, 'addNewRouteService')
       .mockResolvedValue(mockRoute);
-    const mockRes = {
-      status: jest.fn(() => ({ json: mockJson })),
-    };
     await routeHandler.addNewRouteHandler(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(201);
-    expect(mockJson).toHaveBeenCalledWith({ message: mockRoute });
+    expect(mockSend).toHaveBeenCalledWith(mockRoute);
   });
-  it('should not add a new route along status code 400', async () => {
+  it('should go to catch block', async () => {
     const mockError = {
       message: 'Invalid Request',
     };
     jest.spyOn(routeService, 'addNewRouteService').mockRejectedValue(mockError);
-    const mockJson = jest.fn();
-    const mockRes = {
-      status: jest.fn(() => ({ json: mockJson })),
-    };
     await routeHandler.addNewRouteHandler(mockReq, mockRes);
     expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockRes.status().json).toHaveBeenCalledWith({
-      error: mockError.message,
-    });
+    expect(mockSend).toHaveBeenCalledWith();
   });
 });
 
-describe('Get all route', () => {
+describe('getAllRoutesByProjectIDHandler', () => {
+  let mockSend;
+  let mockResponse;
   let mockRoute;
   beforeAll(() => {
     mockRoute = {
@@ -66,30 +66,34 @@ describe('Get all route', () => {
       createdAt: '2021-03-05T17:22:17.114Z',
       updatedAt: '2021-03-05T19:57:19.063Z',
     };
+    mockSend = jest.fn();
+    mockResponse = {
+      status: jest.fn(() => ({ send: mockSend })),
+    };
   });
   it('should return all route along status code 200', async () => {
-    const mockJson = jest
-      .spyOn(routeService, 'getAllRoutesService')
-      .mockResolvedValue(mockRoute);
-    const mockRes = {
-      status: jest.fn(() => ({ json: mockJson })),
+    const mockRequest = {
+      params: { id: 1 },
     };
-    await routeHandler.getAllRoutesHandler(null, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-    expect(mockJson).toHaveBeenCalledWith(mockRoute);
+    jest.spyOn(routeService, 'getAllRoutesByProjectIDService')
+      .mockResolvedValue(mockRoute);
+
+    await routeHandler.getAllRoutesByProjectIDHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockSend).toHaveBeenCalledWith(mockRoute);
   });
-  it('should not return  route along status code 200', async () => {
+  it('should go to catch block', async () => {
+    const mockRequest = {
+      params: { id: 1 },
+    };
     const mockError = {
       message: 'Invalid Request',
     };
-    const mockJson = jest.fn();
-    jest.spyOn(routeService, 'getAllRoutesService').mockRejectedValue(mockError);
-    const mockRes = {
-      status: jest.fn(() => ({ json: mockJson })),
-    };
-    await routeHandler.getAllRoutesHandler(null, mockRes);
-    expect(mockRes.status).toHaveBeenCalledWith(500);
-    expect(mockJson).toHaveBeenCalledWith(mockError);
+    jest.spyOn(routeService, 'getAllRoutesByProjectIDService').mockRejectedValue(mockError);
+
+    await routeHandler.getAllRoutesByProjectIDHandler(mockRequest, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(500);
+    expect(mockSend).toHaveBeenCalledWith();
   });
 });
 

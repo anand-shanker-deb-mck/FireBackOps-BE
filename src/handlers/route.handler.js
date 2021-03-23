@@ -3,17 +3,18 @@ const routeService = require('../service/route.service');
 const addNewRouteHandler = async (req, res) => {
   try {
     const newRoute = await routeService.addNewRouteService(req.body);
-    res.status(201).json({ message: newRoute });
+    res.status(201).send(newRoute);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).send();
   }
 };
-const getAllRoutesHandler = async (req, res) => {
+const getAllRoutesByProjectIDHandler = async (req, res) => {
   try {
-    const allRoutes = await routeService.getAllRoutesService();
-    res.status(200).json(allRoutes);
+    const { params } = req;
+    const allRoutes = await routeService.getAllRoutesByProjectIDService(params.pid);
+    res.status(200).send(allRoutes);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send();
   }
 };
 const updateRouteHandler = async (req, res) => {
@@ -30,6 +31,6 @@ const updateRouteHandler = async (req, res) => {
 
 module.exports = {
   addNewRouteHandler,
-  getAllRoutesHandler,
+  getAllRoutesByProjectIDHandler,
   updateRouteHandler,
 };

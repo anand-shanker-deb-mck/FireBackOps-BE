@@ -169,13 +169,12 @@ function GithubAPIMethod(auth) {
   };
 }
 
-const getFiles = (dirPath, arrayOfFiles) => {
+const getAllFilesFunction = (dirPath, arrayOfFiles) => {
   const files = fs.readdirSync(dirPath);
   let arrOfFiles = arrayOfFiles || [];
-
   files.forEach((file) => {
     if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
-      arrOfFiles = getFiles(`${dirPath}/${file}`, arrOfFiles);
+      arrOfFiles = getAllFilesFunction(`${dirPath}/${file}`, arrOfFiles);
     } else {
       arrOfFiles.push(path.join(dirPath, '/', file));
     }
@@ -183,35 +182,27 @@ const getFiles = (dirPath, arrayOfFiles) => {
   return arrOfFiles;
 };
 
-const getAllFilesFunction = (foldersArray) => {
-  let stats;
-  let allFiles = [];
-  foldersArray.forEach((folder) => {
-    stats = fs.statSync(folder);
-    if (stats.isFile()) { allFiles.push(folder); } else {
-      const returnedFiles = getFiles(folder);
-      allFiles = allFiles.concat(returnedFiles);
-    }
-  });
-  return allFiles;
-};
-
 const getAllFileDataFunction = (allFiles) => {
+  const pathPrefix = `${process.cwd()}/`;
   const dataToPush = allFiles.map((filepath) => {
+    let newFilePath;
     const text = fs.readFileSync(filepath).toString('utf-8');
-    const fileObject = { content: text, path: filepath };
+    if (filepath.indexOf(pathPrefix) === 0) {
+      newFilePath = filepath.slice(pathPrefix.length);
+    }
+    const fileObject = { content: text, path: newFilePath };
     return fileObject;
   });
   return dataToPush;
 };
 
 const pushToGithub = (
-  folders, authToken, username, repositoryName, branchName, commitMessage,
+  folder, authToken, username, repositoryName, branchName, commitMessage,
 ) => {
   const getAllFiles = module.exports.getAllFilesFunction;
   const getAllFileData = module.exports.getAllFileDataFunction;
   const GithubAPI = module.exports.GithubAPIMethod;
-  const allFiles = getAllFiles(folders);
+  const allFiles = getAllFiles(folder[0]);
   const dataToPush = getAllFileData(allFiles);
   const api = new GithubAPI({ token: authToken });
   api.setRepo(username, repositoryName);
@@ -223,6 +214,6 @@ const pushToGithub = (
 };
 
 module.exports = {
-  pushToGithub, getAllFileDataFunction, getAllFilesFunction, getFiles, GithubAPIMethod,
+  pushToGithub, getAllFileDataFunction, getAllFilesFunction, GithubAPIMethod,
 };
-// pushToGithub(FOLDERS, AUTH_TOKEN, USERNAME, REPOSITORY_NAME, BRANCH_NAME, COMMIT_MESSAGE);
+// pushToGithub(FOLDER_ARRAY, AUTH_TOKEN, USERNAME, REPOSITORY_NAME, BRANCH_NAME, COMMIT_MESSAGE);

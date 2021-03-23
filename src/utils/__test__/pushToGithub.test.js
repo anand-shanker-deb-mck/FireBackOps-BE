@@ -1,11 +1,11 @@
 const fs = require('fs');
-const pushFunctions = require('./pushToGithub');
+const pushFunctions = require('../pushToGithub');
 
-describe('getFiles', () => {
-  const mockDir = 'handlers';
-  const mockFiles = ['health.handler.js'];
+describe('getAllFiles function', () => {
+  const mockDir = '/Users/Asmita_Hajra/FireBackOps-BE/abc';
+  const mockFiles = ['package.json'];
   const arrayOfFiles = [];
-  const expectedValue = ['handlers/health.handler.js'];
+  const expectedValue = ['/Users/Asmita_Hajra/FireBackOps-BE/abc/package.json'];
   const mockStatSyncValue = {
     isDirectory() { return false; },
   };
@@ -14,31 +14,14 @@ describe('getFiles', () => {
     spyOnReaddirSync.mockReturnValueOnce(mockFiles);
     const spyOnStatSync = jest.spyOn(fs, 'statSync');
     spyOnStatSync.mockReturnValueOnce(mockStatSyncValue);
-    const result = pushFunctions.getFiles(mockDir, arrayOfFiles);
-    expect(result).toEqual(expectedValue);
-  });
-});
-
-describe('getAllFilesFunction', () => {
-  const mockFolders = ['abc.js'];
-  const expectedValue = ['abc.js'];
-  const mockstatSyncValue = {
-    isFile() { return true; },
-  };
-
-  it('should return final array of all files in various directories', () => {
-    const spyOnStatSync = jest.spyOn(fs, 'statSync');
-    spyOnStatSync.mockReturnValueOnce(mockstatSyncValue);
-    const spyOnGetAllFiles = jest.spyOn(pushFunctions, 'getFiles');
-    spyOnGetAllFiles.mockReturnValueOnce('handlers/health.handler.js');
-    const result = pushFunctions.getAllFilesFunction(mockFolders);
+    const result = pushFunctions.getAllFilesFunction(mockDir, arrayOfFiles);
     expect(result).toEqual(expectedValue);
   });
 });
 
 describe('getAllFileDataFunction', () => {
-  const mockAllFiles = ['handlers/health.handler.js', 'handlers/index.js'];
-  const expectedValue = [{ content: 'abc', path: 'handlers/health.handler.js' }, { content: 'def', path: 'handlers/index.js' }];
+  const mockAllFiles = ['/Users/Asmita_Hajra/FireBackOps-BE/abc/package.json', '/Users/Asmita_Hajra/FireBackOps-BE/abc/package-lock.json'];
+  const expectedValue = [{ content: 'abc', path: 'abc/package.json' }, { content: 'def', path: 'abc/package-lock.json' }];
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -47,18 +30,18 @@ describe('getAllFileDataFunction', () => {
     spyOnReadFileSync.mockReturnValueOnce('abc');
     spyOnReadFileSync.mockReturnValueOnce('def');
     const result = pushFunctions.getAllFileDataFunction(mockAllFiles);
-    expect(result).toEqual(expectedValue);
+    expect(result).toStrictEqual(expectedValue);
   });
 });
 
 describe('pushToGithub', () => {
   const mockUsername = 'abc';
-  const mockRepoName = 'abc';
+  const mockRepoName = 'abcd';
   const mockBranchName = 'main';
   const mockCommitMsg = 'commit';
-  const mockFolders = ['handlers'];
-  const mockAuth = 'abc';
-  const mockDataToPush = [{ content: 'abc', path: 'handlers/health.handler.js' }];
+  const mockFolder = ['/Users/Asmita_Hajra/FireBackOps-BE/abc'];
+  const mockAuth = 'auth_abc';
+  const mockDataToPush = [{ content: 'dummy', path: 'abc/package.json' }];
   it('pushes folders to github', async () => {
     const mockGithubImplementation = {
       setRepo: jest.fn(),
@@ -68,13 +51,13 @@ describe('pushToGithub', () => {
     pushFunctions.GithubAPIMethod = jest.fn(() => mockGithubImplementation);
 
     const spyOnGetAllFilesFunction = jest.spyOn(pushFunctions, 'getAllFilesFunction');
-    spyOnGetAllFilesFunction.mockReturnValueOnce(['handlers/health.handler.js']);
+    spyOnGetAllFilesFunction.mockReturnValueOnce(['/Users/Asmita_Hajra/FireBackOps-BE/abc/package.json']);
 
     const spyOnGetAllFileData = jest.spyOn(pushFunctions, 'getAllFileDataFunction');
     spyOnGetAllFileData.mockReturnValueOnce(mockDataToPush);
 
     await pushFunctions.pushToGithub(
-      mockFolders, mockAuth, mockUsername, mockRepoName, mockBranchName, mockCommitMsg,
+      mockFolder, mockAuth, mockUsername, mockRepoName, mockBranchName, mockCommitMsg,
     );
 
     expect(mockGithubImplementation.setRepo).toHaveBeenCalledWith(mockUsername, mockRepoName);

@@ -47,6 +47,34 @@ const checkConfigIdExist = async (configId) => {
   }
   return true;
 };
+const checkRefNameExist = async (configId, routeId, refName) => {
+  let configData;
+  if (!configId) {
+    configData = await Configuration.findOne({
+      where: {
+        routeId,
+        refName,
+      },
+    });
+  } else {
+    const routeIdData = await Configuration.findOne({
+      where: {
+        id: configId,
+      },
+      attributes: ['routeId'],
+    });
+    const { routeId: routeid } = routeIdData.dataValues;
+    configData = await Configuration.findOne({
+      where: {
+        refName, routeId: routeid,
+      },
+    });
+  }
+  if (configData === null) {
+    return false;
+  }
+  return true;
+};
 const checkSequenceBeforeUpdate = async (configId, sequence) => {
   const routeIdData = await Configuration.findOne({
     where: {
@@ -84,4 +112,5 @@ module.exports = {
   findDependenciesNotExist,
   checkSequenceBeforeUpdate,
   checkConfigIdExist,
+  checkRefNameExist,
 };
