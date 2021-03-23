@@ -1,6 +1,7 @@
 const GitHub = require('github-api');
 const fs = require('fs');
 const path = require('path');
+const process = require('process');
 
 function GithubAPIMethod(auth) {
   let repo;

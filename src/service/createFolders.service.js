@@ -24,6 +24,7 @@ const getRouteDetailsService = async (projectId) => {
 
   const newProjectDetails = JSON.parse(JSON.stringify(projectDetails));
   const filteredDetails = await createFoldersHelper.filterDetails(newProjectDetails);
+  console.log(filteredDetails);
   return filteredDetails;
 };
 

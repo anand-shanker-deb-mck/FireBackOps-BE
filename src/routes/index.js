@@ -1,7 +1,6 @@
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const { router: healthRouter } = require('./health.route');
-const { router: createFoldersRouter } = require('./createFolders.route');
 const { router: githubPushRouter } = require('./githubPush.route');
 const { router: projectRouter } = require('./project.router');
 const { router: userRouter } = require('./user.router');
@@ -22,7 +21,6 @@ router.use('/login', loginRouter);
 router.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 router.use('/project', projectRouter);
 router.use('/route', routeRouter);
-router.use('/createFolders', createFoldersRouter);
 router.use('/githubPush', githubPushRouter);
 router.use('/projectUsers', projectUsers);
 router.use('/user', userRouter);
