@@ -1,5 +1,5 @@
 const fs = require('fs');
-const pushFunctions = require('./pushToGithub');
+const pushFunctions = require('../pushToGithub');
 
 describe('getFiles', () => {
   const mockDir = 'handlers';
