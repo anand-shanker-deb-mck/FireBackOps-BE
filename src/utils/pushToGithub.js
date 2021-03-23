@@ -3,8 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const process = require('process');
 
-// const func = () => process.cwd();
-
 function GithubAPIMethod(auth) {
   let repo;
   const filesToCommit = [];
