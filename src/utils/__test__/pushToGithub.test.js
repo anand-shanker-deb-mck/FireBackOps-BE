@@ -1,5 +1,5 @@
 const fs = require('fs');
-// const process = require('process');
+const process = require('process');
 const pushFunctions = require('../pushToGithub');
 
 describe('getAllFiles function', () => {
@@ -21,13 +21,13 @@ describe('getAllFiles function', () => {
 });
 
 describe('getAllFileDataFunction', () => {
-  const mockAllFiles = ['/Users/Asmita_Hajra/FireBackOps-BE/abc/package.json'];
+  const mockAllFiles = ['/Users/Asmita_Hajra/FireBackOps-BEE/abc/package.json'];
   const expectedValue = [{ content: 'dummy', path: 'abc/package.json' }];
   afterEach(() => {
     jest.clearAllMocks();
   });
   it('should return array of objects having properties content and path', () => {
-    // jest.spyOn(process, 'cwd').mockReturnValue('/Users/Asmita_Hajra/FireBackOps-BE');
+    jest.spyOn(process, 'cwd').mockReturnValue('/Users/Asmita_Hajra/FireBackOps-BEE');
     jest.spyOn(fs, 'readFileSync').mockReturnValueOnce('dummy');
     const result = pushFunctions.getAllFileDataFunction(mockAllFiles);
     expect(result).toStrictEqual(expectedValue);
