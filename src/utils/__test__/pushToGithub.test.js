@@ -1,11 +1,12 @@
 const fs = require('fs');
-const pushFunctions = require('./pushToGithub');
+const process = require('process');
+const pushFunctions = require('../pushToGithub');
 
-describe('getFiles', () => {
-  const mockDir = 'handlers';
-  const mockFiles = ['health.handler.js'];
+describe('getAllFiles function', () => {
+  const mockDir = '/Users/Asmita_Hajra/FireBackOps-BE/abc';
+  const mockFiles = ['package.json'];
   const arrayOfFiles = [];
-  const expectedValue = ['handlers/health.handler.js'];
+  const expectedValue = ['/Users/Asmita_Hajra/FireBackOps-BE/abc/package.json'];
   const mockStatSyncValue = {
     isDirectory() { return false; },
   };
@@ -14,67 +15,50 @@ describe('getFiles', () => {
     spyOnReaddirSync.mockReturnValueOnce(mockFiles);
     const spyOnStatSync = jest.spyOn(fs, 'statSync');
     spyOnStatSync.mockReturnValueOnce(mockStatSyncValue);
-    const result = pushFunctions.getFiles(mockDir, arrayOfFiles);
-    expect(result).toEqual(expectedValue);
-  });
-});
-
-describe('getAllFilesFunction', () => {
-  const mockFolders = ['abc.js'];
-  const expectedValue = ['abc.js'];
-  const mockstatSyncValue = {
-    isFile() { return true; },
-  };
-
-  it('should return final array of all files in various directories', () => {
-    const spyOnStatSync = jest.spyOn(fs, 'statSync');
-    spyOnStatSync.mockReturnValueOnce(mockstatSyncValue);
-    const spyOnGetAllFiles = jest.spyOn(pushFunctions, 'getFiles');
-    spyOnGetAllFiles.mockReturnValueOnce('handlers/health.handler.js');
-    const result = pushFunctions.getAllFilesFunction(mockFolders);
+    const result = pushFunctions.getAllFilesFunction(mockDir, arrayOfFiles);
     expect(result).toEqual(expectedValue);
   });
 });
 
 describe('getAllFileDataFunction', () => {
-  const mockAllFiles = ['handlers/health.handler.js', 'handlers/index.js'];
-  const expectedValue = [{ content: 'abc', path: 'handlers/health.handler.js' }, { content: 'def', path: 'handlers/index.js' }];
+  const mockAllFiles = ['/Users/Asmita_Hajra/FireBackOps-BEE/abc/package.json'];
+  const expectedValue = [{ content: 'dummy', path: 'abc/package.json' }];
   afterEach(() => {
     jest.clearAllMocks();
   });
   it('should return array of objects having properties content and path', () => {
-    const spyOnReadFileSync = jest.spyOn(fs, 'readFileSync');
-    spyOnReadFileSync.mockReturnValueOnce('abc');
-    spyOnReadFileSync.mockReturnValueOnce('def');
+    jest.spyOn(process, 'cwd').mockReturnValue('/Users/Asmita_Hajra/FireBackOps-BEE');
+    jest.spyOn(fs, 'readFileSync').mockReturnValueOnce('dummy');
     const result = pushFunctions.getAllFileDataFunction(mockAllFiles);
-    expect(result).toEqual(expectedValue);
+    expect(result).toStrictEqual(expectedValue);
   });
 });
 
 describe('pushToGithub', () => {
   const mockUsername = 'abc';
-  const mockRepoName = 'abc';
+  const mockRepoName = 'abcd';
   const mockBranchName = 'main';
   const mockCommitMsg = 'commit';
-  const mockFolders = ['handlers'];
-  const mockAuth = 'abc';
-  const mockDataToPush = [{ content: 'abc', path: 'handlers/health.handler.js' }];
+  const mockFolder = ['/Users/Asmita_Hajra/FireBackOps-BE/abc'];
+  const mockAuth = 'auth_abc';
+  const mockDataToPush = [{ content: 'dummy', path: 'abc/package.json' }];
   it('pushes folders to github', async () => {
     const mockGithubImplementation = {
       setRepo: jest.fn(),
       setBranch: jest.fn().mockImplementation(() => Promise.resolve()),
       pushFiles: jest.fn(),
     };
+
     pushFunctions.GithubAPIMethod = jest.fn(() => mockGithubImplementation);
 
     const spyOnGetAllFilesFunction = jest.spyOn(pushFunctions, 'getAllFilesFunction');
-    spyOnGetAllFilesFunction.mockReturnValueOnce(['handlers/health.handler.js']);
+    spyOnGetAllFilesFunction.mockReturnValueOnce(['/Users/Asmita_Hajra/FireBackOps-BE/abc/package.json']);
 
     const spyOnGetAllFileData = jest.spyOn(pushFunctions, 'getAllFileDataFunction');
     spyOnGetAllFileData.mockReturnValueOnce(mockDataToPush);
 
     await pushFunctions.pushToGithub(
-      mockFolders, mockAuth, mockUsername, mockRepoName, mockBranchName, mockCommitMsg,
+      mockFolder, mockAuth, mockUsername, mockRepoName, mockBranchName, mockCommitMsg,
     );
 
     expect(mockGithubImplementation.setRepo).toHaveBeenCalledWith(mockUsername, mockRepoName);
