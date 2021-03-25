@@ -217,4 +217,3 @@ const pushToGithub = (
 module.exports = {
   pushToGithub, getAllFileDataFunction, getAllFilesFunction, GithubAPIMethod,
 };
-// pushToGithub(FOLDER_ARRAY, AUTH_TOKEN, USERNAME, REPOSITORY_NAME, BRANCH_NAME, COMMIT_MESSAGE);
