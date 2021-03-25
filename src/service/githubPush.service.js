@@ -1,8 +1,18 @@
-const fileUtils = require('../utils/file.util');
+const githubPushUtils = require('../utils/pushToGithub');
+const redisUtil = require('../utils/redis.util');
 
-const getFoldersService = async () => {
-  const folders = await fileUtils.readFile('./src/resources/folders.txt');
-  return folders.split(',');
+const githubPush = (async (body, username) => {
+  const {
+    repositoryName,
+    branchName,
+    commitMessage,
+  } = body;
+  const folders = ['/Users/Isha_Deep/Desktop/TECH PROJECT/FireBackOps-BE/generatedFolder'];
+  const accessToken = await redisUtil.getAccessToken(username);
+  githubPushUtils.pushToGithub(folders,
+    accessToken, username, repositoryName, branchName, commitMessage);
+});
+
+module.exports = {
+  githubPush,
 };
-
-module.exports = { getFoldersService };

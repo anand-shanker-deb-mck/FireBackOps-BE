@@ -1,43 +1,44 @@
+jest.mock('redis', () => jest.requireActual('redis-mock'));
 const githubPushHandler = require('../githubPush.handler');
 const githubPushService = require('../../service/githubPush.service');
 
 describe('Git hub push handler', () => {
-  let mockJson;
+  let mockSend;
   let mockResponse;
   let mockRequest;
-  let mockValue;
   beforeEach(() => {
-    mockJson = jest.fn();
+    mockSend = jest.fn();
     mockResponse = {
-      status: jest.fn(() => ({ json: mockJson })),
+      status: jest.fn(() => ({ send: mockSend })),
     };
     mockRequest = {
       body: {
-        authToken: 'a',
         userName: 'a',
         repositoryName: 'a',
         branchName: 'a',
         commitMessage: 'a',
       },
+      user: {
+        username: 'abc',
+      },
     };
-    mockValue = ['routes', 'handlers'];
   });
   afterEach(() => {
     jest.clearAllMocks();
   });
 
   it('should set status code to 200', async () => {
-    const spyGetFoldersService = jest.spyOn(githubPushService, 'getFoldersService').mockResolvedValue(mockValue);
+    const spyGitService = jest.spyOn(githubPushService, 'githubPush').mockReturnValue();
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockResponse.status().json).toHaveBeenCalledWith({ data: mockValue });
-    expect(spyGetFoldersService).toHaveBeenCalled();
+    expect(mockSend).toHaveBeenCalledWith('Files committed successfully');
+    expect(spyGitService).toHaveBeenCalled();
   });
   it('should set status code to 500', async () => {
-    const spyGetFoldersService = jest.spyOn(githubPushService, 'getFoldersService').mockRejectedValue('error');
+    const spyGetFoldersService = jest.spyOn(githubPushService, 'githubPush').mockRejectedValue('error');
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockResponse.status().json).toHaveBeenCalledWith({ message: 'Unable to read files' });
+    expect(mockSend).toHaveBeenCalledWith();
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
 });

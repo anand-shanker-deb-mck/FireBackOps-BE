@@ -1,10 +1,19 @@
-const getFoldersService = require('../githubPush.service');
-const fileUtils = require('../../utils/file.util');
+jest.mock('redis', () => jest.requireActual('redis-mock'));
+const githubPushUtils = require('../../utils/pushToGithub');
+const redisUtil = require('../../utils/redis.util');
+const githubPushServices = require('../githubPush.service');
 
-describe('Get folders service', () => {
-  it('should return the folders name from the file', async () => {
-    jest.spyOn(fileUtils, 'readFile').mockResolvedValue('abc,def');
-    const folders = await getFoldersService.getFoldersService();
-    expect(folders).toEqual(['abc', 'def']);
+describe('githubpush service', () => {
+  const body = {
+    repositoryName: 'abc',
+    branchName: 'abc',
+    commitMessage: 'abc',
+  };
+
+  test('Should call pushToGithub function', async () => {
+    jest.spyOn(redisUtil, 'getAccessToken').mockResolvedValue('token');
+    const pushGitSpy = jest.spyOn(githubPushUtils, 'pushToGithub').mockReturnValue();
+    await githubPushServices.githubPush(body, 'abc');
+    expect(pushGitSpy).toHaveBeenCalled();
   });
 });
