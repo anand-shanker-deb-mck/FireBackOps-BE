@@ -4,6 +4,7 @@ const addNewRouteService = async (body) => {
   const newRoute = await Route.create({
     name: body.name, r_config: body.r_config, p_id: body.p_id, method: body.method,
   });
+  console.log(newRoute);
   return newRoute;
 };
 const getAllRoutesByProjectIDService = async (pid) => {
