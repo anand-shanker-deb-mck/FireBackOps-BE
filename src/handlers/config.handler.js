@@ -7,6 +7,7 @@ const storeConfigHandler = async (req, res) => {
     const dataReceived = await configServices.storeConfig(body);
     return res.status(201).json({ data: dataReceived });
   } catch (error) {
+    console.log(error);
     if (error instanceof InvalidBodyError) {
       return res.status(400).json({ message: error.message });
     }
