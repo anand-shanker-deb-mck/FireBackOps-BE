@@ -20,22 +20,16 @@ const generateCodeService = async (path, projectName, routeArray) => {
   }
   await fsUtil.appendFile(`${projectPath}/src/routes/index.js`, setupRouter());
 
-  const routeHandlerArray = routeArray.map(
-    (routeObj) => createRouteHandler(routeObj.method, routeObj.name),
+  const routeHandlerString = routeArray.reduce(
+    (acc, routeObj) => acc + createRouteHandler(routeObj.method, routeObj.name), '',
   );
 
-  const routeStringArray = routeArray.map(
-    (routeObj) => createRoute(routeObj.method, routeObj.name, routeObj.path),
+  const routeString = routeArray.reduce(
+    (acc, routeObj) => acc + createRoute(routeObj.method, routeObj.name, routeObj.path), '',
   );
 
-  await Promise.all(routeHandlerArray.map(async (data) => {
-    await fsUtil.appendFile(`${projectPath}/src/routes/index.js`, data);
-    return 'success';
-  }));
-  await Promise.all(routeStringArray.map(async (data) => {
-    await fsUtil.appendFile(`${projectPath}/src/routes/index.js`, data);
-    return 'success';
-  }));
+  await fsUtil.appendFile(`${projectPath}/src/routes/index.js`, routeHandlerString);
+  await fsUtil.appendFile(`${projectPath}/src/routes/index.js`, routeString);
 
   await fsUtil.appendFile(`${projectPath}/src/routes/index.js`, exportRouter());
 };
