@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { generateCodeHandler } = require('../handlers/generate.handler');
 
-router.get('', generateCodeHandler);
+router.post('', generateCodeHandler);
 
 module.exports = {
   router,
