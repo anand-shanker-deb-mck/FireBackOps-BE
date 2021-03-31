@@ -18,9 +18,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Route.init({
     name: DataTypes.STRING,
-    rConfig: {
+    r_config: {
       type: DataTypes.JSONB,
-      field: 'r_config',
     },
     pId: {
       type: DataTypes.INTEGER,
@@ -28,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     method: {
       type: DataTypes.STRING,
+      field: 'method',
     },
     createdAt: {
       type: DataTypes.DATE,
