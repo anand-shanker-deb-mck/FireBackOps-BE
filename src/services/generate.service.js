@@ -6,9 +6,9 @@ const {
 } = require('../templates/route.template');
 const {
   createRouteService,
-  createRouteHandlerPart1,
-  createRouteHandlerPart2,
-  createRouteHandlerPart3,
+  createTryTempPart1,
+  createTryTempPart2,
+  createCatchTemp,
   exportHandler,
 } = require('../templates/handler.template');
 
@@ -44,11 +44,13 @@ const generateCodeService = async (path, projectName, routeArray, routeConfig) =
   if (!fs.existsSync(`${projectPath}/src/handlers`)) {
     fs.mkdirSync(`${projectPath}/src/handlers`);
   }
-  await fsUtil.appendFile(`${projectPath}/src/handlers/${routeArray[0].method}${routeArray[0].name}Handlers.js`, createRouteService(routeArray[0].method, routeArray[0].name));
-  await fsUtil.appendFile(`${projectPath}/src/handlers/${routeArray[0].method}${routeArray[0].name}Handlers.js`, createRouteHandlerPart1(routeArray[0].method, routeArray[0].name));
-  await fsUtil.appendFile(`${projectPath}/src/handlers/${routeArray[0].method}${routeArray[0].name}Handlers.js`, createRouteHandlerPart2(routeArray[0].method, routeArray[0].name, routeConfig));
-  await fsUtil.appendFile(`${projectPath}/src/handlers/${routeArray[0].method}${routeArray[0].name}Handlers.js`, createRouteHandlerPart3());
-  await fsUtil.appendFile(`${projectPath}/src/handlers/${routeArray[0].method}${routeArray[0].name}Handlers.js`, exportHandler(routeArray[0].method, routeArray[0].name));
+  routeArray.forEach(async (route) => {
+    await fsUtil.appendFile(`${projectPath}/src/handlers/${route.method}${route.name}Handlers.js`, createRouteService(route.method, route.name));
+    await fsUtil.appendFile(`${projectPath}/src/handlers/${route.method}${route.name}Handlers.js`, createTryTempPart1(route.method, route.name));
+    await fsUtil.appendFile(`${projectPath}/src/handlers/${route.method}${route.name}Handlers.js`, createTryTempPart2(route.method, route.name, routeConfig));
+    await fsUtil.appendFile(`${projectPath}/src/handlers/${route.method}${route.name}Handlers.js`, createCatchTemp());
+    await fsUtil.appendFile(`${projectPath}/src/handlers/${route.method}${route.name}Handlers.js`, exportHandler(route.method, route.name));
+  });
 };
 
 module.exports = { generateCodeService };
