@@ -9,7 +9,7 @@ const getRouteDetailsService = async (projectId) => {
     include: [{
       model: Route,
       as: 'routes',
-      attributes: ['name', 'method'],
+      attributes: ['name', 'method'], // add endpoint and r_config
       include: [{
         model: Configuration,
         as: 'configurations',
