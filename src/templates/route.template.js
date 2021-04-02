@@ -6,7 +6,7 @@ const createRoute = (method, name, path) => `router.${method}('${path}', ${metho
 
 const createRouteHandler = (method, name) => `const {
   ${method}${name}Handler,
-} = require('../handlers/${method}${name}Handler.js');\n\n`;
+} = require('../handlers/${method}${name}Handler');\n\n`;
 
 const exportRouter = () => `
 module.exports = {

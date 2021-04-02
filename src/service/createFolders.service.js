@@ -9,7 +9,7 @@ const getRouteDetailsService = async (projectId) => {
     include: [{
       model: Route,
       as: 'routes',
-      attributes: ['name', 'method'], // add endpoint and r_config
+      attributes: ['name', 'method', 'end_point', 'r_config'], // add endpoint and r_config
       include: [{
         model: Configuration,
         as: 'configurations',
@@ -27,5 +27,7 @@ const getRouteDetailsService = async (projectId) => {
   console.log(filteredDetails);
   return filteredDetails;
 };
+
+// console.log(getRouteDetailsService(1));
 
 module.exports = { getRouteDetailsService };
