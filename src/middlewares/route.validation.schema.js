@@ -20,9 +20,14 @@ const updateRouteParamsSchema = joi.object().keys({
   id: joi.number().required(),
 });
 
+const getRouteDetailsSchema = joi.object().keys({
+  id: joi.number().required(),
+});
+
 module.exports = {
   createRouteSchema,
   updateRouteBodySchema,
   updateRouteParamsSchema,
   getRoutesByProjectSchema,
+  getRouteDetailsSchema,
 };
