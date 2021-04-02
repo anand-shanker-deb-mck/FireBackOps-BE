@@ -144,3 +144,36 @@ describe('Update route by routeId', () => {
     });
   });
 });
+
+describe('getRouteDetailsHandler', () => {
+  afterEach(() => { jest.clearAllMocks(); });
+  const mockJson = jest.fn();
+  const mockResponse = {
+    status: jest.fn(() => ({ json: mockJson })),
+  };
+  const spyOnGetRouteDetails = jest.spyOn(routeService, 'getRouteDetails');
+  it('should return route details and set status code to 200', async () => {
+    spyOnGetRouteDetails.mockResolvedValue('MOCK DATA');
+    await routeHandler.getRouteDetailsHandler({ params: 1 }, mockResponse);
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockJson).toHaveBeenCalledWith({ data: 'MOCK DATA' });
+  });
+  it('should set status code to 500 and send error message in case of internal error', async () => {
+    spyOnGetRouteDetails.mockRejectedValue(new Error('Internal Error'));
+    try {
+      await routeHandler.getRouteDetailsHandler({ params: 1 }, mockResponse);
+    } catch (error) {
+      expect(mockResponse.status).toHaveBeenCalledWith(500);
+      expect(mockJson).toHaveBeenCalledWith({ message: 'Internal Error' });
+    }
+  });
+  it('should set status code to 400 and send error message in case of routeId not found', async () => {
+    spyOnGetRouteDetails.mockRejectedValue(new Error('Route not found'));
+    try {
+      await routeHandler.getRouteDetailsHandler({ params: 1 }, mockResponse);
+    } catch (error) {
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockJson).toHaveBeenCalledWith({ message: 'Route not found' });
+    }
+  });
+});
