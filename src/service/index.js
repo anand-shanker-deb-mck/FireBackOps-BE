@@ -16,20 +16,22 @@ const updateDependencyService = require('./generateCode/updatePackageJson');
 const updateRouteService = require('./generateCode/updateRoutes');
 const generateFileAndFolderService = require('./generateFileAndFolders/index');
 
-const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectName = 'generatedFolder') => {
-  generateFileAndFolderService.createProjectTemplate(projectName, routes);
-  const componentList = await fse.readJson('input.json');
-  updateDependencyService.updatePackageJson(projectName, componentList);
-  updateHandlerService.updateHandler(projectName, routes, componentList);
-  updateRouteService.updateRoutes(projectName, routes, componentList);
-  updateRouteService.updateRouteIndex(projectName, routes);
-  exec(`npx eslint --fix ${projectName}/src`);
+const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectName = 'generatedFolderA', result, projectPath) => {
+  console.log(routes, projectName, result);
+  generateFileAndFolderService.createProjectTemplate(projectName, routes, projectPath, result);
+  // const componentList = await fse.readJson('input.json');
+  // ask1: should be doing it the last?
+  updateDependencyService.updatePackageJson(projectName, result, projectPath);
+  updateHandlerService.updateHandler(projectName, routes, result, projectPath);
+  updateRouteService.updateRoutes(projectName, routes, result, projectPath);
+  updateRouteService.updateRouteIndex(projectName, routes, projectPath);
+  exec(`npx eslint --fix ${projectPath}/src`);
 };
 
 // updateHandlerAndDependency();
 module.exports = {
   updateHandlerAndDependency,
-  getAllUsers,
+  getAllUsers, // ask3: why this?
   getUserById,
   getAllProjects,
   getProjectById,
