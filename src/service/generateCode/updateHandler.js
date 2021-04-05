@@ -3,7 +3,7 @@ const fs = require('../../utils/fileSystem');
 
 const updateHandler = async (projectName, routesNameList, componentList, projectPath) => {
   const { routes } = componentList;
-  console.log(routes);
+  console.log('$$$$$$$$$$$$$$$$', componentList);
   // routeNameList to identify what all routes are to be seperated
   // Each route will make a different route file
   routesNameList.forEach((routeName) => {
@@ -17,10 +17,16 @@ const updateHandler = async (projectName, routesNameList, componentList, project
     console.log('filteredRoutes', filteredRoutes);
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
+      let keys = Object.keys(route.r_config);
+      keys = keys.map((key) => key.toLowerCase());
+      keys.sort();
+      let destructReq = keys.reduce((acc, curVal) => `${acc}${curVal}, `, '');
+      destructReq = destructReq.substring(0, destructReq.length - 2);
+      const handleReqString = `\n    const { ${destructReq} } = req;`;
       moduleExportList += `${route.name}${route.method.toLowerCase()}Handler, `;
       // Start of handler function
       handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = (req, res) => {
-  try{\n`;
+  try{ ${handleReqString}`;
 
       // Sort all the configurations within route by sequenceNumber
       const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);
@@ -35,11 +41,11 @@ const updateHandler = async (projectName, routesNameList, componentList, project
       // Add statement to send the last refName of sortedList as response
       handlerData += `    res.status(200).json({ message: ${sortedConfiguration.pop().refName} });
   }catch(error){\n    res.status(500).json({ message: error });
-  }\n};\n`;
+  }\n};\n\n`;
     });
 
     // Add statement to export modules(functions) from the handler file
-    handlerData += `\nmodule.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };`;
+    handlerData += `module.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };`;
     fs.writeFile(`${projectPath}/src/handlers/${routeName}.handler.js`, handlerData);
   });
 };
