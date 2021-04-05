@@ -19,24 +19,27 @@ const updateHandler = async (projectName, routesNameList, componentList, project
     filteredRoutes.forEach((route) => {
       moduleExportList += `${route.name}${route.method.toLowerCase()}Handler, `;
       // Start of handler function
-      handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = (req, res) => {\n`;
+      handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = (req, res) => {
+  try{\n`;
 
       // Sort all the configurations within route by sequenceNumber
       const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);
       sortedConfiguration.forEach((config) => {
         if (config.componentType === 'API') {
-          handlerData += `  const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
+          handlerData += `    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
         }
         if (config.componentType === 'MAPPER') {
-          handlerData += `  const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
+          handlerData += `    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
         }
       });
       // Add statement to send the last refName of sortedList as response
-      handlerData += `  res.status(200).send(${sortedConfiguration.pop().refName});\n};\n`;
+      handlerData += `    res.status(200).json({ message: ${sortedConfiguration.pop().refName} });
+  }catch(error){\n    res.status(500).json({ message: error });
+  }\n};\n`;
     });
 
     // Add statement to export modules(functions) from the handler file
-    handlerData += `module.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };`;
+    handlerData += `\nmodule.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };`;
     fs.writeFile(`${projectPath}/src/handlers/${routeName}.handler.js`, handlerData);
   });
 };
