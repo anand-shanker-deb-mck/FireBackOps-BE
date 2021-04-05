@@ -22,7 +22,6 @@ const updateService = async (projectName, routesNameList, componentList, project
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
       moduleExportList += `${route.name}${route.method.toLowerCase()}Service, `;
-      // console.log('moduleExportList', route);
       // Start of handler function
       serviceData += `\nconst ${route.name}${route.method.toLowerCase()}Service = () => {\n`;
 
@@ -31,18 +30,15 @@ const updateService = async (projectName, routesNameList, componentList, project
       // console.log('sortedConfiguration', sortedConfiguration);
       // Add function calls for each sorted configuration
       sortedConfiguration.forEach((config) => {
-        // console.log('-------------', config);
         if (config.componentType === 'API') {
           serviceData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
-          // console.log('-----', config.refName);
         }
         if (config.componentType === 'MAPPER') {
           serviceData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
         }
       });
-      // console.log('sortedConfiguration2', sortedConfiguration);
+
       // Add statement to send the last refName of sortedList as response
-      // console.log('serviceData', sortedConfiguration.pop().refName);
       serviceData += `return (${sortedConfiguration.pop().refName}); };\n`;
     });
 

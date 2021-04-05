@@ -19,7 +19,7 @@ const generateCodeService = async (projectId, path) => {
     await generateCode.updateHandlerAndDependency(routesName, result.projectName, result, projectPath);
     eslintFix(projectPath);
   } catch (error) {
-    console.log('useLess puppy', error);
+    console.log(error);
   }
   await fsUtil.writeFile(`${projectPath}/src/index.js`, indexContent());
 };

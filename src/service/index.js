@@ -25,19 +25,6 @@ const updateHandlerAndDependency = async (routes, projectName, result, projectPa
   await updateServicesService.updateService(projectName, routes, result, projectPath);
   await updateRouteService.updateRoutes(projectName, routes, result, projectPath);
   await updateRouteService.updateRouteIndex(projectName, routes, projectPath);
-  // exec(`npx eslint --fix ${projectPath}/src`, (error, stdout, stderr) => {
-  //   if (error) {
-  //     console.log(`error: ${error.message}`);
-  //     return;
-  //   }
-  //   if (stderr) {
-  //     console.log(`stderr: ${stderr}`);
-  //     return;
-  //   }
-  //   console.log(`stdout: ${stdout}`);
-  // });
-
-  console.log('project path= ', projectPath);
 };
 
 // updateHandlerAndDependency();
