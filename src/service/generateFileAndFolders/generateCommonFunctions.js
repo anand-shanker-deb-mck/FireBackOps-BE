@@ -13,6 +13,7 @@ const generateCommonFunction = async (projectName, projectPath, componentList) =
     let isApiComponentExist = false;
     // const userProject = await fse.readJson('input.json');
     const userProject = componentList;
+
     const routeList = userProject.routes;
     const routeListIterate = routeList.map(async (route) => {
       const mapperArguments = [];
@@ -31,6 +32,7 @@ const generateCommonFunction = async (projectName, projectPath, componentList) =
           return accumulator.add(component.componentType);
         }, new Set(),
       );
+
       if (componentType.has('API')) {
         isApiComponentExist = true;
       }
@@ -38,28 +40,29 @@ const generateCommonFunction = async (projectName, projectPath, componentList) =
         if (mapper.type === 'MAPPER') {
           const [mapperContent, mapperModuleExport] = generateMapperCode(mapper);
           const finalMapperContent = `${mapperContent}\n\nmodule.exports = { ${mapperModuleExport}, }`;
-          await fse.appendFile(`${projectPath}/src/services/${mapper.referenceName}.service.js`, prettifyJsText(`${finalMapperContent}`));
+          await fse.writeFile(`${projectPath}/src/services/${mapper.referenceName}.service.js`, prettifyJsText(`${finalMapperContent}`));
         }
       });
       await Promise.all(writeMapperCode);
-
       const customMapperContent = mapperArguments.map(async (customMapper) => {
         if (customMapper.type !== 'MAPPER' && customMapper.type !== 'API') {
-          await fse.appendFile(`${projectPath}/src/services/${customMapper.referenceName}.service.js`, prettifyJsText(`${customMapper.implementation}`));
+          await fse.writeFile(`${projectPath}/src/services/${customMapper.referenceName}.service.js`, prettifyJsText(`${customMapper.implementation}`));
         }
       });
-
+      console.log('-----------line 52');
       await Promise.all(customMapperContent);
     });
-
+    console.log('-----------line 55');
     await Promise.all(routeListIterate);
 
     if (isApiComponentExist) {
       const apiFileContent = apiTemplate.returnApiTemplate();
+
       await fse.appendFile(`${projectPath}/src/utils/index.js`, apiFileContent);
     }
     return userProject;
   } catch (error) {
+    console.log(error.message);
     return error.message;
   }
 };

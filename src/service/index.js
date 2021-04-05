@@ -1,5 +1,3 @@
-const { exec } = require('child_process');
-const fse = require('fs-extra');
 const {
   getAllProjects, getProjectById, createProject,
   deleteAllProjects,
@@ -12,20 +10,34 @@ const {
 const { createUserProject } = require('./user_project.service');
 
 const updateHandlerService = require('./generateCode/updateHandler');
-const updateDependencyService = require('./generateCode/updatePackageJson');
+// const updateDependencyService = require('./generateCode/updatePackageJson');
 const updateRouteService = require('./generateCode/updateRoutes');
 const generateFileAndFolderService = require('./generateFileAndFolders/index');
+const updateServicesService = require('./generateCode/updateService');
 
-const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectName = 'generatedFolderA', result, projectPath) => {
+const updateHandlerAndDependency = async (routes, projectName, result, projectPath) => {
   console.log(routes, projectName, result);
   generateFileAndFolderService.createProjectTemplate(projectName, routes, projectPath, result);
   // const componentList = await fse.readJson('input.json');
   // ask1: should be doing it the last?
-  updateDependencyService.updatePackageJson(projectName, result, projectPath);
-  updateHandlerService.updateHandler(projectName, routes, result, projectPath);
-  // updateRouteService.updateRoutes(projectName, routes, result, projectPath);
-  // updateRouteService.updateRouteIndex(projectName, routes, projectPath);
-  exec(`npx eslint --fix ${projectPath}/src`);
+  // await updateDependencyService.updatePackageJson(projectName, result, projectPath);
+  await updateHandlerService.updateHandler(projectName, routes, result, projectPath);
+  await updateServicesService.updateService(projectName, routes, result, projectPath);
+  await updateRouteService.updateRoutes(projectName, routes, result, projectPath);
+  await updateRouteService.updateRouteIndex(projectName, routes, projectPath);
+  // exec(`npx eslint --fix ${projectPath}/src`, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.log(`error: ${error.message}`);
+  //     return;
+  //   }
+  //   if (stderr) {
+  //     console.log(`stderr: ${stderr}`);
+  //     return;
+  //   }
+  //   console.log(`stdout: ${stdout}`);
+  // });
+
+  console.log('project path= ', projectPath);
 };
 
 // updateHandlerAndDependency();
