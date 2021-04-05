@@ -9,7 +9,7 @@ const updateRouteContent = (routeName, componentList) => {
   const filteredRoutes = routes.filter((route) => route.name === routeName);
 
   filteredRoutes.forEach((route) => {
-    routerMethodCallsCode += `\n${routeName}Router.${route.method.toLowerCase()}('/${(route.end_point === '/') ? '' : route.end_point}', ${routeName}Handler.${route.name}${route.method.toLowerCase()}Handler);\n`;
+    routerMethodCallsCode += `\n${routeName}Router.${route.method.toLowerCase()}('${route.end_point}', ${routeName}Handler.${route.name}${route.method.toLowerCase()}Handler);\n`;
   });
 
   const routeFileCode = `const express = require('express');\nconst ${routeName}Handler = require('../handlers/${routeName}.handler.js');\n\nconst ${routeName}Router = express.Router();\n${routerMethodCallsCode}\nmodule.exports = {
@@ -23,13 +23,13 @@ const updateRouteContent = (routeName, componentList) => {
 const updateRouteIndex = async (projectName, routes, projectPath) => {
   let routerCode = '';
   let moduleExportsCode = '';
-
-  routes.forEach((route) => {
+  const uniqueRoute = routes.filter((route, index, self) => self.indexOf(route) === index);
+  uniqueRoute.forEach((route) => {
     routerCode += `const { ${route}Router } = require('./${route}.route');\n`;
     moduleExportsCode += `${route}Router, `;
   });
 
-  const indexFileCode = `${routerCode}module.exports = { ${moduleExportsCode} }`;
+  const indexFileCode = `${routerCode}\nmodule.exports = { ${moduleExportsCode.substring(0, moduleExportsCode.length - 2)} };`;
 
   await fs.writeFile(`${projectPath}/src/routes/index.js`, indexFileCode);
 };

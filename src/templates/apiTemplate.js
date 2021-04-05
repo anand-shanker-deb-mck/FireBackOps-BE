@@ -62,6 +62,10 @@ const makeAPIcall = async (endpoint, method = 'GET', headers = null, body = null
     }
   }
 };
+
+module.exports = {
+  makeAPIcall,
+};
 `;
 
 module.exports = { returnApiTemplate };

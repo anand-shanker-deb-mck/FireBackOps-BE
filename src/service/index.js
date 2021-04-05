@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 const { exec } = require('child_process');
 const fse = require('fs-extra');
 const {
@@ -17,18 +18,22 @@ const updateRouteService = require('./generateCode/updateRoutes');
 const generateFileAndFolderService = require('./generateFileAndFolders/index');
 
 const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectName = 'generatedFolderA', result, projectPath) => {
-  console.log(routes, projectName, result);
-  generateFileAndFolderService.createProjectTemplate(projectName, routes, projectPath, result);
-  // const componentList = await fse.readJson('input.json');
+  await generateFileAndFolderService.createProjectTemplate(
+    projectName,
+    routes,
+    projectPath,
+    result,
+  );
+  // result = await fse.readJson('input.json');
   // ask1: should be doing it the last?
   updateDependencyService.updatePackageJson(projectName, result, projectPath);
   updateHandlerService.updateHandler(projectName, routes, result, projectPath);
-  // updateRouteService.updateRoutes(projectName, routes, result, projectPath);
-  // updateRouteService.updateRouteIndex(projectName, routes, projectPath);
+  updateRouteService.updateRoutes(projectName, routes, result, projectPath);
+  updateRouteService.updateRouteIndex(projectName, routes, projectPath);
   exec(`npx eslint --fix ${projectPath}/src`);
 };
 
-// updateHandlerAndDependency();
+// updateHandlerAndDependency(['flight', 'hotel'], 'generatedFolderA', 'a', './projectDir/generatedFolderA');
 module.exports = {
   updateHandlerAndDependency,
   getAllUsers, // ask3: why this?
