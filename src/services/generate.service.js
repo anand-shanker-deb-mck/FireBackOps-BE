@@ -22,7 +22,11 @@ const generateCodeService = async (projectId, path) => {
     fs.mkdirSync(path);
   }
   const projectPath = `${path}/${result.projectName}`;
-  await generateCode.updateHandlerAndDependency(routesName, result.projectName, result, projectPath);
+  try {
+    await generateCode.updateHandlerAndDependency(routesName, result.projectName, result, projectPath);
+  } catch (error) {
+    console.log('useLess puppy');
+  }
   await fsUtil.writeFile(`${projectPath}/src/index.js`, indexContent());
   // designated path where project folder will be created
   // if (!fs.existsSync(projectPath)) {

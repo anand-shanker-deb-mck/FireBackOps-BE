@@ -9,13 +9,13 @@ const updateRouteContent = (routeName, componentList) => {
   const filteredRoutes = routes.filter((route) => route.name === routeName);
 
   filteredRoutes.forEach((route) => {
-    routerMethodCallsCode += `\n${routeName}Router.${route.method.toLowerCase()}('/${routeName}', ${routeName}Handler.${route.name}${route.method.toLowerCase()}Handler);\n`;
+    routerMethodCallsCode += `\n${routeName}Router.${route.method.toLowerCase()}('/${(route.end_point === '/') ? '' : route.end_point}', ${routeName}Handler.${route.name}${route.method.toLowerCase()}Handler);\n`;
   });
 
-  const routeFileCode = `const express = require('express');\nconst ${routeName}Handler = require('../handlers/${routeName}.handler.js');\n\nconst ${routeName}Router = express.Router();\n\n${routerMethodCallsCode}module.exports = {
+  const routeFileCode = `const express = require('express');\nconst ${routeName}Handler = require('../handlers/${routeName}.handler.js');\n\nconst ${routeName}Router = express.Router();\n${routerMethodCallsCode}\nmodule.exports = {
   ${routeName}Router,
-  };
-  `;
+};
+`;
 
   return routeFileCode;
 };

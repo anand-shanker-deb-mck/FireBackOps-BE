@@ -23,8 +23,8 @@ const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectN
   // ask1: should be doing it the last?
   updateDependencyService.updatePackageJson(projectName, result, projectPath);
   updateHandlerService.updateHandler(projectName, routes, result, projectPath);
-  updateRouteService.updateRoutes(projectName, routes, result, projectPath);
-  updateRouteService.updateRouteIndex(projectName, routes, projectPath);
+  // updateRouteService.updateRoutes(projectName, routes, result, projectPath);
+  // updateRouteService.updateRouteIndex(projectName, routes, projectPath);
   exec(`npx eslint --fix ${projectPath}/src`);
 };
 

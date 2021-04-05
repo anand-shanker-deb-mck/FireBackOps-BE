@@ -15,27 +15,31 @@ const updateHandler = async (projectName, routesNameList, componentList, project
     const filteredRoutes = routes.filter((route) => route.name === routeName);
 
     let handlerData = 'const utils = require("../utils/index.js");\n';
-
+    console.log('filteredRoutes', filteredRoutes);
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
       moduleExportList += `${route.name}${route.method.toLowerCase()}Handler, `;
-
+      // console.log('moduleExportList', route);
       // Start of handler function
       handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = (req,res) => {\n`;
 
       // Sort all the configurations within route by sequenceNumber
       const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);
-
+      // console.log('sortedConfiguration', sortedConfiguration);
       // Add function calls for each sorted configuration
       sortedConfiguration.forEach((config) => {
+        // console.log('-------------', config);
         if (config.componentType === 'API') {
           handlerData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
+          // console.log('-----', config.refName);
         }
         if (config.componentType === 'MAPPER') {
           handlerData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
         }
       });
-      // Add statemennt to send the last refName of sortedList as response
+      // console.log('sortedConfiguration2', sortedConfiguration);
+      // Add statement to send the last refName of sortedList as response
+      console.log('handlerData', sortedConfiguration.pop().refName);
       handlerData += `res.status(200).send(${sortedConfiguration.pop().refName})};\n`;
     });
 
