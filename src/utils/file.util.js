@@ -14,6 +14,13 @@ const readFile = (path) => new Promise((resolve, reject) => {
   });
 });
 
+const appendFile = (path, data) => new Promise((resolve, reject) => {
+  fs.appendFile(path, data, (err) => {
+    if (err) reject(err);
+    resolve('finish');
+  });
+});
+
 module.exports = {
-  writeFile, readFile,
+  writeFile, readFile, appendFile,
 };

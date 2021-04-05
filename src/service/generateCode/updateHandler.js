@@ -1,45 +1,51 @@
 const lodash = require('lodash');
 const fs = require('../../utils/fileSystem');
 
-const updateHandler = async (projectName, routesNameList, componentList) => {
+const updateHandler = async (projectName, routesNameList, componentList, projectPath) => {
   const { routes } = componentList;
-
+  console.log('update handler', routes);
+  console.log('configuration', routes[0].configurations);
   // routeNameList to identify what all routes are to be seperated
   // Each route will make a different route file
   routesNameList.forEach((routeName) => {
+    // ask-not: we don't need to pass a different parameter specifically for that
     let moduleExportList = '';
 
-    // Filter the routes according to the routeName.
-    const filteredRoutes = routes.filter((route) => route.routeName === routeName);
+    // Filter the routes according to the routeName.// ask-not:change routeName to name only
+    const filteredRoutes = routes.filter((route) => route.name === routeName);
 
     let handlerData = 'const utils = require("../utils/index.js");\n';
-
+    console.log('filteredRoutes', filteredRoutes);
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
-      moduleExportList += `${route.routeName}${route.method.toLowerCase()}Handler, `;
-
+      moduleExportList += `${route.name}${route.method.toLowerCase()}Handler, `;
+      // console.log('moduleExportList', route);
       // Start of handler function
-      handlerData += `const ${route.routeName}${route.method.toLowerCase()}Handler = (req,res) => {\n`;
+      handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = (req,res) => {\n`;
 
       // Sort all the configurations within route by sequenceNumber
-      const sortedConfiguration = lodash.sortBy(route.configuration, (o) => o.sequenceNumber);
-
+      const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);
+      // console.log('sortedConfiguration', sortedConfiguration);
       // Add function calls for each sorted configuration
       sortedConfiguration.forEach((config) => {
-        if (config.type === 'API') {
-          handlerData += `const ${config.refName} = utils.make${lodash.capitalize(config.type)}Call('${config.payload.endpoint}', '${config.payload.method.toLowerCase()}');\n`;
+        // console.log('-------------', config);
+        if (config.componentType === 'API') {
+          handlerData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
+          // console.log('-----', config.refName);
         }
-        if (config.type === 'MAPPER') {
-          handlerData += `const ${config.refName} = utils.make${lodash.capitalize(config.type)}Call([${config.dependencies}], '${config.payload.code}');\n`;
+        if (config.componentType === 'MAPPER') {
+          handlerData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
         }
       });
-      // Add statemennt to send the last refName of sortedList as response
+      // console.log('sortedConfiguration2', sortedConfiguration);
+      // Add statement to send the last refName of sortedList as response
+      console.log('handlerData', sortedConfiguration.pop().refName);
       handlerData += `res.status(200).send(${sortedConfiguration.pop().refName})};\n`;
     });
 
     // Add statement to export modules(functions) from the handler file
     handlerData += `module.exports = {${moduleExportList}};`;
-    fs.writeFile(`${projectName}/src/handlers/${routeName}.handler.js`, handlerData);
+    fs.writeFile(`${projectPath}/src/handlers/${routeName}.handler.js`, handlerData);
   });
 };
 
