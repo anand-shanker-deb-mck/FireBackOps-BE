@@ -12,11 +12,12 @@ const updatePackageJson = async (projectName, componentList, projectPath) => {
         copyProjectNodeModules.axios = '^0.21.1';
       } else {
         configuration.payload.nodeModules.forEach((nodeModule) => {
-          if (copyProjectNodeModules[Object.keys(nodeModule)[0]] === undefined
-            || copyProjectNodeModules[Object.keys(nodeModule)[0]]
-            < configuration.payload.nodeModules[nodeModule]) {
-            copyProjectNodeModules[Object.keys(nodeModule)[0]] = configuration
-              .payload.nodeModules[nodeModule];
+          const nodeModuleName = Object.keys(nodeModule)[0];
+          const nodeModuleVersion = Object.values(nodeModule)[0];
+          if (copyProjectNodeModules[nodeModuleName] === undefined
+            || copyProjectNodeModules[nodeModuleName]
+            < nodeModuleVersion) {
+            copyProjectNodeModules[nodeModuleName] = nodeModuleVersion;
           }
         });
       }
