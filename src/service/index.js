@@ -16,7 +16,6 @@ const generateFileAndFolderService = require('./generateFileAndFolders/index');
 const updateServicesService = require('./generateCode/updateService');
 
 const updateHandlerAndDependency = async (routes, projectName, result, projectPath) => {
-  console.log(routes, projectName, result);
   generateFileAndFolderService.createProjectTemplate(projectName, routes, projectPath, result);
   // const componentList = await fse.readJson('input.json');
   // ask1: should be doing it the last?

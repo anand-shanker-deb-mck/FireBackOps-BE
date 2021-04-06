@@ -49,10 +49,10 @@ const generateCommonFunction = async (projectName, projectPath, componentList) =
           await fse.writeFile(`${projectPath}/src/services/${customMapper.referenceName}.service.js`, prettifyJsText(`${customMapper.implementation}`));
         }
       });
-      console.log('-----------line 52');
+
       await Promise.all(customMapperContent);
     });
-    console.log('-----------line 55');
+
     await Promise.all(routeListIterate);
 
     if (isApiComponentExist) {
