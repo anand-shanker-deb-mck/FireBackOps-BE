@@ -1,19 +1,28 @@
-const fse = require('fs-extra');
 const fs = require('../../utils/fileSystem');
+const { readFile } = require('../../utils/file.util');
 
 const updatePackageJson = async (projectName, componentList, projectPath) => {
-  const packageJsonFileData = await fse.readJson(`${projectPath}/package.json`);
-  // ask2: will it throw errors if there's no key as node modules
-  // Appending new node modules to existing dependencies in the package123.json
-  componentList.routes.reduce((acc, route) => {
-    (route.configurations).forEach((configuration) => Object // make it configurations
-      .keys(configuration.payload.nodeModules)
-      .forEach((key) => {
-        acc[key] = configuration.payload.nodeModules[key];
-      }));
-    return acc;
+  let packageJsonFileData = '';
+  packageJsonFileData = await readFile(`${projectPath}/package.json`);
+  packageJsonFileData = JSON.parse(packageJsonFileData);
+  packageJsonFileData.dependencies = componentList.routes.reduce((acc, route) => {
+    const copyProjectNodeModules = { ...acc };
+    route.configurations.forEach((configuration) => {
+      if (configuration.componentType === 'API' && copyProjectNodeModules.axios === undefined) {
+        copyProjectNodeModules.axios = '^0.21.1';
+      } else {
+        configuration.payload.nodeModules.forEach((nodeModule) => {
+          if (copyProjectNodeModules[Object.keys(nodeModule)[0]] === undefined
+            || copyProjectNodeModules[Object.keys(nodeModule)[0]]
+            < configuration.payload.nodeModules[nodeModule]) {
+            copyProjectNodeModules[Object.keys(nodeModule)[0]] = configuration
+              .payload.nodeModules[nodeModule];
+          }
+        });
+      }
+    });
+    return copyProjectNodeModules;
   }, packageJsonFileData.dependencies);
-
   fs.writeFile(`${projectPath}/package.json`, JSON.stringify(packageJsonFileData, null, 4));
 };
 
