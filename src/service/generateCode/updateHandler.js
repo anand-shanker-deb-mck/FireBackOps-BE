@@ -14,7 +14,6 @@ const updateHandler = async (projectName, routesNameList, componentList, project
     const filteredRoutes = routes.filter((route) => route.name === routeName);
 
     let handlerData = 'const utils = require("../utils/index.js");\n\n';
-    console.log('filteredRoutes', filteredRoutes);
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
       let keys = Object.keys(route.r_config);
@@ -32,10 +31,10 @@ const updateHandler = async (projectName, routesNameList, componentList, project
       const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);
       sortedConfiguration.forEach((config) => {
         if (config.componentType === 'API') {
-          handlerData += `    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
+          handlerData += `\n    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
         }
         if (config.componentType === 'MAPPER') {
-          handlerData += `    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
+          handlerData += `\n    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
         }
       });
       // Add statement to send the last refName of sortedList as response
