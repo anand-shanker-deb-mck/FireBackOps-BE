@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/tech-university-21-project/first-repo#readme",
   "dependencies": {
+    "@octokit/core": "^3.3.2",
     "app-root-path": "^3.0.0",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
