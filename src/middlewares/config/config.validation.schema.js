@@ -40,7 +40,7 @@ const apiSchema = Joi.object().keys({
 
 const mapperSchema = Joi.object().keys({
   code: Joi.string().required(),
-  nodeModules: Joi.array().items(Joi.string()),
+  nodeModules: Joi.array().items(Joi.object()),
 });
 
 module.exports = {
