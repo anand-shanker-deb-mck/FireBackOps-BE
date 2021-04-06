@@ -1,14 +1,19 @@
 {
-  "swagger": "2.0",
+  "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
     "title": "Project FireBackOps-BE",
     "description": "An application designed to help developers in bringing backend servers to life"
   },
-  "host": ":",
+  "host": "localhost:8080",
   "basePath": "/",
   "schemes": [
     "http"
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
   ],
   "paths": {
     "/ping": {
@@ -16,7 +21,1687 @@
         "description": "Health route check",
         "responses": {
           "200": {
-            "description": "Pong is recieved, server up"
+            "description": "Pong is recieved, server up",
+            "content": {
+              "text/plain:": {
+                "schema": {
+                  "type": "string",
+                  "example": "pong"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user-project": {
+      "post": {
+        "tags": [
+          "user-project"
+        ],
+        "description": "Creates a user-project entry in user_projects table",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "ProjectId": {
+                    "type": "integer",
+                    "description": "the project id to associate with logged-in user"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User-project association is created in table",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProject"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Duplicate entries not allowed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/config": {
+      "post": {
+        "tags": [
+          "configuration"
+        ],
+        "description": "Stores configuration in configurations table",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigurationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigurationBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in storing configuration due to bad request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "configuration"
+        ],
+        "description": "Updates configuration in configurations table",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfigurationUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfigurationBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in updating configuration due to bad request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "login"
+        ],
+        "description": "Logs in user and returns JWT token on success",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "jwtToken": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/project/user": {
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "description": "Gets all projects of logged in user",
+        "responses": {
+          "200": {
+            "description": "Returns all projects of logged in user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectsBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/project/{id}": {
+      "get": {
+        "tags": [
+          "project"
+        ],
+        "description": "Gets details of a particular project, along with users associated to the project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The project id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns details of a particular project, along with users associated to the project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectByIdBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "project"
+        ],
+        "description": "Updates details of a particular project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The project id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns number of updated rows",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in updating project due to invalid path parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "project"
+        ],
+        "description": "Deletes a particular project",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The project id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns OK after deleting project",
+            "content": {
+              "text/plain:": {
+                "schema": {
+                  "type": "string",
+                  "example": "OK"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in deleting project due to invalid path parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/project": {
+      "post": {
+        "tags": [
+          "project"
+        ],
+        "description": "Creates a new project and links logged in user to the project in user_projects table",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "pAttributes": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns details of newly created project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewProjectBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in creating project due to bad request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "project"
+        ],
+        "description": "Deletes all projects",
+        "responses": {
+          "200": {
+            "description": "Returns OK after deleting all projects",
+            "content": {
+              "text/plain:": {
+                "schema": {
+                  "type": "string",
+                  "example": "OK"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/route": {
+      "post": {
+        "tags": [
+          "route"
+        ],
+        "description": "Creates a new route in routes table",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created new route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in creating route due to bad request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Could not create route associated with given project id"
+          }
+        }
+      }
+    },
+    "/route/{pid}": {
+      "get": {
+        "tags": [
+          "route"
+        ],
+        "description": "Gets route details associated with a particular project id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pid",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The project id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns route details associated with a particular project id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutesByProjectIdBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in fetching routes due to invalid path parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/route/routeDetails/{id}": {
+      "get": {
+        "tags": [
+          "route"
+        ],
+        "description": "Gets route details for a particular route id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The route id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns route details associated with a particular route id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteByIdBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in fetching route details due to invalid path parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error in fetching route details due to route id not being found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/route/{id}": {
+      "put": {
+        "tags": [
+          "route"
+        ],
+        "description": "Updates route details associated with a particular route id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The route id"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns updated route details associated with a particular route id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatedRouteBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in fetching routes due to invalid path parameter or request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error in fetching routes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/githubPush": {
+      "post": {
+        "tags": [
+          "github-route"
+        ],
+        "description": "Route to push generated project to Github",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GithubPushRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns 'Files committed successfully' after successfully pushing project to Github",
+            "content": {
+              "text/plain:": {
+                "schema": {
+                  "type": "string",
+                  "example": "Files committed successfully"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unable to push project to Github"
+          }
+        }
+      }
+    },
+    "/projectUsers/{id}": {
+      "get": {
+        "tags": [
+          "projectUsers"
+        ],
+        "description": "Gets usernames associated with a particular project id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The project id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns usernames associated with a particular project id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectUsersBody"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error in fetching usernames due to invalid project id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Gets all user details",
+        "responses": {
+          "200": {
+            "description": "Returns all user details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllUsersBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Creates a new user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "userName": {
+                    "type": "string"
+                  },
+                  "displayName": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns created user details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OneUserBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/allusers": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Gets all user names and display names",
+        "responses": {
+          "200": {
+            "description": "Returns all user names and display names",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllUserNamesBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Gets user details associated with a username",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The username"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns user details associated with a username",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsByUsernameBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/routeConfig": {
+      "get": {
+        "tags": [
+          "routeConfig"
+        ],
+        "description": "Gets route configurations for a particular route id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": "true",
+            "schema": {
+              "type": "number"
+            },
+            "description": "The route id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns route configurations for a particular route id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteConfigurationsBody"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "UserProject": {
+        "type": "object",
+        "properties": {
+          "ProjectId": {
+            "type": "integer"
+          },
+          "UserId": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        }
+      },
+      "ConfigurationRequest": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "API or MAPPER",
+            "type": "string",
+            "enum": [
+              "API",
+              "MAPPER"
+            ]
+          },
+          "routeId": {
+            "type": "integer"
+          },
+          "sequence": {
+            "type": "integer"
+          },
+          "refName": {
+            "description": "Reference name for the component",
+            "type": "string"
+          },
+          "payload": {
+            "description": "payload object containing method, url, headers and body in case of type API, and code, nodeModules in case of type MAPPER",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "method": {
+                    "description": "GET, POST, PUT, or DELETE",
+                    "type": "string",
+                    "enum": [
+                      "GET", "POST", "PUT", "DELETE"
+                    ]
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "headers": {
+                    "type": "object"
+                  },
+                  "body": {
+                    "description": "body of request when method is POST or PUT",
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "method"
+                ]
+              },
+              {
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "nodeModules": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              }
+            ]
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "routeId",
+          "sequence",
+          "refName",
+          "payload"
+        ]
+      },
+      "ConfigurationBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "type": {
+                "description": "API or MAPPER",
+                "type": "string"
+              },
+              "routeId": {
+                "type": "integer"
+              },
+              "sequence": {
+                "type": "integer"
+              },
+              "refName": {
+                "description": "Reference name for the component",
+                "type": "string"
+              },
+              "payload": {
+                "description": "payload object containing method, url, headers and body in case of type API, and code, nodeModules in case of type MAPPER",
+                "type": "object",
+                "oneOf": [
+                  {
+                    "properties": {
+                      "method": {
+                        "description": "GET, POST, PUT, or DELETE",
+                        "type": "string",
+                        "enum": [
+                          "GET", "POST", "PUT", "DELETE"
+                        ]
+                      },
+                      "url": {
+                        "type": "string"
+                      },
+                      "headers": {
+                        "type": "object"
+                      },
+                      "body": {
+                        "description": "body of request when method is POST or PUT",
+                        "type": "object"
+                      }
+                    },
+                    "required": [
+                      "method"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "code": {
+                        "type": "string"
+                      },
+                      "nodeModules": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "required": [
+                      "code"
+                    ]
+                  }
+                ]
+              },
+              "dependencies": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ConfigurationUpdateRequest": {
+        "description": "body containing fields to be changed to update a configuration",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "ID of component to be updated",
+            "type": "number"
+          },
+          "type": {
+            "description": "API or MAPPER",
+            "type": "string",
+            "enum": [
+              "API",
+              "MAPPER"
+            ]
+          },
+          "routeId": {
+            "type": "integer"
+          },
+          "sequence": {
+            "type": "integer"
+          },
+          "refName": {
+            "description": "Reference name for the component",
+            "type": "string"
+          },
+          "payload": {
+            "description": "payload object containing method, url, headers and body in case of type API, and code, nodeModules in case of type MAPPER",
+            "type": "object",
+            "oneOf": [
+              {
+                "properties": {
+                  "method": {
+                    "description": "GET, POST, PUT, or DELETE",
+                    "type": "string",
+                    "enum": [
+                      "GET", "POST", "PUT", "DELETE"
+                    ]
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "headers": {
+                    "type": "object"
+                  },
+                  "body": {
+                    "description": "body of request when method is POST or PUT",
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "method"
+                ]
+              },
+              {
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "nodeModules": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "code"
+                ]
+              }
+            ]
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "ProjectsBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "projects": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "pAtrributes": {
+                    "type": "object"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "User_Project": {
+                    "type": "object",
+                    "properties": {
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "ProjectId": {
+                        "type": "integer"
+                      },
+                      "UserId": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProjectByIdBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "name": {
+              "type": "string"
+            },
+            "pAtrributes": {
+              "type": "object"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "users": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "userName": {
+                    "type": "string"
+                  },
+                  "displayName": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  },
+                  "User_Project": {
+                    "type": "object",
+                    "properties": {
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      },
+                      "ProjectId": {
+                        "type": "integer"
+                      },
+                      "UserId": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "NewProjectBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "pAtrributes": {
+            "type": "object"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        }
+      },
+      "RouteRequest": {
+        "type": "object",
+        "properties": {
+          "p_id": {
+            "description": "The project id to associate the route to",
+            "type": "number"
+          },
+          "r_config": {
+            "description": "Configuration for the route",
+            "type": "object"
+          },
+          "name": {
+            "description": "Route name",
+            "type": "string"
+          },
+          "method": {
+            "description": "Method type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "p_id",
+          "r_config",
+          "name",
+          "method"
+        ]
+      },
+      "RouteBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "Unique id for route",
+            "type": "number"
+          },
+          "name": {
+            "description": "Route name",
+            "type": "string"
+          },
+          "r_config": {
+            "description": "Configuration for the route",
+            "type": "object"
+          },
+          "p_id": {
+            "description": "The project id associated to the route",
+            "type": "number"
+          },
+          "method": {
+            "description": "Method type",
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "RoutesByProjectIdBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "description": "Unique id for route",
+              "type": "number"
+            },
+            "name": {
+              "description": "Route name",
+              "type": "string"
+            },
+            "r_config": {
+              "description": "Configuration for the route",
+              "type": "object"
+            },
+            "p_id": {
+              "description": "The project id associated to the route",
+              "type": "number"
+            },
+            "method": {
+              "description": "Method type",
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RouteByIdBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique id for route",
+                "type": "number"
+              },
+              "name": {
+                "description": "Route name",
+                "type": "string"
+              },
+              "r_config": {
+                "description": "Configuration for the route",
+                "type": "object"
+              },
+              "p_id": {
+                "description": "The project id associated to the route",
+                "type": "number"
+              },
+              "method": {
+                "description": "Method type",
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "RouteUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "p_id": {
+            "description": "The project id to associate the route to",
+            "type": "number"
+          },
+          "r_config": {
+            "description": "Configuration for the route",
+            "type": "object"
+          },
+          "name": {
+            "description": "Route name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "p_id",
+          "r_config",
+          "name"
+        ]
+      },
+      "UpdatedRouteBody": {
+        "type": "object",
+        "properties": {
+          "updatedRoute": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique id for route",
+                "type": "number"
+              },
+              "name": {
+                "description": "Route name",
+                "type": "string"
+              },
+              "r_config": {
+                "description": "Configuration for the route",
+                "type": "object"
+              },
+              "p_id": {
+                "description": "The project id associated to the route",
+                "type": "number"
+              },
+              "method": {
+                "description": "Method type",
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "GithubPushRequest": {
+        "type": "object",
+        "properties": {
+          "commitMessage": {
+            "description": "Commit message for pushing project to github",
+            "type": "string"
+          },
+          "repositoryName": {
+            "description": "Github repository name",
+            "type": "string"
+          },
+          "branchName": {
+            "description": "Name of Github branch",
+            "type": "string"
+          }
+        },
+        "required": [
+          "commitMessage",
+          "repositoryName",
+          "branchName"
+        ]
+      },
+      "ProjectUsersBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "User": {
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "AllUsersBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "OneUserBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "AllUserNamesBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "user_name": {
+              "type": "string"
+            },
+            "display_name": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UserDetailsByUsernameBody": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "userName": {
+              "type": "string"
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RouteConfigurationsBody": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "configurations": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "componentType": {
+                        "description": "API or MAPPER",
+                        "type": "string"
+                      },
+                      "payload": {
+                        "description": "payload object containing method, url, headers and body in case of type API, and code, nodeModules in case of type MAPPER",
+                        "type": "object",
+                        "oneOf": [
+                          {
+                            "properties": {
+                              "method": {
+                                "description": "GET, POST, PUT, or DELETE",
+                                "type": "string",
+                                "enum": [
+                                  "GET", "POST", "PUT", "DELETE"
+                                ]
+                              },
+                              "url": {
+                                "type": "string"
+                              },
+                              "headers": {
+                                "type": "object"
+                              },
+                              "body": {
+                                "description": "body of request when method is POST or PUT",
+                                "type": "object"
+                              }
+                            }
+                          },
+                          {
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              },
+                              "nodeModules": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "dependencies": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer"
+                        }
+                      },
+                      "sequence": {
+                        "type": "integer"
+                      },
+                      "routeId": {
+                        "type": "integer"
+                      },
+                      "refName": {
+                        "description": "Reference name for the component",
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ErrorModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
           }
         }
       }
