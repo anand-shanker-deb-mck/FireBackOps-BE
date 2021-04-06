@@ -1,5 +1,5 @@
 const configServiceHelpers = require('../config.service.helper');
-const { storeConfig, updateConfig } = require('../config.service');
+const { storeConfig, updateConfig, deleteConfig } = require('../config.service');
 const { Configuration } = require('../../../models');
 
 describe('storeConfig function', () => {
@@ -249,5 +249,34 @@ describe('updateConfig function', () => {
       payload: 'MOCK CHANGED PAYLOAD',
     };
     expect(receivedValue).toEqual(MOCK_EXPECTED_VALUE);
+  });
+});
+
+describe('deleteConfig function', () => {
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+  it('should delete a config for given routeId and sequence ', async () => {
+    const spyOnDecrement = jest.spyOn(Configuration, 'decrement');
+    const spyOnDestroy = jest.spyOn(Configuration, 'destroy');
+    const spyOnFindAll = jest.spyOn(Configuration, 'findAll');
+    const MOCK_INPUT_VALUE = [
+      {
+
+        routeId: 1,
+        sequence: 1,
+      },
+    ];
+    const MOCK_EXPECTED_VALUE = [{
+      data: ['MOCK_DATA'],
+
+    }];
+
+    spyOnDestroy.mockResolvedValueOnce(MOCK_EXPECTED_VALUE);
+    spyOnDecrement.mockResolvedValueOnce(MOCK_EXPECTED_VALUE);
+    spyOnFindAll.mockResolvedValueOnce(MOCK_EXPECTED_VALUE);
+
+    const createdData = await deleteConfig(MOCK_INPUT_VALUE);
+    expect(createdData).toEqual(MOCK_EXPECTED_VALUE);
   });
 });

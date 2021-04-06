@@ -9,12 +9,13 @@ const {
   deleteProjectByIdHandler,
   updateProjectHandler,
 } = require('./project.handler');
-const { updateConfigHandler } = require('./config.handler');
+const { updateConfigHandler, deleteConfigHandler } = require('./config.handler');
 const { storeConfigHandler } = require('./config.handler');
 const { addNewRouteHandler, getAllRoutesHandler, updateRouteHandler } = require('./route.handler');
 const { createUserProjectHandler } = require('./user_project.handler');
 
 module.exports = {
+  deleteConfigHandler,
   healthHandler,
   getAllUsersHandler,
   getUsersByIdHandler,

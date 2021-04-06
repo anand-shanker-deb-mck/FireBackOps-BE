@@ -12,6 +12,10 @@ const storeConfigDBSchema = Joi.object().keys({
   payload: Joi.object().required(),
   dependencies: Joi.array().items(Joi.number()),
 });
+const deleteConfigDBSchema = Joi.object().keys({
+  routeId: Joi.number().required(),
+  sequence: Joi.number().required(),
+});
 const updateConfigDBSchema = Joi.object().keys({
   id: Joi.number().required(),
   type: Joi.string().valid(API_COMPONENT, MAPPER_COMPONENT),
@@ -44,5 +48,5 @@ const mapperSchema = Joi.object().keys({
 });
 
 module.exports = {
-  storeConfigDBSchema, apiSchema, mapperSchema, updateConfigDBSchema,
+  storeConfigDBSchema, apiSchema, mapperSchema, updateConfigDBSchema, deleteConfigDBSchema,
 };
