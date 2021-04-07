@@ -39,7 +39,7 @@ const updateService = async (projectName, routesNameList, componentList, project
           serviceData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
         }
         if (config.componentType === 'MAPPER') {
-          serviceData += `const ${config.refName} = make${lodash.capitalize(config.refName)}Call([${config.dependencies}], '${config.payload.code}');\n`;
+          serviceData += `const ${config.refName} = make${lodash.capitalize(config.refName)}Call([${config.dependencies}]);\n`;
         }
       });
 
