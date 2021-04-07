@@ -3,11 +3,9 @@ const fs = require('../../utils/fileSystem');
 
 const updateHandler = async (projectName, routesNameList, componentList, projectPath) => {
   const { routes } = componentList;
-  console.log('$$$$$$$$$$$$$$$$', componentList);
   // routeNameList to identify what all routes are to be seperated
   // Each route will make a different route file
   routesNameList.forEach((routeName) => {
-    // ask-not: we don't need to pass a different parameter specifically for that
     let moduleExportList = '';
 
     // Filter the routes according to the routeName.// ask-not:change routeName to name only

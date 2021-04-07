@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 const { exec } = require('child_process');
-const fse = require('fs-extra');
 const {
   getAllProjects, getProjectById, createProject,
   deleteAllProjects,
@@ -24,8 +23,6 @@ const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectN
     projectPath,
     result,
   );
-  // result = await fse.readJson('input.json');
-  // ask1: should be doing it the last?
   // updateDependencyService.updatePackageJson(projectName, result, projectPath);
   updateHandlerService.updateHandler(projectName, routes, result, projectPath);
   updateRouteService.updateRoutes(projectName, routes, result, projectPath);
@@ -35,7 +32,7 @@ const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectN
 
 module.exports = {
   updateHandlerAndDependency,
-  getAllUsers, // ask3: why this?
+  getAllUsers,
   getUserById,
   getAllProjects,
   getProjectById,

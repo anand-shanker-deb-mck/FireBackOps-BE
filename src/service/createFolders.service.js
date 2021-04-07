@@ -8,7 +8,7 @@ const getRouteDetailsService = async (projectId) => {
       {
         model: Route,
         as: 'routes',
-        attributes: ['name', 'method', 'end_point', 'r_config'], // add endpoint and r_config
+        attributes: ['name', 'method', 'end_point', 'r_config'],
         include: [
           {
             model: Configuration,
@@ -34,16 +34,7 @@ const getRouteDetailsService = async (projectId) => {
   const filteredDetails = await createFoldersHelper.filterDetails(
     newProjectDetails,
   );
-  // console.log('1', filteredDetails);
-  // console.log('--------------------\n', filteredDetails.routes[0]);
-  // console.log(
-  //   '--------------------\n',
-  //   filteredDetails.routes[0].configurations,
-  // );
-
   return filteredDetails;
 };
-
-// console.log(getRouteDetailsService(1));
 
 module.exports = { getRouteDetailsService };
