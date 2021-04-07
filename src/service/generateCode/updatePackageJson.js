@@ -1,3 +1,4 @@
+const latestVersion = require('latest-version');
 const fs = require('../../utils/fileSystem');
 const { readFile } = require('../../utils/file.util');
 
@@ -5,26 +6,31 @@ const updatePackageJson = async (projectName, componentList, projectPath) => {
   let packageJsonFileData = '';
   packageJsonFileData = await readFile(`${projectPath}/package.json`);
   packageJsonFileData = JSON.parse(packageJsonFileData);
-  packageJsonFileData.dependencies = componentList.routes.reduce((acc, route) => {
-    const copyProjectNodeModules = { ...acc };
+  const projectNodeModules = {};
+  componentList.routes.forEach((route) => {
     route.configurations.forEach((configuration) => {
-      if (configuration.componentType === 'API' && copyProjectNodeModules.axios === undefined) {
-        copyProjectNodeModules.axios = '^0.21.1';
+      if (configuration.componentType === 'API' && projectNodeModules.axios === undefined) {
+        projectNodeModules.axios = 1;
       } else {
         configuration.payload.nodeModules.forEach((nodeModule) => {
-          const nodeModuleName = Object.keys(nodeModule)[0];
-          const nodeModuleVersion = Object.values(nodeModule)[0];
-          if (copyProjectNodeModules[nodeModuleName] === undefined
-            || copyProjectNodeModules[nodeModuleName]
-            < nodeModuleVersion) {
-            copyProjectNodeModules[nodeModuleName] = nodeModuleVersion;
+          if (projectNodeModules[nodeModule] === undefined) {
+            projectNodeModules[nodeModule] = 1;
           }
         });
       }
     });
-    return copyProjectNodeModules;
-  }, packageJsonFileData.dependencies);
-  fs.writeFile(`${projectPath}/package.json`, JSON.stringify(packageJsonFileData, null, 4));
+  });
+  const nodeModuleVersionsPromise = Object.keys(projectNodeModules)
+    .map((nodeModule) => latestVersion(nodeModule));
+
+  const nodeModuleVersions = await Promise.all(nodeModuleVersionsPromise);
+  packageJsonFileData.dependencies = Object.keys(projectNodeModules)
+    .reduce((allNodeModules, nodeModule, index) => {
+      const copyAllNodeModules = { ...allNodeModules };
+      copyAllNodeModules[nodeModule] = nodeModuleVersions[index];
+      return copyAllNodeModules;
+    }, packageJsonFileData.dependencies);
+  await fs.writeFile(`${projectPath}/package.json`, JSON.stringify(packageJsonFileData, null, 4));
 };
 
 module.exports = { updatePackageJson };
