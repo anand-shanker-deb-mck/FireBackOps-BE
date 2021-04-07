@@ -7,9 +7,7 @@
   },
   "host": "localhost:8080",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "security": [
     {
       "bearerAuth": []
@@ -36,9 +34,7 @@
     },
     "/user-project": {
       "post": {
-        "tags": [
-          "user-project"
-        ],
+        "tags": ["user-project"],
         "description": "Creates a user-project entry in user_projects table",
         "requestBody": {
           "required": true,
@@ -81,9 +77,7 @@
     },
     "/config": {
       "post": {
-        "tags": [
-          "configuration"
-        ],
+        "tags": ["configuration"],
         "description": "Stores configuration in configurations table",
         "requestBody": {
           "required": true,
@@ -129,9 +123,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "configuration"
-        ],
+        "tags": ["configuration"],
         "description": "Updates configuration in configurations table",
         "requestBody": {
           "required": true,
@@ -177,11 +169,58 @@
         }
       }
     },
+    "/config/deleteConfig": {
+      "post": {
+        "tags": ["configuration"],
+        "description": "Delete the selected configuration of particular route id",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "routeId": {
+                    "type": "number"
+                  },
+                  "sequence": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns OK after deleting sequence",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteConfigResponse"
+                }
+              }
+            }
+          },
+
+          "400": {
+            "description": "Error in deleting sequence due to invalid path parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/login": {
       "post": {
-        "tags": [
-          "login"
-        ],
+        "tags": ["login"],
         "description": "Logs in user and returns JWT token on success",
         "requestBody": {
           "required": true,
@@ -221,9 +260,7 @@
     },
     "/project/user": {
       "get": {
-        "tags": [
-          "project"
-        ],
+        "tags": ["project"],
         "description": "Gets all projects of logged in user",
         "responses": {
           "200": {
@@ -244,9 +281,7 @@
     },
     "/project/{id}": {
       "get": {
-        "tags": [
-          "project"
-        ],
+        "tags": ["project"],
         "description": "Gets details of a particular project, along with users associated to the project",
         "parameters": [
           {
@@ -276,9 +311,7 @@
         }
       },
       "put": {
-        "tags": [
-          "project"
-        ],
+        "tags": ["project"],
         "description": "Updates details of a particular project",
         "parameters": [
           {
@@ -321,9 +354,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "project"
-        ],
+        "tags": ["project"],
         "description": "Deletes a particular project",
         "parameters": [
           {
@@ -366,9 +397,7 @@
     },
     "/project": {
       "post": {
-        "tags": [
-          "project"
-        ],
+        "tags": ["project"],
         "description": "Creates a new project and links logged in user to the project in user_projects table",
         "requestBody": {
           "required": true,
@@ -414,9 +443,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "project"
-        ],
+        "tags": ["project"],
         "description": "Deletes all projects",
         "responses": {
           "200": {
@@ -438,9 +465,7 @@
     },
     "/route": {
       "post": {
-        "tags": [
-          "route"
-        ],
+        "tags": ["route"],
         "description": "Creates a new route in routes table",
         "requestBody": {
           "required": true,
@@ -481,9 +506,7 @@
     },
     "/route/{pid}": {
       "get": {
-        "tags": [
-          "route"
-        ],
+        "tags": ["route"],
         "description": "Gets route details associated with a particular project id",
         "parameters": [
           {
@@ -525,9 +548,7 @@
     },
     "/route/routeDetails/{id}": {
       "get": {
-        "tags": [
-          "route"
-        ],
+        "tags": ["route"],
         "description": "Gets route details for a particular route id",
         "parameters": [
           {
@@ -579,9 +600,7 @@
     },
     "/route/{id}": {
       "put": {
-        "tags": [
-          "route"
-        ],
+        "tags": ["route"],
         "description": "Updates route details associated with a particular route id",
         "parameters": [
           {
@@ -640,9 +659,7 @@
     },
     "/githubPush": {
       "post": {
-        "tags": [
-          "github-route"
-        ],
+        "tags": ["github-route"],
         "description": "Route to push generated project to Github",
         "requestBody": {
           "required": true,
@@ -674,9 +691,7 @@
     },
     "/projectUsers/{id}": {
       "get": {
-        "tags": [
-          "projectUsers"
-        ],
+        "tags": ["projectUsers"],
         "description": "Gets usernames associated with a particular project id",
         "parameters": [
           {
@@ -725,9 +740,7 @@
     },
     "/user": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "description": "Gets all user details",
         "responses": {
           "200": {
@@ -746,9 +759,7 @@
         }
       },
       "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "description": "Creates a new user",
         "requestBody": {
           "required": true,
@@ -786,9 +797,7 @@
     },
     "/user/allusers": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "description": "Gets all user names and display names",
         "responses": {
           "200": {
@@ -809,9 +818,7 @@
     },
     "/user/{id}": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "description": "Gets user details associated with a username",
         "parameters": [
           {
@@ -843,9 +850,7 @@
     },
     "/routeConfig": {
       "get": {
-        "tags": [
-          "routeConfig"
-        ],
+        "tags": ["routeConfig"],
         "description": "Gets route configurations for a particular route id",
         "parameters": [
           {
@@ -908,10 +913,7 @@
           "type": {
             "description": "API or MAPPER",
             "type": "string",
-            "enum": [
-              "API",
-              "MAPPER"
-            ]
+            "enum": ["API", "MAPPER"]
           },
           "routeId": {
             "type": "integer"
@@ -932,9 +934,7 @@
                   "method": {
                     "description": "GET, POST, PUT, or DELETE",
                     "type": "string",
-                    "enum": [
-                      "GET", "POST", "PUT", "DELETE"
-                    ]
+                    "enum": ["GET", "POST", "PUT", "DELETE"]
                   },
                   "url": {
                     "type": "string"
@@ -947,9 +947,7 @@
                     "type": "object"
                   }
                 },
-                "required": [
-                  "method"
-                ]
+                "required": ["method"]
               },
               {
                 "properties": {
@@ -963,9 +961,7 @@
                     }
                   }
                 },
-                "required": [
-                  "code"
-                ]
+                "required": ["code"]
               }
             ]
           },
@@ -976,13 +972,92 @@
             }
           }
         },
-        "required": [
-          "type",
-          "routeId",
-          "sequence",
-          "refName",
-          "payload"
-        ]
+        "required": ["type", "routeId", "sequence", "refName", "payload"]
+      },
+      "DeleteConfigBody": {
+        "type": "object",
+        "properties": {
+          "routeId": {
+            "description": "ID of the route to be deleted",
+            "type": "number"
+          },
+          "sequence": {
+            "description": "Sequence of the configuration to be deleted",
+            "type": "number"
+          }
+        }
+      },
+      "DeleteConfigResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "type": {
+              "description": "API or MAPPER",
+              "type": "string",
+              "enum": ["API", "MAPPER"]
+            },
+            "routeId": {
+              "type": "integer"
+            },
+            "sequence": {
+              "type": "integer"
+            },
+            "refName": {
+              "description": "Reference name for the component",
+              "type": "string"
+            },
+            "payload": {
+              "description": "payload object containing method, url, headers and body in case of type API, and code, nodeModules in case of type MAPPER",
+              "type": "object",
+              "oneOf": [
+                {
+                  "properties": {
+                    "method": {
+                      "description": "GET, POST, PUT, or DELETE",
+                      "type": "string",
+                      "enum": ["GET", "POST", "PUT", "DELETE"]
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "headers": {
+                      "type": "object"
+                    },
+                    "body": {
+                      "description": "body of request when method is POST or PUT",
+                      "type": "object"
+                    }
+                  },
+                  "required": ["method"]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "nodeModules": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": ["code"]
+                }
+              ]
+            },
+            "dependencies": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        }
       },
       "ConfigurationBody": {
         "type": "object",
@@ -1016,9 +1091,7 @@
                       "method": {
                         "description": "GET, POST, PUT, or DELETE",
                         "type": "string",
-                        "enum": [
-                          "GET", "POST", "PUT", "DELETE"
-                        ]
+                        "enum": ["GET", "POST", "PUT", "DELETE"]
                       },
                       "url": {
                         "type": "string"
@@ -1031,9 +1104,7 @@
                         "type": "object"
                       }
                     },
-                    "required": [
-                      "method"
-                    ]
+                    "required": ["method"]
                   },
                   {
                     "properties": {
@@ -1047,9 +1118,7 @@
                         }
                       }
                     },
-                    "required": [
-                      "code"
-                    ]
+                    "required": ["code"]
                   }
                 ]
               },
@@ -1080,10 +1149,7 @@
           "type": {
             "description": "API or MAPPER",
             "type": "string",
-            "enum": [
-              "API",
-              "MAPPER"
-            ]
+            "enum": ["API", "MAPPER"]
           },
           "routeId": {
             "type": "integer"
@@ -1104,9 +1170,7 @@
                   "method": {
                     "description": "GET, POST, PUT, or DELETE",
                     "type": "string",
-                    "enum": [
-                      "GET", "POST", "PUT", "DELETE"
-                    ]
+                    "enum": ["GET", "POST", "PUT", "DELETE"]
                   },
                   "url": {
                     "type": "string"
@@ -1119,9 +1183,7 @@
                     "type": "object"
                   }
                 },
-                "required": [
-                  "method"
-                ]
+                "required": ["method"]
               },
               {
                 "properties": {
@@ -1135,9 +1197,7 @@
                     }
                   }
                 },
-                "required": [
-                  "code"
-                ]
+                "required": ["code"]
               }
             ]
           },
@@ -1148,9 +1208,7 @@
             }
           }
         },
-        "required": [
-          "id"
-        ]
+        "required": ["id"]
       },
       "ProjectsBody": {
         "type": "array",
@@ -1318,12 +1376,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "p_id",
-          "r_config",
-          "name",
-          "method"
-        ]
+        "required": ["p_id", "r_config", "name", "method"]
       },
       "RouteBody": {
         "type": "object",
@@ -1442,11 +1495,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "p_id",
-          "r_config",
-          "name"
-        ]
+        "required": ["p_id", "r_config", "name"]
       },
       "UpdatedRouteBody": {
         "type": "object",
@@ -1500,11 +1549,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "commitMessage",
-          "repositoryName",
-          "branchName"
-        ]
+        "required": ["commitMessage", "repositoryName", "branchName"]
       },
       "ProjectUsersBody": {
         "type": "object",
@@ -1636,9 +1681,7 @@
                               "method": {
                                 "description": "GET, POST, PUT, or DELETE",
                                 "type": "string",
-                                "enum": [
-                                  "GET", "POST", "PUT", "DELETE"
-                                ]
+                                "enum": ["GET", "POST", "PUT", "DELETE"]
                               },
                               "url": {
                                 "type": "string"
