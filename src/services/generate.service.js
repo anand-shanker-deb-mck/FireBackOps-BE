@@ -17,7 +17,7 @@ const generateCodeService = async (projectId, path) => {
     result,
     projectPath);
   await fsUtil.writeFile(`${projectPath}/src/index.js`, indexContent(routesName));
-  eslintFix(projectPath);
+  // eslintFix(projectPath);
 };
 
 module.exports = { generateCodeService };

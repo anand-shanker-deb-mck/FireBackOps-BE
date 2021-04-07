@@ -18,12 +18,11 @@ const updateService = async (projectName, routesNameList, componentList, project
     const filteredRoutes = routes.filter((route) => route.name === routeName);
 
     let serviceData = 'const utils = require("../utils/index.js");\n';
-    console.log('filteredRoutes', filteredRoutes);
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
       moduleExportList += `${route.name}${route.method.toLowerCase()}Service, `;
       // Start of handler function
-      serviceData += `\nconst ${route.name}${route.method.toLowerCase()}Service = () => {\n`;
+      serviceData += `\nconst ${route.name}${route.method.toLowerCase()}Service = async () => {\n`;
 
       // Sort all the configurations within route by sequenceNumber
       const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);
@@ -31,7 +30,7 @@ const updateService = async (projectName, routesNameList, componentList, project
       // Add function calls for each sorted configuration
       sortedConfiguration.forEach((config) => {
         if (config.componentType === 'API') {
-          serviceData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
+          serviceData += `const ${config.refName} = await utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
         }
         if (config.componentType === 'MAPPER') {
           serviceData += `const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;

@@ -22,20 +22,20 @@ const updateHandler = async (projectName, routesNameList, componentList, project
       const handleReqString = `\n    const { ${destructReq} } = req;`;
       moduleExportList += `${route.name}${route.method.toLowerCase()}Handler, `;
       // Start of handler function
-      handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = (req, res) => {
-  try{ ${handleReqString}`;
+      handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = async (req, res) => {
+  try {${handleReqString}`;
 
-      handlerData += `try {\n    const result = services.${route.name}${route.method.toLowerCase()}Service();\n`;
+      handlerData += `\n    const result = await services.${route.name}${route.method.toLowerCase()}Service();\n`;
 
       // Add statement to send the last refName of sortedList as response
       handlerData += `    res.status(200).json({ message: result });
-  }catch(error){\n    res.status(500).json({ message: error });
+  } catch (error) {\n    res.status(500).json({ message: error });
   }\n};\n\n`;
     });
 
     // Add statement to export modules(functions) from the handler file
-    handlerData += `module.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };`;
-    handlerData = prettifyJsText(handlerData);
+    handlerData += `module.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };\n`;
+    // handlerData = prettifyJsText(handlerData);
     fs.writeFile(`${projectPath}/src/handlers/${routeName}.handler.js`, handlerData);
   });
 };
