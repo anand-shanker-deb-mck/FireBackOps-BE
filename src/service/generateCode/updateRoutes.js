@@ -29,7 +29,7 @@ const updateRouteIndex = async (projectName, routes, projectPath) => {
     moduleExportsCode += `${route}Router, `;
   });
 
-  const indexFileCode = `${routerCode}\nmodule.exports = { ${moduleExportsCode.substring(0, moduleExportsCode.length - 2)} };`;
+  const indexFileCode = `${routerCode}\nmodule.exports = { ${moduleExportsCode.substring(0, moduleExportsCode.length - 2)} };\n`;
 
   await fs.writeFile(`${projectPath}/src/routes/index.js`, indexFileCode);
 };

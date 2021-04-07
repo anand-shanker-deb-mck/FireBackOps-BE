@@ -35,7 +35,7 @@ const updateHandler = async (projectName, routesNameList, componentList, project
 
     // Add statement to export modules(functions) from the handler file
     handlerData += `module.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };\n`;
-    // handlerData = prettifyJsText(handlerData);
+    handlerData = prettifyJsText(handlerData);
     fs.writeFile(`${projectPath}/src/handlers/${routeName}.handler.js`, handlerData);
   });
 };
