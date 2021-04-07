@@ -1,6 +1,25 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable camelcase */
+/* eslint-disable no-undef */
+const { Op } = require('sequelize');
 const configServiceHelpers = require('./config.service.helper');
 const InvalidBodyError = require('../errors/invalidBody.error');
 const { Configuration } = require('../../models');
+
+const deleteConfig = async (body) => {
+  const { routeId, sequence } = body;
+  const toDelete = await Configuration.destroy({
+    where: {
+      route_id: routeId,
+      sequence,
+    },
+  });
+  const decrementResult = await Configuration.decrement('sequence', {
+    by: 1, where: { sequence: { [Op.gt]: sequence }, route_id: routeId },
+  });
+  const updatedData = await Configuration.findAll({});
+  return updatedData;
+};
 
 const storeConfig = async (body) => {
   const {
@@ -93,4 +112,5 @@ const updateConfig = async (body) => {
 module.exports = {
   updateConfig,
   storeConfig,
+  deleteConfig,
 };
