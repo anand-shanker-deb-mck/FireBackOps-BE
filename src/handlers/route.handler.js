@@ -28,9 +28,19 @@ const updateRouteHandler = async (req, res) => {
     res.status(500).json(error);
   }
 };
-
+const getRouteDetailsHandler = async (req, res) => {
+  try {
+    const { params } = req;
+    const routeDetails = await routeService.getRouteDetails(params.id);
+    return res.status(200).json({ data: routeDetails });
+  } catch (error) {
+    if (error.message === 'Route not found') return res.status(404).json({ message: 'Route id not found' });
+    return res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   addNewRouteHandler,
   getAllRoutesByProjectIDHandler,
   updateRouteHandler,
+  getRouteDetailsHandler,
 };

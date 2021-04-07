@@ -18,8 +18,17 @@ const updateRouteService = async (rid, body) => {
   updatedRoute = updatedRoute > 0 ? await Route.findOne({ where: { id: rid } }) : 'Not a valid id';
   return updatedRoute;
 };
+
+const getRouteDetails = async (id) => {
+  const routeDetails = await Route.findOne({ where: { id } });
+  if (routeDetails === null) {
+    throw new Error('Route not found');
+  }
+  return routeDetails;
+};
 module.exports = {
   addNewRouteService,
   getAllRoutesByProjectIDService,
   updateRouteService,
+  getRouteDetails,
 };

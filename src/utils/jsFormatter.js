@@ -6,7 +6,7 @@ const prettifyJsText = (JavaScriptText, parser = 'babel') => prettier.format(Jav
 });
 
 const eslintFix = (projectName) => {
-  exec(`npx eslint --fix ${projectName}/src`);
+  exec(`npx eslint --autofix ${projectName}/src`);
 };
 
 module.exports = { prettifyJsText, eslintFix };

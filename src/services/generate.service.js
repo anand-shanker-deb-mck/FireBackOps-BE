@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { eslintFix } = require('../utils/jsFormatter');
 const fsUtil = require('../utils/file.util');
 const createFolderService = require('../service/createFolders.service');
 const { indexContent } = require('../templates/index.template');
@@ -16,6 +17,7 @@ const generateCodeService = async (projectId, path) => {
     result,
     projectPath);
   await fsUtil.writeFile(`${projectPath}/src/index.js`, indexContent(routesName));
+  eslintFix(projectPath);
 };
 
 module.exports = { generateCodeService };

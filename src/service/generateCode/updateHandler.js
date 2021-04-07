@@ -1,5 +1,5 @@
-const lodash = require('lodash');
 const fs = require('../../utils/fileSystem');
+const { prettifyJsText } = require('../../utils/jsFormatter');
 
 const updateHandler = async (projectName, routesNameList, componentList, projectPath) => {
   const { routes } = componentList;
@@ -11,7 +11,7 @@ const updateHandler = async (projectName, routesNameList, componentList, project
     // Filter the routes according to the routeName.// ask-not:change routeName to name only
     const filteredRoutes = routes.filter((route) => route.name === routeName);
 
-    let handlerData = 'const utils = require("../utils/index.js");\n\n';
+    let handlerData = `const services = require("../services/${routeName}.service.js");\n\n`;
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
       let keys = Object.keys(route.r_config);
@@ -25,24 +25,17 @@ const updateHandler = async (projectName, routesNameList, componentList, project
       handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = (req, res) => {
   try{ ${handleReqString}`;
 
-      // Sort all the configurations within route by sequenceNumber
-      const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);
-      sortedConfiguration.forEach((config) => {
-        if (config.componentType === 'API') {
-          handlerData += `\n    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
-        }
-        if (config.componentType === 'MAPPER') {
-          handlerData += `\n    const ${config.refName} = utils.make${lodash.capitalize(config.componentType)}Call([${config.dependencies}], '${config.payload.code}');\n`;
-        }
-      });
+      handlerData += `try {\n    const result = services.${route.name}${route.method.toLowerCase()}Service();\n`;
+
       // Add statement to send the last refName of sortedList as response
-      handlerData += `    res.status(200).json({ message: ${sortedConfiguration.pop().refName} });
+      handlerData += `    res.status(200).json({ message: result });
   }catch(error){\n    res.status(500).json({ message: error });
   }\n};\n\n`;
     });
 
     // Add statement to export modules(functions) from the handler file
     handlerData += `module.exports = { ${moduleExportList.substring(0, moduleExportList.length - 2)} };`;
+    handlerData = prettifyJsText(handlerData);
     fs.writeFile(`${projectPath}/src/handlers/${routeName}.handler.js`, handlerData);
   });
 };

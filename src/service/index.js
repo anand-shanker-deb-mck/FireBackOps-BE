@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-const { exec } = require('child_process');
 const {
   getAllProjects, getProjectById, createProject,
   deleteAllProjects,
@@ -12,22 +10,23 @@ const {
 const { createUserProject } = require('./user_project.service');
 
 const updateHandlerService = require('./generateCode/updateHandler');
-const updateDependencyService = require('./generateCode/updatePackageJson');
+// const updateDependencyService = require('./generateCode/updatePackageJson');
 const updateRouteService = require('./generateCode/updateRoutes');
 const generateFileAndFolderService = require('./generateFileAndFolders/index');
+const updateServicesService = require('./generateCode/updateService');
 
-const updateHandlerAndDependency = async (routes = ['flight', 'hotel'], projectName = 'generatedFolderA', result, projectPath) => {
+const updateHandlerAndDependency = async (routes , projectName , result, projectPath) => {
   await generateFileAndFolderService.createProjectTemplate(
     projectName,
     routes,
     projectPath,
     result,
   );
-  // updateDependencyService.updatePackageJson(projectName, result, projectPath);
-  updateHandlerService.updateHandler(projectName, routes, result, projectPath);
-  updateRouteService.updateRoutes(projectName, routes, result, projectPath);
-  updateRouteService.updateRouteIndex(projectName, routes, projectPath);
-  exec(`npx eslint --fix ${projectPath}/src`);
+  // await updateDependencyService.updatePackageJson(projectName, result, projectPath);
+  await updateHandlerService.updateHandler(projectName, routes, result, projectPath);
+  await updateServicesService.updateService(projectName, routes, result, projectPath);
+  await updateRouteService.updateRoutes(projectName, routes, result, projectPath);
+  await updateRouteService.updateRouteIndex(projectName, routes, projectPath);
 };
 
 module.exports = {
