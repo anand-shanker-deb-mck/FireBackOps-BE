@@ -1,4 +1,5 @@
 const { Octokit } = require('@octokit/core');
+const { getGitHubDefaultBranch } = require('../utils/getGithubDefaultBranch');
 const githubPushUtils = require('../utils/pushToGithub');
 const redisUtil = require('../utils/redis.util');
 
@@ -8,8 +9,9 @@ const githubPush = (async (body, username) => {
     branchName,
     commitMessage,
   } = body;
-  const folders = ['/Users/Asmita_Hajra/FireBackOps-BE/pool'];
+  const folders = ['./checkAPI'];
   const accessToken = await redisUtil.getAccessToken(username);
+
   githubPushUtils.pushToGithub(folders,
     accessToken, username, repositoryName, branchName, commitMessage);
 });
@@ -24,13 +26,14 @@ const githubRaisePullRequest = async (body, username) => {
 
   const accessToken = await redisUtil.getAccessToken(username);
   const octokit = new Octokit({ auth: accessToken });
+  const baseBranch = await getGitHubDefaultBranch(accessToken, username, repositoryName);
   const response = await octokit.request('POST /repos/{owner}/{repo}/pulls', {
     owner: username,
     repo: repositoryName,
     title: prTitle,
     body: prBody,
     head: branchName,
-    base: 'master',
+    base: baseBranch,
   });
 
   await octokit.request('POST /repos/{owner}/{repo}/issues/{issue_number}/assignees', {

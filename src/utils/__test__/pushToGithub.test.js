@@ -21,7 +21,7 @@ describe('getAllFiles function', () => {
 });
 
 describe('getAllFileDataFunction', () => {
-  const mockAllFiles = ['/Users/Asmita_Hajra/FireBackOps-BEE/abc/package.json'];
+  const mockAllFiles = ['abc/package.json'];
   const expectedValue = [{ content: 'dummy', path: 'abc/package.json' }];
   afterEach(() => {
     jest.clearAllMocks();

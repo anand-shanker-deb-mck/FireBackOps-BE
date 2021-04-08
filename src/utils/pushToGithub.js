@@ -1,7 +1,7 @@
 const GitHub = require('github-api');
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
+const { getGitHubDefaultBranch } = require('./getGithubDefaultBranch');
 
 function GithubAPIMethod(auth) {
   let repo;
@@ -36,12 +36,12 @@ function GithubAPIMethod(auth) {
         new Error('Repository is not initialized'),
       );
     }
-
     return repo.listBranches().then((branches) => {
       const branchExists = branches.data.find((branch) => branch.name === branchName);
 
       if (!branchExists) {
-        return repo.createBranch('master', branchName)
+        const baseBranch = getGitHubDefaultBranch(this.userName, this.repoName);
+        return repo.createBranch(baseBranch, branchName)
           .then(() => {
             currentBranch.name = branchName;
           });
@@ -184,14 +184,9 @@ const getAllFilesFunction = (dirPath, arrayOfFiles) => {
 };
 
 const getAllFileDataFunction = (allFiles) => {
-  const pathPrefix = `${process.cwd()}/`;
   const dataToPush = allFiles.map((filepath) => {
-    let newFilePath;
     const text = fs.readFileSync(filepath).toString('utf-8');
-    if (filepath.indexOf(pathPrefix) === 0) {
-      newFilePath = filepath.slice(pathPrefix.length);
-    }
-    const fileObject = { content: text, path: newFilePath };
+    const fileObject = { content: text, path: filepath };
     return fileObject;
   });
   return dataToPush;
