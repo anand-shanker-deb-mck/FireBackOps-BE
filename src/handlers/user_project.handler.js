@@ -2,7 +2,6 @@ const userProjectServices = require('../service');
 
 const createUserProjectHandler = async (req, res) => {
   try {
-    const { user } = req;
     const { ProjectId } = req.body;
     const { userAdded } = req.body;
     const newUser = await userProjectServices.createUserProject(ProjectId, userAdded.id);
