@@ -9,10 +9,10 @@ const githubPush = (async (body, username) => {
     branchName,
     commitMessage,
   } = body;
-  const folders = ['./checkAPI'];
+  const folders = ['./{path}'];
   const accessToken = await redisUtil.getAccessToken(username);
 
-  githubPushUtils.pushToGithub(folders,
+  await githubPushUtils.pushToGithub(folders,
     accessToken, username, repositoryName, branchName, commitMessage);
 });
 

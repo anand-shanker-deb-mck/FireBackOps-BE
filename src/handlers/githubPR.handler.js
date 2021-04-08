@@ -7,7 +7,8 @@ const githubPRHandler = async (req, res) => {
     const response = await githubPushService.githubRaisePullRequest(body, username);
     res.status(200).json({ url: response });
   } catch (err) {
-    res.status(500).json({ message: 'Internal server error' });
+    console.log(err);
+    res.status(500).json({ message: err.message });
   }
 };
 

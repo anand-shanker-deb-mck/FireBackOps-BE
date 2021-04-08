@@ -21,6 +21,8 @@ function GithubAPIMethod(auth) {
      */
   this.setRepo = (userName, repoName) => {
     repo = gh.getRepo(userName, repoName);
+    this.userName = userName;
+    this.repoName = repoName;
   };
 
   /**
@@ -36,11 +38,12 @@ function GithubAPIMethod(auth) {
         new Error('Repository is not initialized'),
       );
     }
-    return repo.listBranches().then((branches) => {
+
+    return repo.listBranches().then(async (branches) => {
       const branchExists = branches.data.find((branch) => branch.name === branchName);
 
       if (!branchExists) {
-        const baseBranch = getGitHubDefaultBranch(this.userName, this.repoName);
+        const baseBranch = await getGitHubDefaultBranch(auth.token, this.userName, this.repoName);
         return repo.createBranch(baseBranch, branchName)
           .then(() => {
             currentBranch.name = branchName;
