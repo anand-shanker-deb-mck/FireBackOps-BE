@@ -11,7 +11,7 @@ const getUserNamesService = (async (projectId) => {
   const userDetails = await User_Project.findAll({
     include: [{
       model: User,
-      attributes: ['userName'],
+      attributes: ['id', 'userName'],
     }],
     where: {
       ProjectId: projectId,

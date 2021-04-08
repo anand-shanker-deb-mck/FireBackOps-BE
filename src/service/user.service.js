@@ -3,7 +3,7 @@ const { User } = require('../../models');
 
 const getUserDetails = async () => {
   const userDetails = await User.findAll({
-    attributes: ['user_name', 'display_name'],
+    attributes: ['id', 'user_name', 'display_name'],
   });
   return userDetails;
 };

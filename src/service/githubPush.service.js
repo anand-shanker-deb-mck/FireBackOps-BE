@@ -8,7 +8,7 @@ const githubPush = (async (body, username) => {
     branchName,
     commitMessage,
   } = body;
-  const folders = ['/Users/Isha_Deep/Desktop/TECH PROJECT/FireBackOps-BE/generatedFolder'];
+  const folders = ['/Users/Asmita_Hajra/FireBackOps-BE/pool'];
   const accessToken = await redisUtil.getAccessToken(username);
   githubPushUtils.pushToGithub(folders,
     accessToken, username, repositoryName, branchName, commitMessage);

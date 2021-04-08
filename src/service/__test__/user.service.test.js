@@ -12,10 +12,12 @@ describe('getUserDetails function', () => {
     const spyOnFindAll = jest.spyOn(User, 'findAll');
     const MOCK_EXPECTED_VALUE = [
       {
+        id: 1,
         user_name: 'hi',
         display_name: 'hi',
       },
       {
+        id: 2,
         user_name: 'bye',
         display_name: 'bye',
       },
