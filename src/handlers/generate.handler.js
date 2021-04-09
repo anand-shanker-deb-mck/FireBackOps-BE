@@ -5,7 +5,6 @@ const generateCodeHandler = async (req, res) => {
     const { body } = req;
     await service.generateCodeService(
       body.projectId,
-      body.envPath,
     );
     res.status(200).send({ message: 'successful' });
   } catch (error) {

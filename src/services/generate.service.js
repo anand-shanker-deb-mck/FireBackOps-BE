@@ -5,14 +5,14 @@ const createFolderService = require('../service/createFolders.service');
 const { indexContent } = require('../templates/index.template');
 const generateCode = require('../service/index');
 
-const generateCodeService = async (projectId, path) => {
+const generateCodeService = async (projectId) => {
   try {
     const result = await createFolderService.getRouteDetailsService(projectId);
     const routesName = result.routes.map((route) => route.name);
-    if (!fs.existsSync(path)) {
-      fs.mkdirSync(path);
+    if (!fs.existsSync(process.env.PROJECT_PATH)) {
+      fs.mkdirSync(process.env.PROJECT_PATH);
     }
-    const projectPath = `${path}/${result.projectName}`;
+    const projectPath = `${process.env.PROJECT_PATH}/${result.projectName}`;
     await generateCode.updateHandlerAndDependency(routesName,
       result.projectName,
       result,
