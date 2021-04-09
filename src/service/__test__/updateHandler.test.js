@@ -4,47 +4,41 @@ const updateHandlerService = require('../generateCode/updateHandler');
 describe('Update Handler', () => {
   it('should make function calls in the generated folder handler file', async (done) => {
     const mockComponentList = {
-      routes: [{
-        routeName: 'flight',
-        method: 'POST',
-        configuration: [
-          {
-            type: 'API',
-            payload: {
-              endpoint: 'http://demo1852771.mockable.io/trivago',
-              method: 'POST',
-              nodeModules: { lodash: '^4.5.6', axios: '^1.2.3' },
+      projectName: 'Project1',
+      routes: [
+        {
+          name: 'R1',
+          method: 'get',
+          end_point: '/',
+          r_config: { body: { args: 'project1' }, Params: { routeId: '1' } },
+          configurations: [
+            {
+              componentType: 'MAPPER',
+              payload: [Object],
+              sequence: 2,
+              refName: 'refN2',
+              dependencies: [Array],
             },
-            dependencies: [],
-            refName: 'getTrivagoPrice',
-            sequenceNumber: 1,
-          },
-          {
-            type: 'MAPPER',
-            payload: {
-              code: 'return getTrivagoPrice < getIbiboPrice ? getTrivagoPrice :  getIbiboPrice',
-              nodeModules: {
-                lodash: '^4.5.6',
-                axios: '^1.2.3',
-                express: '^4.17.1',
-                'fs-extra': '^9.1.0',
-              },
-            },
-            refName: 'flightsCostMapper',
-            sequenceNumber: 3,
-            dependencies: ['getTrivagoPrice', 'getIbiboPrice'],
-          },
-        ],
-      }],
+          ],
+        },
+      ],
     };
     const writeFileSpy = jest.spyOn(fs, 'writeFile');
-    const dummyCode = "const getTrivagoPrice = utils.makeApiCall('http://demo1852771.mockable.io/trivago', 'post');\nconst flightsCostMapper = utils.makeMapperCall([getTrivagoPrice,getIbiboPrice], 'return getTrivagoPrice < getIbiboPrice ? getTrivagoPrice :  getIbiboPrice');\n";
-    const responseCode = 'res.status(200).send(flightsCostMapper)';
-    const handlerDummyData = `const utils = require("../utils/index.js");\nconst flightpostHandler = (req,res) => {\n${dummyCode}${responseCode}};\nmodule.exports = {flightpostHandler, };`;
+    const handlerDummyData = `./projectPath/Project1/src/handlers/R1.handler.js", "const services = require('../services/R1.service.js');·
+    const R1getHandler = async (req, res) => {
+      try {
+        const { body, params } = req;
+        const result = await services.R1getService();
+        res.status(200).json({ message: result });
+      } catch (error) {
+        res.status(500).json({ message: error });
+      }
+    };·
+    module.exports = { R1getHandler };
+    `;
     writeFileSpy.mockResolvedValue('Success');
-    await updateHandlerService.updateHandler('generatedFolder', ['flight'], mockComponentList);
-    expect(writeFileSpy).toHaveBeenCalledWith('generatedFolder/src/handlers/flight.handler.js',
-      handlerDummyData);
+    await updateHandlerService.updateHandler('generatedFolder', ['R1'], mockComponentList, './projectPath/Project1');
+    expect(writeFileSpy).toHaveBeenCalledWith('./projectPath/Project1/src/handlers/R1.handler.js', handlerDummyData);
     done();
   });
 });

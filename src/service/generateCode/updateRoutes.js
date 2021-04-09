@@ -16,7 +16,7 @@ const updateRouteContent = (routeName, componentList) => {
   ${routeName}Router,
 };
 `;
-
+  console.log(routeFileCode);
   return routeFileCode;
 };
 

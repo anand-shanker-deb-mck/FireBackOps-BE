@@ -9,18 +9,43 @@ describe('server test', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
+  let mockResult;
+  beforeAll(() => {
+    mockResult = {
+      projectName: 'Project1',
+      routes: [
+        {
+          name: 'R1',
+          method: 'get',
+          end_point: '/',
+          r_config: { body: { args: 'project1' }, Params: { routeId: '1' } },
+          configurations: [
+            {
+              componentType: 'MAPPER',
+              payload: [{
+                code: 'console.log("Hello World")',
+                nodeModules: ['axioddd', 'numberq'],
+              }],
+              sequence: 2,
+              refName: 'refN2',
+              dependencies: ['refN1'],
+            },
+          ],
+        },
+      ],
+    };
+  });
   const mockApiTemplate = `import axios from Axios;
     const makeApiCall = (url, token) => {
         data
     }`;
   const mockMapperTemplate = ['const makeMapperCall = (abc, code) => {return code}', 'makeGoIbiboCall'];
   it('should be called with template response', async () => {
-    jest.spyOn(fse, 'readJson').mockResolvedValue(mockInputData.inputJsonData);
+    jest.spyOn(fse, 'readJson').mockResolvedValue(mockResult);
     jest.spyOn(apiTemplate, 'returnApiTemplate').mockImplementation(() => mockApiTemplate);
     jest.spyOn(mapperTemplate, 'returnMapperTemplate').mockImplementation(() => mockMapperTemplate);
     jest.spyOn(fse, 'appendFile').mockResolvedValue('resolved');
-    await server.generateCommonFunction('project1');
+    await server.generateCommonFunction('project1', 'projectPath', mockResult);
     const finalMapperContent = `${mockMapperTemplate[0]}\n\nmodule.exports = { ${mockMapperTemplate[1]}, }`;
     await expect(fse.appendFile).toHaveBeenNthCalledWith(1, 'project1/src/services/flightsCostMapper.service.js', prettifyJsText(finalMapperContent));
     const customMapperData = 'const customMapper = (source, destination) => source < destination ? source : destination;';
@@ -33,16 +58,16 @@ describe('server test', () => {
     jest.spyOn(mapperTemplate, 'returnMapperTemplate').mockImplementation(() => mockMapperTemplate);
     jest.spyOn(fse, 'appendFile').mockResolvedValue('resolved');
 
-    const testGenerateCommonFunction = await server.generateCommonFunction('project1');
+    const testGenerateCommonFunction = await server.generateCommonFunction('project1', 'projectPath', mockResult);
     expect(testGenerateCommonFunction).toEqual('read file failed');
   });
 
   it('should fail with error message', async () => {
-    jest.spyOn(fse, 'readJson').mockResolvedValue(mockInputData.inputJsonData);
+    jest.spyOn(fse, 'readJson').mockResolvedValue(mockResult);
     jest.spyOn(apiTemplate, 'returnApiTemplate').mockImplementation(() => mockApiTemplate);
     jest.spyOn(mapperTemplate, 'returnMapperTemplate').mockImplementation(() => mockMapperTemplate);
     jest.spyOn(fse, 'appendFile').mockRejectedValue(new Error('failed'));
-    const testGenerateCommonFunction = await server.generateCommonFunction('project1');
+    const testGenerateCommonFunction = await server.generateCommonFunction('project1', 'projectPath', mockResult);
     expect(testGenerateCommonFunction).toEqual('failed');
   });
 });

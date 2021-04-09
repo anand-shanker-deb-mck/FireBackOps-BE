@@ -7,7 +7,7 @@ describe('Update package.json dependencies', () => {
 
   const mockComponentList = {
     routes: [{
-      configuration: [
+      configurations: [
         {
           payload: {
             nodeModules: { lodash: '^4.5.6' },
@@ -21,8 +21,8 @@ describe('Update package.json dependencies', () => {
     readSpy.mockResolvedValueOnce({ dependencies: {} });
     const writeFileSpy = jest.spyOn(fs, 'writeFile');
     writeFileSpy.mockResolvedValue('Success');
-    await updatePackageJsonService.updatePackageJson('generatedFolder', mockComponentList);
-    expect(writeFileSpy).toHaveBeenCalledWith('generatedFolder/package.json', JSON.stringify(mockDependencies, null, 4));
+    await updatePackageJsonService.updatePackageJson('generatedFolder', mockComponentList, 'projectPath');
+    expect(writeFileSpy).toHaveBeenCalledWith('projectPath/package.json', JSON.stringify(mockDependencies, null, 4));
     done();
   });
 });

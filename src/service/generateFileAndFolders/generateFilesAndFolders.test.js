@@ -33,23 +33,23 @@ describe('Project folder structure', () => {
     const spyOnPathExisting = jest.spyOn(fse, 'pathExistsSync').mockReturnValue(false);
     const spyOnMakeDir = jest.spyOn(fse, 'mkdirSync').mockReturnValue(null);
     jest.spyOn(fse, 'writeFile').mockReturnValue(null);
-    server.generateProjectFolderStructure('abc');
-    expect(spyOnPathExisting).toHaveBeenCalledWith('abc');
-    expect(spyOnMakeDir).toHaveBeenNthCalledWith(1, 'abc');
-    expect(spyOnMakeDir).toHaveBeenNthCalledWith(2, 'abc/src');
-    expect(spyOnMakeDir).toHaveBeenNthCalledWith(3, 'abc/src/routes');
-    expect(spyOnMakeDir).toHaveBeenNthCalledWith(4, 'abc/src/handlers');
-    expect(spyOnMakeDir).toHaveBeenNthCalledWith(5, 'abc/src/services');
-    expect(spyOnMakeDir).toHaveBeenNthCalledWith(6, 'abc/src/utils');
+    server.generateProjectFolderStructure('abc', ['r1'], './projectDir/abc');
+    expect(spyOnPathExisting).toHaveBeenCalledWith(['r1']);
+    expect(spyOnMakeDir).toHaveBeenNthCalledWith(1, ['r1']);
+    expect(spyOnMakeDir).toHaveBeenNthCalledWith(2, 'r1/src');
+    expect(spyOnMakeDir).toHaveBeenNthCalledWith(3, 'r1/src/routes');
+    expect(spyOnMakeDir).toHaveBeenNthCalledWith(4, 'r1/src/handlers');
+    expect(spyOnMakeDir).toHaveBeenNthCalledWith(5, 'r1/src/services');
+    expect(spyOnMakeDir).toHaveBeenNthCalledWith(6, 'r1/src/utils');
   });
   it('should return that the Project already exists', () => {
     jest.spyOn(fse, 'pathExistsSync').mockImplementation((projectName) => {
       throw new Error(`Project ${projectName} already exists!`);
     });
     try {
-      server.generateProjectFolderStructure('def');
+      server.generateProjectFolderStructure('def', 'projectPath');
     } catch (err) {
-      expect(err.message).toBe('Project def already exists!');
+      expect(err.message).toBe('Project projectPath already exists!');
     }
   });
 });
@@ -61,13 +61,13 @@ describe('Generate FIle Structure', () => {
   it('should generate the files in the right folder and write into those files', () => {
     const mockOnWriteFile = jest.spyOn(fse, 'writeFile').mockReturnValue(null);
     const mockRouteName = ['abc', 'def'];
-    server.generateFileStructure('ibibo', mockRouteName);
+    server.generateFileStructure('ibibo', mockRouteName, './projectDir/ProjectName');
     mockRouteName.forEach((routeName, index) => {
-      expect(mockOnWriteFile).toHaveBeenNthCalledWith(index * 3 + 1, `ibibo/src/routes/${routeName}.route.js`, '');
-      expect(mockOnWriteFile).toHaveBeenNthCalledWith(index * 3 + 2, `ibibo/src/handlers/${routeName}.handler.js`, '');
-      expect(mockOnWriteFile).toHaveBeenNthCalledWith(index * 3 + 3, `ibibo/src/services/${routeName}.service.js`, '');
+      expect(mockOnWriteFile).toHaveBeenNthCalledWith(index * 3 + 1, `./projectDir/ProjectName/src/routes/${routeName}.route.js`, '');
+      expect(mockOnWriteFile).toHaveBeenNthCalledWith(index * 3 + 2, `./projectDir/ProjectName/src/handlers/${routeName}.handler.js`, '');
+      expect(mockOnWriteFile).toHaveBeenNthCalledWith(index * 3 + 3, `./projectDir/ProjectName/src/services/${routeName}.service.js`, '');
     });
-    expect(mockOnWriteFile).toHaveBeenCalledWith('ibibo/src/utils/index.js', '');
-    expect(mockOnWriteFile).toHaveBeenCalledWith('ibibo/src/routes/index.js', '');
+    expect(mockOnWriteFile).toHaveBeenCalledWith('./projectDir/ProjectName/src/utils/index.js', '');
+    expect(mockOnWriteFile).toHaveBeenCalledWith('./projectDir/ProjectName/src/routes/index.js', '');
   });
 });

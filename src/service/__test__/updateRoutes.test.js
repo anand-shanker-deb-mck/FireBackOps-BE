@@ -4,7 +4,7 @@ const updateRouteService = require('../generateCode/updateRoutes');
 describe('Update routes of generated folder', () => {
   const mockComponentList = {
     routes: [{
-      routeName: 'flight',
+      routeName: 'dummyRoute',
       method: 'POST',
       configuration: [
         {
@@ -22,10 +22,10 @@ describe('Update routes of generated folder', () => {
     }],
   };
   const mockWriteInput = `const express = require('express');
-const dummyRouteHandler = require('../handlers/dummyRoute.handler.js');
-const dummyRouteRouter = express.Router();
-module.exports = {
-  dummyRouteRouter,
+  const dummyRouteHandler = require('../handlers/dummyRoute.handler.js');\n
+  const dummyRouteRouter = express.Router();\n\n
+  module.exports = {
+    dummyRouteRouter,
   };
   `;
 
@@ -36,8 +36,8 @@ module.exports = {
   it('should append the routes to the corresponding file', async (done) => {
     const writeFileSpy = jest.spyOn(fs, 'writeFile');
     writeFileSpy.mockResolvedValue('Success');
-    await updateRouteService.updateRoutes('dummyFolder', ['dummyRoute'], mockComponentList);
-    expect(writeFileSpy).toHaveBeenCalledWith('dummyFolder/src/routes/dummyRoute.route.js', mockWriteInput);
+    await updateRouteService.updateRoutes('dummyFolder', ['dummyRoute'], mockComponentList, './projectDir');
+    expect(writeFileSpy).toHaveBeenCalledWith('./projectDir/src/routes/dummyRoute.route.js', mockWriteInput);
     done();
   });
 });
@@ -49,9 +49,9 @@ describe('Update index of routes folder', () => {
   it('should update the indeex of the corresponding routes file', async (done) => {
     const writeFileSpy = jest.spyOn(fs, 'writeFile');
     writeFileSpy.mockResolvedValue('Success');
-    await updateRouteService.updateRouteIndex('dummyFolder', ['dummyRoute']);
-    expect(writeFileSpy).toHaveBeenCalledWith('dummyFolder/src/routes/index.js', `const { dummyRouteRouter } = require('./dummyRoute.route');
-module.exports = { dummyRouteRouter,  }`);
+    await updateRouteService.updateRouteIndex('dummyFolder', ['dummyRoute'], './projectDir');
+    expect(writeFileSpy).toHaveBeenCalledWith('./projectDir/src/routes/index.js', `const { dummyRouteRouter } = require('./dummyRoute.route');\n
+module.exports = { dummyRouteRouter };\n`);
     done();
   });
 });
