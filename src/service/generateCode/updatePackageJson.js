@@ -1,10 +1,10 @@
 const latestVersion = require('latest-version');
 const fs = require('../../utils/fileSystem');
-const { readFile } = require('../../utils/file.util');
+const fileServices = require('../../utils/file.util');
 
 const updatePackageJson = async (projectName, componentList, projectPath) => {
   let packageJsonFileData = '';
-  packageJsonFileData = await readFile(`${projectPath}/package.json`);
+  packageJsonFileData = await fileServices.readFile(`${projectPath}/package.json`);
   packageJsonFileData = JSON.parse(packageJsonFileData);
   const projectNodeModules = {};
   componentList.routes.forEach((route) => {

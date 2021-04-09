@@ -7,7 +7,7 @@ const storeConfigValidator = (req, res, next) => {
   const { error } = storeConfigDBSchema.validate(body);
 
   if (error) {
-    res.status(400).json({ error: 'Invalid component' });
+    res.status(400).json({ message: JSON.stringify(error) });
     return;
   }
   next();
