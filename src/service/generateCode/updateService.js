@@ -17,14 +17,13 @@ const updateService = async (projectName, routesNameList, componentList, project
     filteredRoutes.forEach((route) => {
       route.configurations.forEach((config) => {
         if (config.componentType === 'MAPPER') {
-          serviceData += `const { make${lodash.capitalize(config.refName)}Call } = require("./${config.refName}.service.js");\n`;
+          serviceData += `const { make${config.refName.charAt(0).toUpperCase() + config.refName.slice(1, config.refName.length)}Call } = require("./${config.refName}.service.js");\n`;
         } else isApi = 1;
       });
     });
     if (isApi) {
       serviceData += 'const utils = require("../utils/index.js");\n';
     }
-    console.log(filteredRoutes);
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
       moduleExportList += `${route.name}${route.method.toLowerCase()}Service, `;
@@ -36,10 +35,10 @@ const updateService = async (projectName, routesNameList, componentList, project
       // Add function calls for each sorted configuration
       sortedConfiguration.forEach((config) => {
         if (config.componentType === 'API') {
-          serviceData += `const ${config.refName} = await utils.make${lodash.capitalize(config.componentType)}Call('${config.payload.url}', '${config.payload.method.toLowerCase()}');\n`;
+          serviceData += `const ${config.refName} = await utils.make${config.componentType}Call('${config.payload.url}', '${config.payload.method}');\n`;
         }
         if (config.componentType === 'MAPPER') {
-          serviceData += `const ${config.refName} = make${lodash.capitalize(config.refName)}Call([${config.dependencies}]);\n`;
+          serviceData += `const ${config.refName} = make${config.refName.charAt(0).toUpperCase() + config.refName.slice(1, config.refName.length)}Call([${config.dependencies}]);\n`;
         }
       });
 

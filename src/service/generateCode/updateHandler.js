@@ -28,7 +28,7 @@ const updateHandler = async (projectName, routesNameList, componentList, project
       handlerData += `\n    const result = await services.${route.name}${route.method.toLowerCase()}Service();\n`;
 
       // Add statement to send the last refName of sortedList as response
-      handlerData += `    res.status(200).json({ message: result });
+      handlerData += `    res.status(200).json({ data: result });
   } catch (error) {\n    res.status(500).json({ message: error });
   }\n};\n\n`;
     });

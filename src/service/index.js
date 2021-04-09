@@ -18,11 +18,12 @@ const updateServicesService = require('./generateCode/updateService');
 const updateHandlerAndDependency = async (routes, projectName, result, projectPath) => {
   await generateFileAndFolderService
     .createProjectTemplate(projectName, routes, projectPath, result);
-  await updateDependencyService.updatePackageJson(projectName, routes, result, projectPath);
   await updateServicesService.updateService(projectName, routes, result, projectPath);
   await updateHandlerService.updateHandler(projectName, routes, result, projectPath);
   await updateRouteService.updateRoutes(projectName, routes, result, projectPath);
   await updateRouteService.updateRouteIndex(projectName, routes, projectPath);
+  await updateDependencyService.updatePackageJson(projectName, result, projectPath);
+
   // exec(`npx eslint --fix ${projectPath}/src`);
 };
 
