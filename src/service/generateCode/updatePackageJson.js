@@ -1,19 +1,36 @@
-const fse = require('fs-extra');
+const latestVersion = require('latest-version');
 const fs = require('../../utils/fileSystem');
+const fileServices = require('../../utils/file.util');
 
 const updatePackageJson = async (projectName, componentList, projectPath) => {
-  const packageJsonFileData = await fse.readJson(`${projectPath}/package.json`);
-  // Appending new node modules to existing dependencies in the package123.json
-  componentList.routes.reduce((acc, route) => {
-    (route.configurations).forEach((configuration) => Object
-      .keys(configuration.payload.nodeModules)
-      .forEach((key) => {
-        acc[key] = configuration.payload.nodeModules[key];
-      }));
-    return acc;
-  }, packageJsonFileData.dependencies);
+  let packageJsonFileData = '';
+  packageJsonFileData = await fileServices.readFile(`${projectPath}/package.json`);
+  packageJsonFileData = JSON.parse(packageJsonFileData);
+  const projectNodeModules = {};
+  componentList.routes.forEach((route) => {
+    route.configurations.forEach((configuration) => {
+      if (configuration.componentType === 'API' && projectNodeModules.axios === undefined) {
+        projectNodeModules.axios = 1;
+      } else {
+        configuration.payload.nodeModules.forEach((nodeModule) => {
+          if (projectNodeModules[nodeModule] === undefined) {
+            projectNodeModules[nodeModule] = 1;
+          }
+        });
+      }
+    });
+  });
+  const nodeModuleVersionsPromise = Object.keys(projectNodeModules)
+    .map((nodeModule) => latestVersion(nodeModule));
 
-  fs.writeFile(`${projectPath}/package.json`, JSON.stringify(packageJsonFileData, null, 4));
+  const nodeModuleVersions = await Promise.all(nodeModuleVersionsPromise);
+  packageJsonFileData.dependencies = Object.keys(projectNodeModules)
+    .reduce((allNodeModules, nodeModule, index) => {
+      const copyAllNodeModules = { ...allNodeModules };
+      copyAllNodeModules[nodeModule] = nodeModuleVersions[index];
+      return copyAllNodeModules;
+    }, packageJsonFileData.dependencies);
+  await fs.writeFile(`${projectPath}/package.json`, JSON.stringify(packageJsonFileData, null, 4));
 };
 
 module.exports = { updatePackageJson };

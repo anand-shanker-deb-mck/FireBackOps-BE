@@ -12,6 +12,8 @@ const createPackageJson = (projectName) => {
     author: '',
     license: 'ISC',
     dependencies: {
+      dotenv: '^8.2.0',
+      express: '^4.17.1',
     },
   };
   return JSON.stringify(packageJson, null, 4);

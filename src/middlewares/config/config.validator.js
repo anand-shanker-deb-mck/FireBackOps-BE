@@ -1,11 +1,21 @@
 const {
-  storeConfigDBSchema, apiSchema, mapperSchema, updateConfigDBSchema,
+  storeConfigDBSchema, apiSchema, mapperSchema, updateConfigDBSchema, deleteConfigDBSchema,
 } = require('./config.validation.schema');
 
 const storeConfigValidator = (req, res, next) => {
   const { body } = req;
   const { error } = storeConfigDBSchema.validate(body);
 
+  if (error) {
+    res.status(400).json({ message: JSON.stringify(error) });
+    return;
+  }
+  next();
+};
+
+const deleteConfigValidator = (req, res, next) => {
+  const { body } = req;
+  const { error } = deleteConfigDBSchema.validate(body);
   if (error) {
     res.status(400).json({ error: 'Invalid component' });
     return;
@@ -39,4 +49,6 @@ const payloadValidator = (req, res, next) => {
   next();
 };
 
-module.exports = { storeConfigValidator, payloadValidator, updateConfigValidator };
+module.exports = {
+  storeConfigValidator, payloadValidator, updateConfigValidator, deleteConfigValidator,
+};
