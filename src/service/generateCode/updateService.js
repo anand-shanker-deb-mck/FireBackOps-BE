@@ -28,7 +28,7 @@ const updateService = async (projectName, routesNameList, componentList, project
     filteredRoutes.forEach((route) => {
       moduleExportList += `${route.name}${route.method.toLowerCase()}Service, `;
       // Start of handler function
-      serviceData += `\nconst ${route.name}${route.method.toLowerCase()}Service = async () => {\n`;
+      serviceData += `\nconst ${route.name}${route.method.toLowerCase()}Service = async (req) => {\n`;
 
       // Sort all the configurations within route by sequenceNumber
       const sortedConfiguration = lodash.sortBy(route.configurations, (o) => o.sequence);

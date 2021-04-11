@@ -14,18 +14,19 @@ const updateHandler = async (projectName, routesNameList, componentList, project
     let handlerData = `const services = require("../services/${routeName}.service.js");\n\n`;
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
-      let keys = Object.keys(route.r_config);
-      keys = keys.map((key) => key.toLowerCase());
-      keys.sort();
-      let destructReq = keys.reduce((acc, curVal) => `${acc}${curVal}, `, '');
-      destructReq = destructReq.substring(0, destructReq.length - 2);
-      const handleReqString = `\n    const { ${destructReq} } = req;`;
+      // destructuring request object
+      // let keys = Object.keys(route.r_config);
+      // keys = keys.map((key) => key.toLowerCase());
+      // keys.sort();
+      // let destructReq = keys.reduce((acc, curVal) => `${acc}${curVal}, `, '');
+      // destructReq = destructReq.substring(0, destructReq.length - 2);
+      // const handleReqString = `\n    const { ${destructReq} } = req;`;
       moduleExportList += `${route.name}${route.method.toLowerCase()}Handler, `;
       // Start of handler function
       handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = async (req, res) => {
-  try {${handleReqString}`;
+  try {`;
 
-      handlerData += `\n    const result = await services.${route.name}${route.method.toLowerCase()}Service();\n`;
+      handlerData += `\n    const result = await services.${route.name}${route.method.toLowerCase()}Service(req);\n`;
 
       // Add statement to send the last refName of sortedList as response
       handlerData += `    res.status(200).json({ data: result });
