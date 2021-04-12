@@ -20,7 +20,7 @@ const createOptions = (method, headers, body, authType = null, authToken = null)
   }
 };
 
-const makeAPIcall = async (endpoint, method = 'GET', headers = null, body = null, auth_type = null, auth_token = null) => {
+const makeAPICall = async (endpoint, method = 'GET', headers = null, body = null, auth_type = null, auth_token = null) => {
   const options = createOptions(method, headers, body, auth_type, auth_token);
   if (method === 'GET') {
     try {
@@ -61,6 +61,10 @@ const makeAPIcall = async (endpoint, method = 'GET', headers = null, body = null
       return error.message;
     }
   }
+};
+
+module.exports = {
+  makeAPICall,
 };
 `;
 

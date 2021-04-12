@@ -21,11 +21,12 @@ const githubPush = (async (body, username) => {
   });
   const projectName = projectDetails.dataValues.name;
   const basePath = process.env.PROJECT_PATH;
-  const pathToProject = `${basePath}${projectName}`;
+  const pathToProject = `${basePath}/${projectName}`;
   const folder = pathToProject;
   const accessToken = await redisUtil.getAccessToken(username);
   await githubPushUtils.pushToGithub(folder,
-    accessToken, username, repositoryName, branchName, commitMessage);
+    accessToken, username, repositoryName, branchName, commitMessage, projectName);
+  console.log(`folder${folder}`);
   rimraf(folder, {}, () => {});
 });
 

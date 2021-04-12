@@ -6,37 +6,36 @@ const updateRouteContent = (routeName, componentList) => {
 
   // generate code for each route file
   // filter by routeName
-  const filteredRoutes = routes.filter((route) => route.routeName === routeName);
+  const filteredRoutes = routes.filter((route) => route.name === routeName);
 
   filteredRoutes.forEach((route) => {
-    routerMethodCallsCode += `${routeName}Router.${route.method.toLowerCase()}('/${routeName}', ${routeName}Handler.${route.routeName}${route.method.toLowerCase()}Handler);\n`;
+    routerMethodCallsCode += `${routeName}Router.${route.method.toLowerCase()}('${route.end_point}', ${routeName}Handler.${route.name}${route.method.toLowerCase()}Handler);\n`;
   });
 
-  const routeFileCode = `const express = require('express');\nconst ${routeName}Handler = require('../handlers/${routeName}.handler.js');\nconst ${routeName}Router = express.Router();\n${routerMethodCallsCode}module.exports = {
+  const routeFileCode = `const express = require('express');\nconst ${routeName}Handler = require('../handlers/${routeName}.handler.js');\n\nconst ${routeName}Router = express.Router();\n\n${routerMethodCallsCode}\nmodule.exports = {
   ${routeName}Router,
-  };
-  `;
-
+};
+`;
   return routeFileCode;
 };
 
-const updateRouteIndex = async (projectName, routes) => {
+const updateRouteIndex = async (projectName, routes, projectPath) => {
   let routerCode = '';
   let moduleExportsCode = '';
-
-  routes.forEach((route) => {
+  const uniqueRoute = routes.filter((route, index, self) => self.indexOf(route) === index);
+  uniqueRoute.forEach((route) => {
     routerCode += `const { ${route}Router } = require('./${route}.route');\n`;
     moduleExportsCode += `${route}Router, `;
   });
 
-  const indexFileCode = `${routerCode}module.exports = { ${moduleExportsCode} }`;
+  const indexFileCode = `${routerCode}\nmodule.exports = { ${moduleExportsCode.substring(0, moduleExportsCode.length - 2)} };\n`;
 
-  await fs.writeFile(`${projectName}/src/routes/index.js`, indexFileCode);
+  await fs.writeFile(`${projectPath}/src/routes/index.js`, indexFileCode);
 };
 
-const updateRoutes = async (projectName, routes, componentList) => {
+const updateRoutes = async (projectName, routes, componentList, projectPath) => {
   routes.forEach(async (routeName) => {
-    await fs.writeFile(`${projectName}/src/routes/${routeName}.route.js`, updateRouteContent(routeName, componentList));
+    await fs.writeFile(`${projectPath}/src/routes/${routeName}.route.js`, updateRouteContent(routeName, componentList));
   });
 };
 

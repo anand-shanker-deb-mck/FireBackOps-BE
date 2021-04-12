@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     method: {
       type: DataTypes.STRING,
+      field: 'method',
     },
     createdAt: {
       type: DataTypes.DATE,

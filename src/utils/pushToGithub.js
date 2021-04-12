@@ -186,23 +186,25 @@ const getAllFilesFunction = (dirPath, arrayOfFiles) => {
   return arrOfFiles;
 };
 
-const getAllFileDataFunction = (allFiles) => {
+const getAllFileDataFunction = (allFiles, projectName) => {
   const dataToPush = allFiles.map((filepath) => {
     const text = fs.readFileSync(filepath).toString('utf-8');
-    const fileObject = { content: text, path: filepath };
+    const relativePath = `${process.env.PROJECT_PATH}/${projectName}/`.replace('./', '');
+    const newFilePath = filepath.replace(relativePath, '');
+    const fileObject = { content: text, path: newFilePath };
     return fileObject;
   });
   return dataToPush;
 };
 
 const pushToGithub = (
-  folder, authToken, username, repositoryName, branchName, commitMessage,
+  folder, authToken, username, repositoryName, branchName, commitMessage, projectName,
 ) => {
   const getAllFiles = module.exports.getAllFilesFunction;
   const getAllFileData = module.exports.getAllFileDataFunction;
   const GithubAPI = module.exports.GithubAPIMethod;
   const allFiles = getAllFiles(folder);
-  const dataToPush = getAllFileData(allFiles);
+  const dataToPush = getAllFileData(allFiles, projectName);
   const api = new GithubAPI({ token: authToken });
   api.setRepo(username, repositoryName);
   return api.setBranch(branchName)

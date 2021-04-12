@@ -12,35 +12,37 @@ const createPackageJson = (projectName) => {
     author: '',
     license: 'ISC',
     dependencies: {
+      dotenv: '^8.2.0',
+      express: '^4.17.1',
     },
   };
   return JSON.stringify(packageJson, null, 4);
 };
 
-const generateProjectFolderStructure = (projectName) => {
-  if (!fse.pathExistsSync(projectName)) {
-    fse.mkdirSync(projectName);
-    fse.writeFile(`${projectName}/package.json`, createPackageJson(projectName));
-    fse.mkdirSync(`${projectName}/src`);
-    fse.mkdirSync(`${projectName}/src/routes`);
-    fse.mkdirSync(`${projectName}/src/handlers`);
-    fse.mkdirSync(`${projectName}/src/services`);
-    fse.mkdirSync(`${projectName}/src/utils`);
+const generateProjectFolderStructure = (projectName, projectPath) => {
+  if (!fse.pathExistsSync(projectPath)) {
+    fse.mkdirSync(projectPath);
+    fse.writeFile(`${projectPath}/package.json`, createPackageJson(projectName));
+    fse.mkdirSync(`${projectPath}/src`);
+    fse.mkdirSync(`${projectPath}/src/routes`);
+    fse.mkdirSync(`${projectPath}/src/handlers`);
+    fse.mkdirSync(`${projectPath}/src/services`);
+    fse.mkdirSync(`${projectPath}/src/utils`);
   } else {
-    console.log(`Project ${projectName} already exists!`);
+    console.log(`Project ${projectPath} already exists!`);
   }
 };
 
-const generateFileStructure = (projectName, routeNames) => {
+const generateFileStructure = (projectName, routeNames, projectPath) => {
   routeNames.forEach((routeName) => {
-    fse.writeFile(`${projectName}/src/routes/${routeName}.route.js`, '');
-    fse.writeFile(`${projectName}/src/handlers/${routeName}.handler.js`,
+    fse.writeFile(`${projectPath}/src/routes/${routeName}.route.js`, '');
+    fse.writeFile(`${projectPath}/src/handlers/${routeName}.handler.js`,
       '');
-    fse.writeFile(`${projectName}/src/services/${routeName}.service.js`,
+    fse.writeFile(`${projectPath}/src/services/${routeName}.service.js`,
       '');
   });
-  fse.writeFile(`${projectName}/src/utils/index.js`, '');
-  fse.writeFile(`${projectName}/src/routes/index.js`, '');
+  fse.writeFile(`${projectPath}/src/utils/index.js`, '');
+  fse.writeFile(`${projectPath}/src/routes/index.js`, '');
 };
 
 module.exports = { createPackageJson, generateProjectFolderStructure, generateFileStructure };

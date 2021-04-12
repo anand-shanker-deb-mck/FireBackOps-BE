@@ -37,7 +37,7 @@ describe('githubpush service', () => {
   });
 
   test('Should call pushToGithub function', async () => {
-    process.env.PROJECT_PATH = './';
+    process.env.PROJECT_PATH = './projectDir';
     const spyOnFindOne = jest.spyOn(Project, 'findOne');
     spyOnFindOne.mockResolvedValue({
       dataValues: {
@@ -48,7 +48,7 @@ describe('githubpush service', () => {
     jest.spyOn(redisUtil, 'getAccessToken').mockResolvedValue('token');
     const pushGitSpy = jest.spyOn(githubPushUtils, 'pushToGithub').mockReturnValue();
     await githubPushServices.githubPush(body, 'abc');
-    expect(rimraf).toHaveBeenCalledWith('./proj1', {}, expect.any(Function));
+    expect(rimraf).toHaveBeenCalledWith('./projectDir/proj1', {}, expect.any(Function));
     expect(pushGitSpy).toHaveBeenCalled();
   });
 });
