@@ -87,7 +87,7 @@ The pull requests should have the following two components
 ### Login with Github
 Add your Github Organization `CLIENT_ID`, `CLIENT_SECRET`, `JWT_SECRET`, `JWT_EXPIRY_TIME` in your `.env` file. We have `.sample-env` file to demonstrate required fields needed in an `.env` file
 ### Documentation of APIs
-The live API documentation is being visualized using Swagger-Ui at http://<hostName>:<portNo>/api-docs/, which reads the swagger.json for the OpenAPI specification
+The live API documentation is being visualized using Swagger-Ui at http://< hostName >:< portNo >/api-docs/, which reads the swagger.json for the OpenAPI specification
 
 To update the swagger.json on creating a new route:
 * Update 'paths' object with route endpoint
