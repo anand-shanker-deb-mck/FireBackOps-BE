@@ -201,7 +201,7 @@ const pushToGithub = (
   const getAllFiles = module.exports.getAllFilesFunction;
   const getAllFileData = module.exports.getAllFileDataFunction;
   const GithubAPI = module.exports.GithubAPIMethod;
-  const allFiles = getAllFiles(folder[0]);
+  const allFiles = getAllFiles(folder);
   const dataToPush = getAllFileData(allFiles);
   const api = new GithubAPI({ token: authToken });
   api.setRepo(username, repositoryName);

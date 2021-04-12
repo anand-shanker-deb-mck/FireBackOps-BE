@@ -1,19 +1,32 @@
 const { Octokit } = require('@octokit/core');
+const rimraf = require('rimraf');
 const { getGitHubDefaultBranch } = require('../utils/getGithubDefaultBranch');
 const githubPushUtils = require('../utils/pushToGithub');
 const redisUtil = require('../utils/redis.util');
+const {
+  Project,
+} = require('../../models');
 
 const githubPush = (async (body, username) => {
   const {
     repositoryName,
     branchName,
     commitMessage,
+    projectId,
   } = body;
-  const folders = ['./{path}'];
+  const projectDetails = await Project.findOne({
+    where: {
+      id: projectId,
+    },
+  });
+  const projectName = projectDetails.dataValues.name;
+  const basePath = process.env.PROJECT_PATH;
+  const pathToProject = `${basePath}${projectName}`;
+  const folder = pathToProject;
   const accessToken = await redisUtil.getAccessToken(username);
-
-  await githubPushUtils.pushToGithub(folders,
+  await githubPushUtils.pushToGithub(folder,
     accessToken, username, repositoryName, branchName, commitMessage);
+  rimraf(folder, {}, () => {});
 });
 
 const githubRaisePullRequest = async (body, username) => {

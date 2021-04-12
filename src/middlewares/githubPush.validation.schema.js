@@ -5,6 +5,7 @@ const githubPushSchema = joi.object().keys({
   commitMessage: joi.string().required(),
   repositoryName: joi.string().required(),
   branchName: joi.string().required(),
+  projectId: joi.number().required(),
 });
 
 module.exports = {
