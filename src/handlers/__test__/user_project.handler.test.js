@@ -5,7 +5,7 @@ describe('create a user project', () => {
   const mockRequest = {
     user: { id: 1 },
     body: {
-      userName: 'bye',
+      userAdded: { id: 4, userName: 'pushya' },
       ProjectId: 3,
 
     },
@@ -17,7 +17,7 @@ describe('create a user project', () => {
   };
   const responseValue = {
     ProjectId: 3,
-    UserId: 1,
+    UserId: 4,
     updatedAt: '2021-03-14T04:18:44.771Z',
     createdAt: '2021-03-14T04:18:44.771Z',
   };
@@ -26,7 +26,7 @@ describe('create a user project', () => {
     await UserProjectHandler.createUserProjectHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.send).toHaveBeenCalledWith(responseValue);
-    expect(userProjectServices.createUserProject).toHaveBeenCalledWith(3, 1);
+    expect(userProjectServices.createUserProject).toHaveBeenCalledWith(3, 4);
   });
   it('should set status code to 500 if error in accessing db', async () => {
     jest.spyOn(userProjectServices, 'createUserProject').mockRejectedValue(new Error('Error in creating'));

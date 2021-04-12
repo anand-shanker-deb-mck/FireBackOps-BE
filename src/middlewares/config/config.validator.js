@@ -7,7 +7,7 @@ const storeConfigValidator = (req, res, next) => {
   const { error } = storeConfigDBSchema.validate(body);
 
   if (error) {
-    res.status(400).json({ message: JSON.stringify(error) });
+    res.status(400).json({ message: JSON.stringify(error.details) });
     return;
   }
   next();
@@ -17,7 +17,7 @@ const deleteConfigValidator = (req, res, next) => {
   const { body } = req;
   const { error } = deleteConfigDBSchema.validate(body);
   if (error) {
-    res.status(400).json({ error: 'Invalid component' });
+    res.status(400).json({ message: JSON.stringify(error.details) });
     return;
   }
   next();
@@ -27,7 +27,7 @@ const updateConfigValidator = (req, res, next) => {
   const { error } = updateConfigDBSchema.validate(body);
 
   if (error) {
-    res.status(400).json({ error: 'Invalid component' });
+    res.status(400).json({ message: JSON.stringify(error.details) });
     return;
   }
   next();
@@ -43,7 +43,7 @@ const payloadValidator = (req, res, next) => {
     error = mapperSchema.validate(payload).error;
   }
   if (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ message: JSON.stringify(error.details) });
     return;
   }
   next();

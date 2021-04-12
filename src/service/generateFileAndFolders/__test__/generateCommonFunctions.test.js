@@ -1,11 +1,10 @@
 const fse = require('fs-extra');
 const server = require('../generateCommonFunctions');
-const mockInputData = require('./mockInputData');
 const apiTemplate = require('../../../templates/apiTemplate');
 const mapperTemplate = require('../../../templates/mapperTemplate');
 const { prettifyJsText } = require('../../../utils/jsFormatter');
 
-describe('server test', () => {
+xdescribe('server test', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });

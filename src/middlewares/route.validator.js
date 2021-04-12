@@ -11,37 +11,37 @@ const getRouteDetailsValidator = (req, res, next) => {
   const { params } = req;
   const { error } = getRouteDetailsSchema.validate(params);
   if (error) {
-    return res.status(400).json({ message: 'Invalid parameters' });
+    return res.status(400).send({ message: JSON.stringify(error.details) });
   }
   next();
 };
 const createRouteValidator = (req, res, next) => {
   const { body } = req;
-  const validate = createRouteSchema.validate(body);
-  if (validate.error) {
-    return res.status(400).json({ message: 'Invalid body' });
+  const { error } = createRouteSchema.validate(body);
+  if (error) {
+    return res.status(400).send({ message: JSON.stringify(error.details) });
   }
   next();
 };
 
 const getRoutesByProjectIDValidator = (req, res, next) => {
   const { params } = req;
-  const validate = getRoutesByProjectSchema.validate(params);
-  if (validate.error) {
-    return res.status(400).json({ message: 'Invalid body' });
+  const { error } = getRoutesByProjectSchema.validate(params);
+  if (error) {
+    return res.status(400).send({ message: JSON.stringify(error.details) });
   }
   next();
 };
 
 const updateRouteValidator = (req, res, next) => {
   const { body } = req;
-  let validate = updateRouteBodySchema.validate(body);
-  if (validate.error) {
-    return res.status(400).json({ message: 'Invalid body' });
+  const { error } = updateRouteBodySchema.validate(body);
+  if (error) {
+    return res.status(400).send({ message: JSON.stringify(error.details) });
   }
-  validate = updateRouteParamsSchema.validate(req.params);
+  const validate = updateRouteParamsSchema.validate(req.params);
   if (validate.error) {
-    return res.status(400).json({ message: 'Invalid id' });
+    return res.status(400).send({ message: JSON.stringify(validate.error.details) });
   }
   next();
 };

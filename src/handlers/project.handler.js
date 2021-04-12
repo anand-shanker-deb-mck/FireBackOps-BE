@@ -59,7 +59,6 @@ const deleteProjectByIdHandler = async (req, res) => {
 const deleteProjectHandler = async (req, res) => {
   try {
     const deletedProject = await projectServices.deleteAllProjects();
-
     res.sendStatus(200).send(deletedProject);
   } catch (error) {
     res.status(500).send();

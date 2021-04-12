@@ -1,7 +1,7 @@
 const fse = require('fs-extra');
 const server = require('./generateFilesAndFolders');
 
-describe('Create PackageJSON', () => {
+xdescribe('Create PackageJSON', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -24,7 +24,7 @@ describe('Create PackageJSON', () => {
   });
 });
 
-describe('Project folder structure', () => {
+xdescribe('Project folder structure', () => {
   afterEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
@@ -54,7 +54,7 @@ describe('Project folder structure', () => {
   });
 });
 
-describe('Generate FIle Structure', () => {
+xdescribe('Generate FIle Structure', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });

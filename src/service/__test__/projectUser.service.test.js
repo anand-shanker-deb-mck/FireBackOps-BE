@@ -7,11 +7,13 @@ describe('get username service', () => {
     const mockValue = [
       {
         User: {
+          id: 1,
           userName: 'abc',
         },
       },
       {
         User: {
+          id: 2,
           userName: 'def',
         },
       },
@@ -28,11 +30,13 @@ describe('get username service', () => {
     const mockValue = [
       {
         User: {
+          id: 1,
           userName: 'abc',
         },
       },
       {
         User: {
+          id: 2,
           userName: 'def',
         },
       },

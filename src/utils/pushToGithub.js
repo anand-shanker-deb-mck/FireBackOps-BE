@@ -1,7 +1,7 @@
 const GitHub = require('github-api');
 const fs = require('fs');
 const path = require('path');
-const process = require('process');
+const { getGitHubDefaultBranch } = require('./getGithubDefaultBranch');
 
 function GithubAPIMethod(auth) {
   let repo;
@@ -21,6 +21,8 @@ function GithubAPIMethod(auth) {
      */
   this.setRepo = (userName, repoName) => {
     repo = gh.getRepo(userName, repoName);
+    this.userName = userName;
+    this.repoName = repoName;
   };
 
   /**
@@ -37,11 +39,12 @@ function GithubAPIMethod(auth) {
       );
     }
 
-    return repo.listBranches().then((branches) => {
+    return repo.listBranches().then(async (branches) => {
       const branchExists = branches.data.find((branch) => branch.name === branchName);
 
       if (!branchExists) {
-        return repo.createBranch('master', branchName)
+        const baseBranch = await getGitHubDefaultBranch(auth.token, this.userName, this.repoName);
+        return repo.createBranch(baseBranch, branchName)
           .then(() => {
             currentBranch.name = branchName;
           });
@@ -183,14 +186,11 @@ const getAllFilesFunction = (dirPath, arrayOfFiles) => {
   return arrOfFiles;
 };
 
-const getAllFileDataFunction = (allFiles) => {
-  const pathPrefix = `${process.cwd()}/`;
+const getAllFileDataFunction = (allFiles, projectName) => {
   const dataToPush = allFiles.map((filepath) => {
-    let newFilePath;
     const text = fs.readFileSync(filepath).toString('utf-8');
-    if (filepath.indexOf(pathPrefix) === 0) {
-      newFilePath = filepath.slice(pathPrefix.length);
-    }
+    const relativePath = `${process.env.PROJECT_PATH}/${projectName}/`.replace('./', '');
+    const newFilePath = filepath.replace(relativePath, '');
     const fileObject = { content: text, path: newFilePath };
     return fileObject;
   });
@@ -198,13 +198,13 @@ const getAllFileDataFunction = (allFiles) => {
 };
 
 const pushToGithub = (
-  folder, authToken, username, repositoryName, branchName, commitMessage,
+  folder, authToken, username, repositoryName, branchName, commitMessage, projectName,
 ) => {
   const getAllFiles = module.exports.getAllFilesFunction;
   const getAllFileData = module.exports.getAllFileDataFunction;
   const GithubAPI = module.exports.GithubAPIMethod;
-  const allFiles = getAllFiles(folder[0]);
-  const dataToPush = getAllFileData(allFiles);
+  const allFiles = getAllFiles(folder);
+  const dataToPush = getAllFileData(allFiles, projectName);
   const api = new GithubAPI({ token: authToken });
   api.setRepo(username, repositoryName);
   return api.setBranch(branchName)

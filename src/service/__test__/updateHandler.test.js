@@ -1,7 +1,7 @@
 const fs = require('../../utils/fileSystem');
 const updateHandlerService = require('../generateCode/updateHandler');
 
-describe('Update Handler', () => {
+xdescribe('Update Handler', () => {
   it('should make function calls in the generated folder handler file', async (done) => {
     const mockComponentList = {
       projectName: 'Project1',

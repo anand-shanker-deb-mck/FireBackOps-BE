@@ -16,7 +16,7 @@ describe('Update package.json dependencies', () => {
       ],
     }],
   };
-  it.only('should get all the node modules and read and update the package.json', async (done) => {
+  it('should get all the node modules and read and update the package.json', async (done) => {
     const readSpy = jest.spyOn(fileServices, 'readFile');
     readSpy.mockResolvedValueOnce('{ "dependencies": {} }');
     const writeFileSpy = jest.spyOn(fs, 'writeFile');
