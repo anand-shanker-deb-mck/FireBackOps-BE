@@ -11,7 +11,7 @@ const updateHandler = async (projectName, routesNameList, componentList, project
     // Filter the routes according to the routeName.// ask-not:change routeName to name only
     const filteredRoutes = routes.filter((route) => route.name === routeName);
 
-    let handlerData = `const services = require("../services/${routeName}.service.js");\n\n`;
+    let handlerData = `const services = require('../services/${routeName}.service.js');\n\n`;
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
       // destructuring request object
