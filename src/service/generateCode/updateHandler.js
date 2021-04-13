@@ -22,7 +22,6 @@ const updateHandler = async (projectName, routesNameList, componentList, project
       // destructReq = destructReq.substring(0, destructReq.length - 2);
       // const handleReqString = `\n    const { ${destructReq} } = req;`;
       moduleExportList += `${route.name}${route.method.toLowerCase()}Handler, `;
-      // Start of handler function
       handlerData += `const ${route.name}${route.method.toLowerCase()}Handler = async (req, res) => {
   try {`;
 
