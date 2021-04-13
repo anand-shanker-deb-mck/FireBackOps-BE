@@ -22,7 +22,7 @@ const updateService = async (projectName, routesNameList, componentList, project
       });
     });
     if (isApi) {
-      serviceData += 'const utils = require("../utils/index.js");\n';
+      serviceData += "const utils = require('../utils/index.js');\n";
     }
     // Each item in the filtered route will make a new handler function
     filteredRoutes.forEach((route) => {
@@ -35,7 +35,7 @@ const updateService = async (projectName, routesNameList, componentList, project
       // Add function calls for each sorted configuration
       sortedConfiguration.forEach((config) => {
         if (config.componentType === 'API') {
-          serviceData += `const ${config.refName} = await utils.make${config.componentType}Call('${config.payload.url}', '${config.payload.method}');\n`;
+          serviceData += `const ${config.refName} = await utils.make${config.componentType}Call('\`${config.payload.url}\`', '${config.payload.method}');\n`;
         }
         if (config.componentType === 'MAPPER') {
           serviceData += `const ${config.refName} = make${config.refName.charAt(0).toUpperCase() + config.refName.slice(1, config.refName.length)}Call([${config.dependencies}]);\n`;
