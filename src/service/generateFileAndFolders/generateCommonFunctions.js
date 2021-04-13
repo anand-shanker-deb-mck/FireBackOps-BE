@@ -4,7 +4,6 @@ const apiTemplate = require('../../templates/apiTemplate');
 const mapperTemplate = require('../../templates/mapperTemplate');
 
 const generateMapperCode = (mapper) => {
-  console.log(mapper);
   const [mapperContent, mapperModuleExport] = mapperTemplate
     .returnMapperTemplate(mapper.dependencies,
       mapper.code, mapper.referenceName, mapper.nodeModules);
