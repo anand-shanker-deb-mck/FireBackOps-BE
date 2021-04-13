@@ -10,7 +10,7 @@ describe('api test', () => {
 
 describe('mapper test', () => {
   it('should return mapper template as string', () => {
-    const returnMapperTemplate = mapperTemplate.returnMapperTemplate(['getTrivagoPrice', 'getIbiboPrice'], 'return getTrivagoPrice < getIbiboPrice ? getTrivagoPrice :  getIbiboPrice', 'flightsCostMapper');
+    const returnMapperTemplate = mapperTemplate.returnMapperTemplate(['getTrivagoPrice', 'getIbiboPrice'], 'return getTrivagoPrice < getIbiboPrice ? getTrivagoPrice :  getIbiboPrice', 'flightsCostMapper', ['loadash', 'axios']);
     expect(typeof (returnMapperTemplate)).toBe('object');
   });
 });
