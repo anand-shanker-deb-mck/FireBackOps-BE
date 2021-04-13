@@ -24,6 +24,7 @@
     "@octokit/core": "^3.3.2",
     "app-root-path": "^3.0.0",
     "axios": "^0.21.1",
+    "camelcase": "^5.3.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
