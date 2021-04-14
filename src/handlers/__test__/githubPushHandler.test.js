@@ -4,13 +4,13 @@ const githubPushService = require('../../service/githubPush.service');
 const service = require('../../services/generate.service');
 
 describe('Git hub push handler', () => {
-  let mockSend;
+  let mockJson;
   let mockResponse;
   let mockRequest;
   beforeEach(() => {
-    mockSend = jest.fn();
+    mockJson = jest.fn();
     mockResponse = {
-      status: jest.fn(() => ({ send: mockSend })),
+      status: jest.fn(() => ({ json: mockJson })),
     };
     mockRequest = {
       body: {
@@ -40,15 +40,15 @@ describe('Git hub push handler', () => {
     const spyGitService = jest.spyOn(githubPushService, 'githubPush').mockReturnValue();
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockSend).toHaveBeenCalledWith('Project got committed successfully on Github');
+    expect(mockJson).toHaveBeenCalledWith('Project got committed successfully on Github');
     expect(spyGitService).toHaveBeenCalled();
   });
   it('should set status code to 500', async () => {
     jest.spyOn(service, 'generateCodeService').mockResolvedValue();
-    const spyGetFoldersService = jest.spyOn(githubPushService, 'githubPush').mockRejectedValue('error');
+    const spyGetFoldersService = jest.spyOn(githubPushService, 'githubPush').mockRejectedValue({ message: 'abc' });
     await githubPushHandler.githubPushHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(500);
-    expect(mockSend).toHaveBeenCalledWith();
+    expect(mockJson).toHaveBeenCalledWith({ message: 'abc' });
     expect(spyGetFoldersService).toHaveBeenCalled();
   });
 });

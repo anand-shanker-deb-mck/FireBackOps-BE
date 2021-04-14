@@ -51,6 +51,24 @@ describe('githubpush service', () => {
     expect(rimraf).toHaveBeenCalledWith('./projectDir/proj1', {}, expect.any(Function));
     expect(pushGitSpy).toHaveBeenCalled();
   });
+
+  xtest('Should enter catch block', async () => {
+    process.env.PROJECT_PATH = './projectDir';
+    const spyOnFindOne = jest.spyOn(Project, 'findOne');
+    spyOnFindOne.mockResolvedValue({
+      dataValues: {
+        name: 'proj1',
+      },
+    });
+
+    jest.spyOn(redisUtil, 'getAccessToken').mockResolvedValue('token');
+    const pushGitSpy = jest.spyOn(githubPushUtils, 'pushToGithub').mockImplementation(() => {
+      throw new Error({ message: 'error' });
+    });
+    await githubPushServices.githubPush(body, 'abc');
+    expect(rimraf).toNotHaveBeenCalledWith();
+    expect(pushGitSpy).toHaveBeenCalled();
+  });
 });
 
 describe('github raise pr', () => {
