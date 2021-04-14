@@ -8,7 +8,7 @@ const storeConfigDBSchema = Joi.object().keys({
   type: Joi.string().valid(API_COMPONENT, MAPPER_COMPONENT).required(),
   routeId: Joi.number().required(),
   sequence: Joi.number().required(),
-  refName: Joi.string().required(),
+  refName: Joi.string().trim().required(),
   payload: Joi.object().required(),
   dependencies: Joi.array().items(Joi.number()),
 });
@@ -21,7 +21,7 @@ const updateConfigDBSchema = Joi.object().keys({
   type: Joi.string().valid(API_COMPONENT, MAPPER_COMPONENT),
   routeId: Joi.number(),
   sequence: Joi.number(),
-  refName: Joi.string(),
+  refName: Joi.string().trim(),
   payload: Joi.object(),
   dependencies: Joi.array().items(Joi.number()),
 });

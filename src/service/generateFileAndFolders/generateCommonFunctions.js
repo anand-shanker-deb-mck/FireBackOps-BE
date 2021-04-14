@@ -5,7 +5,8 @@ const mapperTemplate = require('../../templates/mapperTemplate');
 
 const generateMapperCode = (mapper) => {
   const [mapperContent, mapperModuleExport] = mapperTemplate
-    .returnMapperTemplate(mapper.dependencies, mapper.code, mapper.referenceName);
+    .returnMapperTemplate(mapper.dependencies,
+      mapper.code, mapper.referenceName, mapper.nodeModules);
   return [mapperContent, mapperModuleExport];
 };
 const generateCommonFunction = async (projectName, projectPath, componentList) => {

@@ -8,6 +8,7 @@ const createPackageJson = (projectName) => {
     main: 'index.js',
     scripts: {
       test: "echo 'Error: no test specified' && exit 1",
+      start: 'node ./src/index.js',
     },
     author: '',
     license: 'ISC',
