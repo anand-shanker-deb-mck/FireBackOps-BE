@@ -17,9 +17,9 @@ const oauthLogin = async (code) => {
 
   await redisClient.setex(username, process.env.ACCESS_TOKEN_EXPIRY_TIME, accessToken);
 
-  const jwtToken = jwt.sign({ username, id: userObject[0].dataValues.id },
+  const jwtToken = await jwt.sign({ username, id: userObject[0].dataValues.id },
     process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRY_TIME });
-  return jwtToken;
+  return { jwtToken, username };
 };
 
 module.exports = { oauthLogin };
