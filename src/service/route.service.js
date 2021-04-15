@@ -2,7 +2,11 @@ const { Route } = require('../../models');
 
 const addNewRouteService = async (body) => {
   const newRoute = await Route.create({
-    name: body.name, r_config: body.r_config, p_id: body.p_id, method: body.method,
+    name: body.name,
+    r_config: body.r_config,
+    p_id: body.p_id,
+    method: body.method,
+    end_point: body.end_point,
   });
   return newRoute;
 };
@@ -12,9 +16,12 @@ const getAllRoutesByProjectIDService = async (pid) => {
 };
 const updateRouteService = async (rid, body) => {
   let updatedRoute = await Route.update(
-    { name: body.name, r_config: body.r_config, p_id: body.p_id }, { where: { id: rid } },
+    { name: body.name, r_config: body.r_config, p_id: body.p_id },
+    { where: { id: rid } },
   );
-  updatedRoute = updatedRoute > 0 ? await Route.findOne({ where: { id: rid } }) : 'Not a valid id';
+  updatedRoute = updatedRoute > 0
+    ? await Route.findOne({ where: { id: rid } })
+    : 'Not a valid id';
   return updatedRoute;
 };
 

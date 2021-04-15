@@ -11,7 +11,9 @@ const addNewRouteHandler = async (req, res) => {
 const getAllRoutesByProjectIDHandler = async (req, res) => {
   try {
     const { params } = req;
-    const allRoutes = await routeService.getAllRoutesByProjectIDService(params.pid);
+    const allRoutes = await routeService.getAllRoutesByProjectIDService(
+      params.pid,
+    );
     res.status(200).send(allRoutes);
   } catch (error) {
     res.status(500).send();
@@ -34,7 +36,7 @@ const getRouteDetailsHandler = async (req, res) => {
     const routeDetails = await routeService.getRouteDetails(params.id);
     return res.status(200).json({ data: routeDetails });
   } catch (error) {
-    if (error.message === 'Route not found') return res.status(404).json({ message: 'Route id not found' });
+    if (error.message === 'Route not found') { return res.status(404).json({ message: 'Route id not found' }); }
     return res.status(500).json({ message: error.message });
   }
 };
