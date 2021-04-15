@@ -168,7 +168,7 @@ function GithubAPIMethod(auth) {
       .then(() => createCommit(message))
       .then(updateHead)
       .catch((e) => {
-        console.error(e);
+        throw e;
       });
   };
 }
@@ -211,6 +211,12 @@ const pushToGithub = (
     .then(() => api.pushFiles(commitMessage, dataToPush))
     .then(() => {
       console.log('Files committed!');
+    }).catch((err) => {
+      if (err.response.data.message === 'Not Found') {
+        throw new Error('Repository not found');
+      } else {
+        throw new Error(err.response.data.message);
+      }
     });
 };
 

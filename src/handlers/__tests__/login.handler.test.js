@@ -19,10 +19,11 @@ describe('oauthLoginHandler', () => {
       body: { code: '124512' },
     };
     const jwtToken = 'dnkjnvdjksnksd';
-    jest.spyOn(service, 'oauthLogin').mockResolvedValue(jwtToken);
+    const username = 'srishti';
+    jest.spyOn(service, 'oauthLogin').mockResolvedValue({ jwtToken, username });
     await oauthLoginHandler(mockRequest, mockResponse);
     expect(mockResponse.status).toHaveBeenCalledWith(200);
-    expect(mockSend).toHaveBeenCalledWith({ jwtToken });
+    expect(mockSend).toHaveBeenCalledWith({ jwtToken, username });
   });
 
   it('should go to catch block when service throws error ', async () => {

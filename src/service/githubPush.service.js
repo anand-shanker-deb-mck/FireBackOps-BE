@@ -24,9 +24,12 @@ const githubPush = (async (body, username) => {
   const pathToProject = `${basePath}/${projectName}`;
   const folder = pathToProject;
   const accessToken = await redisUtil.getAccessToken(username);
-  await githubPushUtils.pushToGithub(folder,
-    accessToken, username, repositoryName, branchName, commitMessage, projectName);
-  console.log(`folder${folder}`);
+  try {
+    await githubPushUtils.pushToGithub(folder,
+      accessToken, username, repositoryName, branchName, commitMessage, projectName);
+  } catch (err) {
+    throw new Error(err.message);
+  }
   rimraf(folder, {}, () => {});
 });
 

@@ -54,7 +54,7 @@ describe('oauthLogin', () => {
     jwtSignSpy.mockResolvedValue(mockJWTToken);
 
     const response = await oauthLogin(mockCode);
-    expect(response).toBe(mockJWTToken);
+    expect(response).toStrictEqual({ jwtToken: mockJWTToken, username: 'abc' });
     expect(getUsernameSpy).toHaveBeenCalledWith(mockAccessToken);
     expect(jwtSignSpy).toHaveBeenCalledWith({
       username: mockUsername,
