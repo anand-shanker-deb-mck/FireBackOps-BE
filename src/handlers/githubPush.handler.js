@@ -9,6 +9,7 @@ const githubPushHandler = async (req, res) => {
     await service.generateCodeService(
       body.projectId,
     );
+    console.log('generation');
     await githubPushService.githubPush(body, username);
     res.status(200).json('Project got committed successfully on Github');
   } catch (err) {
