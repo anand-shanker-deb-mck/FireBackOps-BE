@@ -9,8 +9,8 @@ const updatePackageJson = async (projectName, componentList, projectPath) => {
   const projectNodeModules = {};
   componentList.routes.forEach((route) => {
     route.configurations.forEach((configuration) => {
-      if (configuration.componentType === 'API' && projectNodeModules.axios === undefined) {
-        projectNodeModules.axios = 1;
+      if (configuration.componentType === 'API') {
+        if (projectNodeModules.axios === undefined) { projectNodeModules.axios = 1; }
       } else {
         configuration.payload.nodeModules.forEach((nodeModule) => {
           if (projectNodeModules[nodeModule] === undefined) {

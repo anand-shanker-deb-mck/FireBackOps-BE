@@ -29,7 +29,7 @@ describe('tests for generate', () => {
       ],
     };
   });
-  test('should generate code', async () => {
+  xtest('should generate code', async () => {
     jest.spyOn(createFolderService, 'getRouteDetailsService').mockResolvedValue(mockResult);
     jest.spyOn(generateCode, 'updateHandlerAndDependency').mockResolvedValue();
     await generateService.generateCodeService('1', './projectDir');

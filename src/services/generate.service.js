@@ -20,7 +20,7 @@ const generateCodeService = async (projectId) => {
     await fsUtil.writeFile(`${projectPath}/src/index.js`, indexContent(routesName));
     eslintFix(projectPath);
   } catch (error) {
-    console.log('error', error);
+    throw new Error('please check your configurations');
   }
 };
 
