@@ -5,6 +5,7 @@ const createRouteSchema = joi.object().keys({
   r_config: joi.object().required(),
   name: joi.string().required(),
   method: joi.string().required(),
+  end_point: joi.string().required(),
 });
 
 const getRoutesByProjectSchema = joi.object().keys({
