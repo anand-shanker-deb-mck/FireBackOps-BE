@@ -4,7 +4,7 @@ const createOptions = (method, headers, body, authType = null, authToken = null)
   if (method === 'GET' || method === 'PUT' || method === 'DELETE') {
     const options = {
       method,
-      headers: { ...headers, Authorization: \`\${authType} \${authToken}\` },
+      headers: {...headers},
       body,
     };
     return options;
@@ -13,8 +13,8 @@ const createOptions = (method, headers, body, authType = null, authToken = null)
   if (method === 'POST') {
     const options = {
       method,
-      headers: { Authorization: \`\${authType} \${authToken}\` },
-      body: JSON.stringify(body),
+      headers: {...headers},
+      body,
     };
     return options;
   }

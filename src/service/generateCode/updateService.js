@@ -35,7 +35,7 @@ const updateService = async (projectName, routesNameList, componentList, project
       // Add function calls for each sorted configuration
       sortedConfiguration.forEach((config) => {
         if (config.componentType === 'API') {
-          serviceData += `const ${config.refName} = await utils.make${config.componentType}Call(\`${config.payload.url}\`, '${config.payload.method}');\n`;
+          serviceData += `const ${config.refName} = await utils.make${config.componentType}Call(\`${config.payload.url}\`, '${config.payload.method}', ${JSON.stringify(config.payload.headers)} );\n`;
         }
         if (config.componentType === 'MAPPER') {
           serviceData += `const ${config.refName} = make${config.refName.charAt(0).toUpperCase() + config.refName.slice(1, config.refName.length)}Call([${config.dependencies}]);\n`;
