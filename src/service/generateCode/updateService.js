@@ -38,10 +38,9 @@ const updateService = async (projectName, routesNameList, componentList, project
           serviceData += `const ${config.refName} = await utils.make${config.componentType}Call(\`${config.payload.url}\`, '${config.payload.method}', ${JSON.stringify(config.payload.headers)} );\n`;
         }
         if (config.componentType === 'MAPPER') {
-          serviceData += `const ${config.refName} = make${config.refName.charAt(0).toUpperCase() + config.refName.slice(1, config.refName.length)}Call([${config.dependencies}]);\n`;
+          serviceData += `const ${config.refName} = make${config.refName.charAt(0).toUpperCase() + config.refName.slice(1, config.refName.length)}Call({${config.dependencies.join(',')}});\n`;
         }
       });
-
       // Add statement to send the last refName of sortedList as response
       serviceData += `return (${sortedConfiguration.pop().refName}); };\n`;
     });
