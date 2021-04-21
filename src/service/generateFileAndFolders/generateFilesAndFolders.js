@@ -24,6 +24,7 @@ const generateProjectFolderStructure = (projectName, projectPath) => {
   if (!fse.pathExistsSync(projectPath)) {
     fse.mkdirSync(projectPath);
     fse.writeFile(`${projectPath}/package.json`, createPackageJson(projectName));
+    fse.writeFile(`${projectPath}/.gitignore`, 'node_modules');
     fse.mkdirSync(`${projectPath}/src`);
     fse.mkdirSync(`${projectPath}/src/routes`);
     fse.mkdirSync(`${projectPath}/src/handlers`);
