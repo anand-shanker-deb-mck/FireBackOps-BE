@@ -16,6 +16,8 @@ const updateRouteBodySchema = joi.object().keys({
   p_id: joi.number().required(),
   r_config: joi.object().required(),
   name: joi.string().required(),
+  method: joi.string().required(),
+  end_point: joi.string().required(),
 });
 const updateRouteParamsSchema = joi.object().keys({
   id: joi.number().required(),

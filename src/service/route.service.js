@@ -16,7 +16,14 @@ const getAllRoutesByProjectIDService = async (pid) => {
 };
 const updateRouteService = async (rid, body) => {
   let updatedRoute = await Route.update(
-    { name: body.name, r_config: body.r_config, p_id: body.p_id },
+    {
+      name: body.name,
+      r_config: body.r_config,
+      p_id:
+      body.p_id,
+      method: body.method,
+      end_point: body.end_point,
+    },
     { where: { id: rid } },
   );
   updatedRoute = updatedRoute > 0
