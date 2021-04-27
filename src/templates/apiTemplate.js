@@ -25,7 +25,7 @@ const makeAPICall = async (endpoint, method = 'GET', headers = null, body = null
   if (method === 'GET') {
     try {
       const response = await axios.get(endpoint, options);
-      const responseData = await response.data;
+      const responseData = response.data;
       return responseData;
     } catch (error) {
       return error.message;
@@ -34,7 +34,7 @@ const makeAPICall = async (endpoint, method = 'GET', headers = null, body = null
   if (method === 'POST') {
     try {
       const response = await axios.post(endpoint, body, options);
-      const responseData = await response.data;
+      const responseData = response.data;
       return responseData;
     } catch (error) {
       return error.message;
@@ -44,7 +44,7 @@ const makeAPICall = async (endpoint, method = 'GET', headers = null, body = null
   if (method === 'PUT') {
     try {
       const response = await axios.put(endpoint, body, options);
-      const responseData = await response.data;
+      const responseData = response.data;
       console.log(responseData);
       return responseData;
     } catch (error) {
@@ -55,7 +55,7 @@ const makeAPICall = async (endpoint, method = 'GET', headers = null, body = null
   if (method === 'DELETE') {
     try {
       const response = await axios.delete(endpoint, options);
-      const responseData = await response;
+      const responseData = response.data;
       return responseData;
     } catch (error) {
       return error.message;
@@ -65,6 +65,7 @@ const makeAPICall = async (endpoint, method = 'GET', headers = null, body = null
 
 module.exports = {
   makeAPICall,
+  createOptions
 };
 `;
 

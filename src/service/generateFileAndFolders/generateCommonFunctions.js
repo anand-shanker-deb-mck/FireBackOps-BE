@@ -2,6 +2,8 @@ const fse = require('fs-extra');
 const { prettifyJsText } = require('../../utils/jsFormatter');
 const apiTemplate = require('../../templates/apiTemplate');
 const mapperTemplate = require('../../templates/mapperTemplate');
+const apiTestTemplate = require('../../templates/apiTestTemplate');
+const { returnMapperServiceTestTemplate } = require('../../templates/mapperServiceTest.template');
 
 const generateMapperCode = (mapper) => {
   const [mapperContent, mapperModuleExport] = mapperTemplate
@@ -41,7 +43,9 @@ const generateCommonFunction = async (projectName, projectPath, componentList) =
         if (mapper.type === 'MAPPER') {
           const [mapperContent, mapperModuleExport] = generateMapperCode(mapper);
           const finalMapperContent = `${mapperContent}\n\nmodule.exports = { ${mapperModuleExport}, }`;
+          const mapperTestContent = returnMapperServiceTestTemplate(mapper.referenceName, `../${mapper.referenceName}.service.js`);
           await fse.writeFile(`${projectPath}/src/services/${mapper.referenceName}.service.js`, prettifyJsText(`${finalMapperContent}`));
+          await fse.writeFile(`${projectPath}/src/services/__test__/${mapper.referenceName}.service.test.js`, prettifyJsText(mapperTestContent));
         }
       });
       await Promise.all(writeMapperCode);
@@ -56,12 +60,12 @@ const generateCommonFunction = async (projectName, projectPath, componentList) =
 
     if (isApiComponentExist) {
       const apiFileContent = apiTemplate.returnApiTemplate();
-
+      const apiTestFileContent = apiTestTemplate.returnApiTestTemplate();
       await fse.appendFile(`${projectPath}/src/utils/index.js`, apiFileContent);
+      await fse.appendFile(`${projectPath}/src/utils/__test__/index.test.js`, apiTestFileContent);
     }
     return userProject;
   } catch (error) {
-    console.log(error.message);
     return error.message;
   }
 };
