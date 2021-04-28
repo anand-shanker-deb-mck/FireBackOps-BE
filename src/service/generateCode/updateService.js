@@ -3,6 +3,7 @@ const lodash = require('lodash');
 const fs = require('../../utils/fileSystem');
 const { prettifyJsText } = require('../../utils/jsFormatter');
 const { returnServiceTestTemplate } = require('../../templates/serviceTest.template');
+const { makeBodyTemplateString } = require('../../utils/apiPayloadBody.util');
 
 const updateService = async (projectName, routesNameList, componentList, projectPath) => {
   const { routes } = componentList;
@@ -39,7 +40,8 @@ const updateService = async (projectName, routesNameList, componentList, project
       sortedConfiguration.forEach((config) => {
         if (config.componentType === 'API') {
           if (config.payload.method === 'POST' || config.payload.method === 'PATCH' || config.payload.method === 'DELETE') {
-            serviceData += `const ${config.refName} = await utils.make${config.componentType}Call(\`${config.payload.url}\`, '${config.payload.method}', ${JSON.stringify(config.payload.headers)},${JSON.stringify(config.payload.body)} );\n`;
+            const modifiedBody = makeBodyTemplateString(config.payload.body);
+            serviceData += `const ${config.refName} = await utils.make${config.componentType}Call(\`${config.payload.url}\`, '${config.payload.method}', ${JSON.stringify(config.payload.headers)},${modifiedBody} );\n`;
           } else {
             serviceData += `const ${config.refName} = await utils.make${config.componentType}Call(\`${config.payload.url}\`, '${config.payload.method}', ${JSON.stringify(config.payload.headers)} );\n`;
           }

@@ -34,6 +34,12 @@ const apiSchema = Joi.object().keys({
     }
     return true;
   }).required(),
+  baseUrl: Joi.string().custom((urlValue, error) => {
+    if (!isUrl(urlValue)) {
+      return error.message('URL must be valid');
+    }
+    return true;
+  }).required(),
   headers: Joi.object(),
   // body is valid only for POST and PUT methods
   body: Joi.object().when('method', { is: 'POST', then: Joi.required() })
