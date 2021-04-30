@@ -19,9 +19,9 @@ const makeBodyTemplateString = (body) => {
   let bodyString = '{\n';
   Object.keys(finalBody).forEach((key) => {
     if (key[0] === '$') {
-      bodyString += `\`${key}\` : \`${finalBody[key]}\`\n`;
+      bodyString += `\`${key}\` : \`${finalBody[key]}\`,\n`;
     } else {
-      bodyString += `${key}: \`${finalBody[key]}\`\n`;
+      bodyString += `${key}: \`${finalBody[key]}\`,\n`;
     }
   });
   bodyString += '}';

@@ -3,13 +3,22 @@ const fs = require('../../utils/fileSystem');
 const updateRouteContent = (routeName, componentList) => {
   const { routes } = componentList;
   let routerMethodCallsCode = '';
-
   // generate code for each route file
   // filter by routeName
   const filteredRoutes = routes.filter((route) => route.name === routeName);
 
   filteredRoutes.forEach((route) => {
-    routerMethodCallsCode += `${routeName}Router.${route.method.toLowerCase()}('${route.end_point}', ${routeName}Handler.${route.name}${route.method.toLowerCase()}Handler);\n`;
+    let endPointParams = '';
+    if (route.r_config.params.length !== 0) {
+      route.r_config.params.forEach((param, index) => {
+        if (index === 0 && route.end_point === '/') {
+          endPointParams += `:${param}`;
+        } else {
+          endPointParams += `/:${param}`;
+        }
+      });
+    }
+    routerMethodCallsCode += `${routeName}Router.${route.method.toLowerCase()}('${route.end_point}${endPointParams}', ${routeName}Handler.${route.name}${route.method.toLowerCase()}Handler);\n`;
   });
 
   const routeFileCode = `const express = require('express');\nconst ${routeName}Handler = require('../handlers/${routeName}.handler.js');\n\nconst ${routeName}Router = express.Router();\n\n${routerMethodCallsCode}\nmodule.exports = {
