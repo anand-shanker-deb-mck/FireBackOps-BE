@@ -1,4 +1,5 @@
 const fse = require('fs-extra');
+const { dockerFileContent, dockerIgnoreFileContent } = require('../../constants/readOnlyFileContent');
 
 const createPackageJson = (projectName) => {
   const packageJson = {
@@ -27,6 +28,8 @@ const generateProjectFolderStructure = (projectName, projectPath) => {
   if (!fse.pathExistsSync(projectPath)) {
     fse.mkdirSync(projectPath);
     fse.writeFile(`${projectPath}/package.json`, createPackageJson(projectName));
+    fse.writeFile(`${projectPath}/Dockerfile`, dockerFileContent);
+    fse.writeFile(`${projectPath}/.dockerignore`, dockerIgnoreFileContent);
     fse.writeFile(`${projectPath}/.gitignore`, 'node_modules');
     fse.mkdirSync(`${projectPath}/src`);
     fse.mkdirSync(`${projectPath}/src/routes`);
